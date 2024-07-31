@@ -1,0 +1,34 @@
+{
+  "name": "@magiclabs.ai/web-sdk",
+  "version": "0.0.0",
+  "private": false,
+  "description": "TypeScript package to create photo books with the Magicbook API.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magiclabs-ai/mb-client"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build": "../../scripts/build/before.sh && tsup && ../../scripts/build/after.sh && esbuild dist/index.js --bundle --outfile=dist/index.iife.js --format=iife --global-name=MagicLabs",
+    "watch": "../../scripts/build/before.sh --watch && tsup --watch"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "flatted": "^3.3.1",
+    "json": "^11.0.0"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.1",
+    "tsup": "^8.2.3"
+  },
+  "packageManager": "pnpm@8.6.11"
+}

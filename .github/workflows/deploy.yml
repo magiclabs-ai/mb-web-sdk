@@ -1,0 +1,27 @@
+name: Publish Package to npmjs
+on:
+  release:
+    types: [released, prereleased]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ${{github.event.release.prerelease && 'dev' || 'prod'}}
+    env:
+      WEBSOCKET_HOST: ${{vars.WEBSOCKET_HOST}}
+      API_HOST: ${{vars.API_HOST}}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: true
+      - run: pnpm run turbo:coverage
+      - run: chmod +x ./scripts/publish.sh && pnpm run pub:${{github.event.release.prerelease && 'canary' || 'release'}}
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
