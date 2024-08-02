@@ -1,3 +1,2 @@
 packages:
-  - "packages/cli"
-  - "packages/client"
+  - "packages/web-sdk"

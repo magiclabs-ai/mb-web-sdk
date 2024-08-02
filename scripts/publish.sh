@@ -2,7 +2,7 @@
 
 version=$(sed -n 's/.*"version": "\(.*\)".*/\1/p' package.json)
 publishCommand="pnpm publish --no-git-checks --access public --tag"
-packages=("web-sdk")
+packages=("mb-web-sdk")
 baseDir=$PWD
 
 if [[ "$1" == "--canary" ]]; then
