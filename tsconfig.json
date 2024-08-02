@@ -31,7 +31,6 @@
   },
   "exclude": [
     "node_modules",
-    "packages/client/example",
-    "**/tests"
+    "packages/client/example"
   ]
 }
