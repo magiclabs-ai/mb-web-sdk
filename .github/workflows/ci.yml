@@ -51,10 +51,3 @@ jobs:
           json-summary-path: "./coverage/coverage-summary.json"
           json-final-path: "./coverage/coverage-final.json"
           vite-config-path: "./configs/vitest/vitest.config.ts"
-      - name: "Report CLI Coverage"
-        if: always() # Also generate the report if tests are failing
-        uses: davelosert/vitest-coverage-report-action@v1
-        with:
-          json-summary-path: "./packages/cli/coverage/coverage-summary.json"
-          json-final-path: "./packages/cli/coverage/coverage-final.json"
-          vite-config-path: "./packages/cli/vitest.config.ts"
