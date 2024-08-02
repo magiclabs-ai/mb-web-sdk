@@ -6,7 +6,7 @@ import { ProjectEndpoints } from "@/core/models/api/endpoints/project";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photo";
 
 type MagicBookAPIProps = {
-  apiKey: string;
+  apiKey?: string;
   apiHost?: string;
   webSocketHost?: string;
   mock?: boolean;
@@ -15,10 +15,12 @@ type MagicBookAPIProps = {
 export class MagicBookAPI {
   readonly fetcher: Fetcher;
 
-  constructor({ apiHost = defaultApiHost, apiKey, mock = false }: MagicBookAPIProps) {
+  constructor(props?: MagicBookAPIProps) {
+    const apiHost = props?.apiHost || defaultApiHost;
+    const mock = props?.mock || true;
     const options = {
       headers: {
-        Authorization: `API-Key ${apiKey}`,
+        Authorization: `API-Key ${props?.apiKey}`,
       },
     };
     this.fetcher = new Fetcher(apiHost, options, mock);

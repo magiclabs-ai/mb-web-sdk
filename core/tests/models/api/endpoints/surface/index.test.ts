@@ -4,6 +4,7 @@ import { surfaceSchema } from "@/core/models/surface";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import { z } from "zod";
+import type { MBEvent } from "@/core/models/event";
 
 describe("Surface", () => {
   const api = new MagicBookAPI({
@@ -26,7 +27,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = dispatchEventSpy.mock.calls[0][0]["detail"];
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surface.autofill");
     expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
   });
@@ -42,7 +43,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = dispatchEventSpy.mock.calls[0][0]["detail"];
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surface.shuffle");
     expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
   });
@@ -58,7 +59,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = dispatchEventSpy.mock.calls[0][0]["detail"];
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surface.autoAdapt");
     expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
   });
@@ -74,7 +75,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = dispatchEventSpy.mock.calls[0][0]["detail"];
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surface.suggest");
     expect(z.array(surfaceSchema).parse(event.payload)).toStrictEqual(event.payload);
   });

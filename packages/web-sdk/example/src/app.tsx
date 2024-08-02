@@ -1,47 +1,46 @@
-import { MagicBookAPI } from "@magiclabs.ai/web-sdk";
+import {
+  MagicBookAPI,
+  type MBEvent,
+  type AnalyzedPhoto,
+  type Project,
+} from "@magiclabs.ai/web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
 
 function App() {
-  const [photos, setPhotos] = useState([]);
-  const [project, setProject] = useState();
-  const mb = new MagicBookAPI({
-    apiKey: "YOUR_API",
-    mock: true,
-  });
-
-  function addMagicBookEventListener() {
-    window.addEventListener(
-      "MagicBook",
-      handleDesignRequestUpdated as EventListener
-    );
-  }
-
-  function removeMagicBookEventListener() {
-    window.removeEventListener(
-      "MagicBook",
-      handleDesignRequestUpdated as EventListener
-    );
-  }
+  const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
+  const [project, setProject] = useState<Project>();
+  const mb = new MagicBookAPI();
 
   useEffect(() => {
+    function addMagicBookEventListener() {
+      window.addEventListener(
+        "MagicBook",
+        handleDesignRequestUpdated as EventListener
+      );
+    }
+
+    function removeMagicBookEventListener() {
+      window.removeEventListener(
+        "MagicBook",
+        handleDesignRequestUpdated as EventListener
+      );
+    }
     addMagicBookEventListener();
     return () => {
       removeMagicBookEventListener();
     };
   }, []);
 
-  function handleDesignRequestUpdated(designRequestEvent) {
-    console.log(
-      "MagicBook",
-      designRequestEvent.detail.eventName,
-      designRequestEvent.detail.payload
-    );
-    if (designRequestEvent.detail.eventName === "photo.analyze") {
-      setPhotos((prevPhotos) => [...prevPhotos, designRequestEvent.detail.res]);
+  function handleDesignRequestUpdated(event: CustomEvent<MBEvent<unknown>>) {
+    console.log("MagicBook", event.detail.eventName, event.detail.payload);
+    if (event.detail.eventName === "photo.analyze") {
+      const photo = event.detail.payload as AnalyzedPhoto;
+      setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
-    if (designRequestEvent.detail.eventName === "project.autofill") {
-      setProject(designRequestEvent.detail.payload);
+    if (event.detail.eventName === "project.autofill") {
+      const project = event.detail.payload as Project;
+      setProject(project);
     }
   }
 
@@ -87,6 +86,18 @@ function App() {
       return;
     }
     await mb.project.restyle({
+      id: project.id,
+      metadata: project.metadata,
+      photos: project.photos,
+      surfaces: project.surfaces,
+    });
+  }
+
+  async function resizeProject() {
+    if (!project) {
+      return;
+    }
+    await mb.project.photo.resize({
       id: project.id,
       metadata: project.metadata,
       photos: project.photos,
@@ -169,6 +180,9 @@ function App() {
       </button>
       <button type="button" className="text-left" onClick={restyleProject}>
         3. Restyle Project
+      </button>
+      <button type="button" className="text-left" onClick={resizeProject}>
+        3. Resize Project
       </button>
       <div className="grid grid-cols-1 gap-4 p-4">
         <h2>Surface</h2>

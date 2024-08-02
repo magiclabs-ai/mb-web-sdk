@@ -4,6 +4,7 @@ import { photoFactory } from "@/core/factories/photo";
 import { analyzedPhotoSchema } from "@/core/models/photo";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
+import type { MBEvent } from "@/core/models/event";
 
 describe("Photo", () => {
   const api = new MagicBookAPI({
@@ -23,7 +24,7 @@ describe("Photo", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = dispatchEventSpy.mock.calls[0][0]["detail"];
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("photo.analyze");
     expect(analyzedPhotoSchema.parse(event.payload)).toStrictEqual(event.payload);
   });

@@ -1,5 +1,5 @@
 {
-  "name": "@magiclabs.ai/web-sdk",
+  "name": "@magiclabs.ai/mb-web-sdk",
   "version": "0.0.0",
   "private": false,
   "description": "TypeScript package to create photo books with the Magicbook API.",

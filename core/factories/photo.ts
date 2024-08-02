@@ -31,9 +31,24 @@ export function photoFactory(): AnalyzedPhoto {
     })),
     takenAt: faker.date.past().toISOString(),
     roi: {
-      primary: {},
-      maxL: {},
-      maxP: {},
+      primary: {
+        x: faker.number.float({ min: 0, max: 1 }),
+        y: faker.number.float({ min: 0, max: 1 }),
+        width: faker.number.float({ min: 0, max: 1 }),
+        height: faker.number.float({ min: 0, max: 1 }),
+      },
+      maxL: {
+        x: faker.number.float({ min: 0, max: 1 }),
+        y: faker.number.float({ min: 0, max: 1 }),
+        width: faker.number.float({ min: 0, max: 1 }),
+        height: faker.number.float({ min: 0, max: 1 }),
+      },
+      maxP: {
+        x: faker.number.float({ min: 0, max: 1 }),
+        y: faker.number.float({ min: 0, max: 1 }),
+        width: faker.number.float({ min: 0, max: 1 }),
+        height: faker.number.float({ min: 0, max: 1 }),
+      },
     },
   };
 }

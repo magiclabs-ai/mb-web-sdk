@@ -33,11 +33,18 @@ export const faceSchema = z.object({
   }),
 });
 
+const roiSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number(),
+});
+
 // Roi schema
-export const roiSchema = z.object({
-  primary: z.record(z.unknown()),
-  maxL: z.record(z.unknown()),
-  maxP: z.record(z.unknown()),
+export const roiObjectSchema = z.object({
+  primary: roiSchema,
+  maxL: roiSchema,
+  maxP: roiSchema,
 });
 
 // AnalyzedPhoto schema
@@ -53,7 +60,7 @@ export const analyzedPhotoSchema = z.object({
   aestheticScore: z.number(),
   labels: z.array(labelSchema),
   takenAt: z.string(),
-  roi: roiSchema,
+  roi: roiObjectSchema,
 });
 
 // Infer types from schemas
@@ -61,4 +68,4 @@ export type PhotoAnalyzeBody = z.infer<typeof photoAnalyzeBodySchema>;
 export type AnalyzedPhoto = z.infer<typeof analyzedPhotoSchema>;
 export type Label = z.infer<typeof labelSchema>;
 export type Face = z.infer<typeof faceSchema>;
-export type Roi = z.infer<typeof roiSchema>;
+export type Roi = z.infer<typeof roiObjectSchema>;

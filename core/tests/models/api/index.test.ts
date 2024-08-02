@@ -9,7 +9,7 @@ describe("API", () => {
       mock: true,
     });
     const apiKey = "fake key";
-    expect(api.fetcher.options.headers["Authorization"]).toEqual(`API-Key ${apiKey}`);
+    expect(api.fetcher.options.headers.Authorization).toEqual(`API-Key ${apiKey}`);
   });
   test("Without mock", async () => {
     fetchMocker.mockResponse(JSON.stringify({}));
