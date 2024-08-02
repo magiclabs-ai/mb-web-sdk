@@ -197,7 +197,7 @@ await api.project.resize({
 To retrieve autofill options by `imageCount`, call the `autofillOptions` function. This API will send the response directly.
 
 ```ts
-await api.autofillOptions(100);
+await api.autofillOptions.retrieve(100);
 ```
 
 ---
