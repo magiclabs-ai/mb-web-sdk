@@ -4,6 +4,9 @@
 
 TypeScript package to interact with the MagicBook API.
 
+> :warning:
+> This is currently a **mock** SDK. It makes no network calls and returns canned responses and fake data. It is to be used for testing purposes and by no means represents the design quality of the upcoming **operational** SDK. 
+
 ## Installation
 
 ```bash
