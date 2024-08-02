@@ -5,7 +5,7 @@
   "description": "TypeScript package to create photo books with the Magicbook API.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/magiclabs-ai/mb-client"
+    "url": "https://github.com/magiclabs-ai/mb-web-sdk"
   },
   "type": "module",
   "exports": {
