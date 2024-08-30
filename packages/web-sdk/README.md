@@ -26,8 +26,9 @@ First, set up a callback to handle the asynchronous responses from the request y
 ```ts
 window.addEventListener(
   "MagicBook",
-  async((designRequestEvent: DesignRequestEvent) => {
-    console.log(designRequestEvent.detail);
+  ((event: CustomEvent<MBEvent<unknown>>) => {
+    // Handle the event
+    console.log(event.detail);
   }) as EventListener
 );
 ```
