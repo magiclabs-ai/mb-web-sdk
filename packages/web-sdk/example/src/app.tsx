@@ -97,7 +97,7 @@ function App() {
     if (!project) {
       return;
     }
-    await mb.project.photo.resize({
+    await mb.project.resize({
       id: project.id,
       metadata: project.metadata,
       photos: project.photos,
