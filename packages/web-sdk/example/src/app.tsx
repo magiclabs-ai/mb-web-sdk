@@ -3,7 +3,7 @@ import {
   type MBEvent,
   type AnalyzedPhoto,
   type Project,
-} from "@magiclabs.ai/web-sdk";
+} from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
 
