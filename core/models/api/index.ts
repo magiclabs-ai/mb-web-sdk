@@ -1,5 +1,5 @@
 import { SurfaceEndpoints } from "./endpoints/surface";
-import { Fetcher } from "../fetcher";
+import { Fetcher, FetchOptions } from "../fetcher";
 import { AutofillOptionsEndpoints } from "@/core/models/api/endpoints/autofill-options";
 import { defaultApiHost } from "@/core/config";
 import { ProjectEndpoints } from "@/core/models/api/endpoints/project";
@@ -17,12 +17,9 @@ export class MagicBookAPI {
 
   constructor(props?: MagicBookAPIProps) {
     const apiHost = props?.apiHost || defaultApiHost;
-    const mock = props?.mock || true;
-    const options = {
-      headers: {
-        Authorization: `API-Key ${props?.apiKey}`,
-      },
-    };
+    const mock = props?.mock ?? false;
+    const options = {} as FetchOptions;
+    if (props?.apiKey) options.headers.Authorization = `API-Key ${props?.apiKey}`;
     this.fetcher = new Fetcher(apiHost, options, mock);
   }
 

@@ -1,5 +1,7 @@
 import { mergeNestedObject } from "../utils/toolbox";
 
+export type FetchOptions = RequestInit & { headers: { Authorization?: string } };
+
 export type CallProps<T> = {
   path: string;
   options?: RequestInit;
