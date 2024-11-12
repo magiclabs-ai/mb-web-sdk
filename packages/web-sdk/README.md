@@ -128,10 +128,10 @@ app.use(
     async function makeBookRequest() {
       const test = await api.photos.analyze([
         {
-          id: "photo.handle",
+          id: "1234",
           width: 100,
           height: 100,
-          url: "photo.url",
+          url: "https://...",
         },
       ]);
     }
