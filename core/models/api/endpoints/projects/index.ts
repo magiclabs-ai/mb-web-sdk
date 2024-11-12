@@ -12,15 +12,15 @@ export class ProjectEndpoints {
   autofill(body: ProjectAutofillBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/project/autofill",
+        path: "/v1/projects/autofill",
         options: {
           method: "POST",
           body: JSON.stringify(body),
         },
         factory: async () => {
-          eventHandler(await projectFactory({ ...body, noSurfaces: true }), "project.autofill");
+          eventHandler(await projectFactory({ ...body, noSurfaces: true }), "projects.autofill");
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler(await surfaceFactory(), "project.autofill.surface");
+            eventHandler(await surfaceFactory(), "projects.autofill.surface");
           });
           return {};
         },
@@ -32,15 +32,15 @@ export class ProjectEndpoints {
   restyle(body: Project) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/project/restyle",
+        path: "/v1/projects/restyle",
         options: {
           method: "POST",
           body: JSON.stringify(body),
         },
         factory: async () => {
-          eventHandler(await projectFactory({ ...body, noSurfaces: true }), "project.restyle");
+          eventHandler(await projectFactory({ ...body, noSurfaces: true }), "projects.restyle");
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler(await surfaceFactory(), "project.restyle.surface");
+            eventHandler(await surfaceFactory(), "projects.restyle.surface");
           });
           return {};
         },
@@ -52,7 +52,7 @@ export class ProjectEndpoints {
   resize(body: Project) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/project/resize",
+        path: "/v1/projects/resize",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -63,10 +63,10 @@ export class ProjectEndpoints {
               ...body,
               noSurfaces: true,
             }),
-            "project.resize",
+            "projects.resize",
           );
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler(await surfaceFactory(), "project.resize.surface");
+            eventHandler(await surfaceFactory(), "projects.resize.surface");
           });
           return {};
         },

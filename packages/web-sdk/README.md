@@ -40,7 +40,7 @@ the events you will receive will have two props
 
 ```json
 {
-  "eventName": "surface.autofill"
+  "eventName": "surfaces.autofill"
   "request": {...}
   "result": {...}
 }
@@ -71,10 +71,10 @@ await api.photos.analyse(
 > :warning:
 > Only available in mock mode.
 
-To create a surface with autofill, call the `surface.autofill` function. Once ready, an event will be sent to the listener you created earlier.
+To create a surface with autofill, call the `surfaces.autofill` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
-await api.surface.autofill({
+await api.surfaces.autofill({
   photos: [...],
   surface: {
     id: "surfaceId",
@@ -94,10 +94,10 @@ await api.surface.autofill({
 > :warning:
 > Only available in mock mode.
 
-To create a surface with shuffle, call the `surface.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
+To create a surface with shuffle, call the `surfaces.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
-await api.surface.shuffle({
+await api.surfaces.shuffle({
   photos: [...],
   surface: {
     id: "surfaceId",
@@ -117,10 +117,10 @@ await api.surface.shuffle({
 > :warning:
 > Only available in mock mode.
 
-To create a surface with autoAdapt, call the `surface.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
+To create a surface with autoAdapt, call the `surfaces.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
-await api.surface.autoAdapt({
+await api.surfaces.autoAdapt({
   photos: [...],
   surface: {
     id: "surfaceId",
@@ -140,10 +140,10 @@ await api.surface.autoAdapt({
 > :warning:
 > Only available in mock mode.
 
-To create a surface with suggest, call the `surface.suggest` function. Once ready, an event will be sent to the listener you created earlier.
+To create a surface with suggest, call the `surfaces.suggest` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
-await api.surface.suggest({
+await api.surfaces.suggest({
   photos: [...],
   surface: {
     id: "surfaceId",
@@ -165,10 +165,10 @@ await api.surface.suggest({
 > :warning:
 > Only available in mock mode.
 
-To create a project with autofill, call the `project.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
+To create a project with autofill, call the `projects.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
 ```ts
-await api.project.autofill({
+await api.projects.autofill({
   photos: [...],
   metadata: [
     {
@@ -183,10 +183,10 @@ await api.project.autofill({
 > :warning:
 > Only available in mock mode.
 
-To create a project with restyle, call the `project.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
+To create a project with restyle, call the `projects.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
 ```ts
-await api.project.restyle({
+await api.projects.restyle({
   photos: [...],
   metadata: [
     {
@@ -201,10 +201,10 @@ await api.project.restyle({
 > :warning:
 > Only available in mock mode.
 
-To resize a project, call the `project.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
+To resize a project, call the `projects.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
 ```ts
-await api.project.resize({
+await api.projects.resize({
   photos: [...],
   metadata: [
     {

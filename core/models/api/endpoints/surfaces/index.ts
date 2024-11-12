@@ -16,12 +16,12 @@ export class SurfaceEndpoints {
   autofill(body: SurfaceAutofillBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surface/autofill",
+        path: "/v1/surfaces/autofill",
         options: {
           method: "POST",
           body: JSON.stringify(body),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.autofill"),
+        factory: () => eventHandler(surfaceFactory(), "surfaces.autofill"),
       });
       return res;
     });
@@ -30,12 +30,12 @@ export class SurfaceEndpoints {
   shuffle(body: SurfaceShuffleBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surface/shuffle",
+        path: "/v1/surfaces/shuffle",
         options: {
           method: "POST",
           body: JSON.stringify(body),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.shuffle"),
+        factory: () => eventHandler(surfaceFactory(), "surfaces.shuffle"),
       });
       return res;
     });
@@ -44,12 +44,12 @@ export class SurfaceEndpoints {
   autoAdapt(body: SurfaceAutoAdaptBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surface/autoadapt",
+        path: "/v1/surfaces/autoadapt",
         options: {
           method: "POST",
           body: JSON.stringify(body),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.autoAdapt"),
+        factory: () => eventHandler(surfaceFactory(), "surfaces.autoAdapt"),
       });
       return res;
     });
@@ -58,7 +58,7 @@ export class SurfaceEndpoints {
   suggest(body: SurfaceSuggestBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surface/suggest",
+        path: "/v1/surfaces/suggest",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -66,7 +66,7 @@ export class SurfaceEndpoints {
         factory: () =>
           eventHandler(
             Array.from({ length: faker.number.int({ min: 2, max: 10 }) }).map(surfaceFactory),
-            "surface.suggest",
+            "surfaces.suggest",
           ),
       });
       return res;

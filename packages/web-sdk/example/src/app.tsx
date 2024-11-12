@@ -29,7 +29,7 @@ function App() {
       const photo = event.detail.result as AnalyzedPhoto;
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
-    if (event.detail.eventName === "project.autofill") {
+    if (event.detail.eventName === "projects.autofill") {
       const project = event.detail.result as Project;
       setProject(project);
     }
@@ -58,7 +58,7 @@ function App() {
   }
 
   async function createProjectWithAutofill() {
-    await mb.project.autofill({
+    await mb.projects.autofill({
       photos,
       metadata: [
         {
@@ -73,11 +73,11 @@ function App() {
     if (!project) {
       return;
     }
-    await mb.project.restyle({
-      id: project.id,
-      metadata: project.metadata,
-      photos: project.photos,
-      surfaces: project.surfaces,
+    await mb.projects.restyle({
+      id: projects.id,
+      metadata: projects.metadata,
+      photos: projects.photos,
+      surfaces: projects.surfaces,
     });
   }
 
@@ -85,23 +85,23 @@ function App() {
     if (!project) {
       return;
     }
-    await mb.project.resize({
-      id: project.id,
-      metadata: project.metadata,
-      photos: project.photos,
-      surfaces: project.surfaces,
+    await mb.projects.resize({
+      id: projects.id,
+      metadata: projects.metadata,
+      photos: projects.photos,
+      surfaces: projects.surfaces,
     });
   }
 
   async function autofillSurface() {
-    await mb.surface.autofill({
+    await mb.surfaces.autofill({
       metadata: [],
       photos,
     });
   }
 
   async function autoAdaptSurface() {
-    await mb.surface.autoAdapt({
+    await mb.surfaces.autoAdapt({
       photos,
       surface: {
         id: "surfaceId",
@@ -118,7 +118,7 @@ function App() {
   }
 
   async function suggestSurface() {
-    await mb.surface.suggest({
+    await mb.surfaces.suggest({
       photos,
       surface: {
         id: "surfaceId",
@@ -135,7 +135,7 @@ function App() {
   }
 
   async function shuffleSurface() {
-    await mb.surface.shuffle({
+    await mb.surfaces.shuffle({
       photos,
       surface: {
         id: "surfaceId",

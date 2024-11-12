@@ -18,7 +18,7 @@ describe("API", () => {
     });
 
     expect(
-      await api.surface.autofill({
+      await api.surfaces.autofill({
         metadata: [],
         photos: [],
       }),

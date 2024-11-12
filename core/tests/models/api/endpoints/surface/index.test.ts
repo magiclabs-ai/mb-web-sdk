@@ -19,7 +19,7 @@ describe("Surface", () => {
   test("autofill", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.surface.autofill({
+    const res = await api.surfaces.autofill({
       metadata: [],
       photos: [],
     });
@@ -28,14 +28,14 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.autofill");
+    expect(event.eventName).toBe("surfaces.autofill");
     expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
   });
 
   test("shuffle", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.surface.shuffle({
+    const res = await api.surfaces.shuffle({
       metadata: [],
       photos: [],
     });
@@ -44,14 +44,14 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.shuffle");
+    expect(event.eventName).toBe("surfaces.shuffle");
     expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
   });
 
   test("autoAdapt", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.surface.autoAdapt({
+    const res = await api.surfaces.autoAdapt({
       metadata: [],
       photos: [],
     });
@@ -60,14 +60,14 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.autoAdapt");
+    expect(event.eventName).toBe("surfaces.autoAdapt");
     expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
   });
 
   test("suggest", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.surface.suggest({
+    const res = await api.surfaces.suggest({
       metadata: [],
       photos: [],
     });
@@ -76,7 +76,7 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.suggest");
+    expect(event.eventName).toBe("surfaces.suggest");
     expect(z.array(surfaceSchema).parse(event.payload)).toStrictEqual(event.payload);
   });
 });

@@ -19,7 +19,7 @@ describe("Project", () => {
   test("autofill", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.project.autofill({
+    const res = await api.projects.autofill({
       metadata: [],
       photos: [],
     });
@@ -28,12 +28,12 @@ describe("Project", () => {
     vi.runAllTimers();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("project.autofill");
+    expect(event.eventName).toBe("projects.autofill");
     expect(projectSchema.parse(event.payload)).toStrictEqual(event.payload);
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
       const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<MBEvent<unknown>>).detail;
-      expect(surfaceEvent.eventName).toBe("project.autofill.surface");
+      expect(surfaceEvent.eventName).toBe("projects.autofill.surface");
       expect(surfaceSchema.parse(surfaceEvent.payload)).toStrictEqual(surfaceEvent.payload);
     }
   });
@@ -41,7 +41,7 @@ describe("Project", () => {
   test("restyle", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.project.restyle({
+    const res = await api.projects.restyle({
       metadata: [],
       photos: [],
     });
@@ -50,12 +50,12 @@ describe("Project", () => {
     vi.runAllTimers();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("project.restyle");
+    expect(event.eventName).toBe("projects.restyle");
     expect(projectSchema.parse(event.payload)).toStrictEqual(event.payload);
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
       const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<MBEvent<unknown>>).detail;
-      expect(surfaceEvent.eventName).toBe("project.restyle.surface");
+      expect(surfaceEvent.eventName).toBe("projects.restyle.surface");
       expect(surfaceSchema.parse(surfaceEvent.payload)).toStrictEqual(surfaceEvent.payload);
     }
   });
@@ -63,7 +63,7 @@ describe("Project", () => {
   test("resize", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.project.resize({
+    const res = await api.projects.resize({
       metadata: [],
       photos: [],
     });
@@ -72,12 +72,12 @@ describe("Project", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("project.resize");
+    expect(event.eventName).toBe("projects.resize");
     expect(projectSchema.parse(event.payload)).toStrictEqual(event.payload);
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
       const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<MBEvent<unknown>>).detail;
-      expect(surfaceEvent.eventName).toBe("project.resize.surface");
+      expect(surfaceEvent.eventName).toBe("projects.resize.surface");
       expect(surfaceSchema.parse(surfaceEvent.payload)).toStrictEqual(surfaceEvent.payload);
     }
   });

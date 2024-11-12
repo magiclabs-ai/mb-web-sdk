@@ -1,8 +1,8 @@
-import { SurfaceEndpoints } from "./endpoints/surface";
+import { SurfaceEndpoints } from "./endpoints/surfaces";
 import { Fetcher, type FetchOptions } from "../fetcher";
 import { AutofillOptionsEndpoints } from "@/core/models/api/endpoints/autofill-options";
 import { defaultApiHost, defaultWebSocketHost } from "@/core/config";
-import { ProjectEndpoints } from "@/core/models/api/endpoints/project";
+import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
@@ -44,8 +44,8 @@ export class MagicBookAPI {
     this.fetcher = new Fetcher(apiHost, options, mock, this.ws);
   }
 
-  readonly surface = new SurfaceEndpoints(this);
-  readonly project = new ProjectEndpoints(this);
+  readonly surfaces = new SurfaceEndpoints(this);
+  readonly projects = new ProjectEndpoints(this);
   readonly autofillOptions = new AutofillOptionsEndpoints(this);
   readonly photos = new PhotoEndpoints(this);
 }
