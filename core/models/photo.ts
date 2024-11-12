@@ -6,7 +6,6 @@ export const photoAnalyzeBodySchema = z.array(
     id: z.string(),
     width: z.number(),
     height: z.number(),
-    orientation: z.number(),
     url: z.string(),
   }),
 );
@@ -50,17 +49,27 @@ export const roiObjectSchema = z.object({
 // AnalyzedPhoto schema
 export const analyzedPhotoSchema = z.object({
   id: z.string(),
+  url: z.string(),
+  roi: roiObjectSchema,
+  faces: z.array(faceSchema),
+  handle: z.string(),
+  filename: z.string(),
   width: z.number(),
   height: z.number(),
   orientation: z.number(),
-  url: z.string(),
-  faces: z.array(faceSchema),
+  sequence: z.number(),
+  taken_at: z.string(),
+  taken_at_offset: z.number(),
+  camera_make: z.string(),
+  camera: z.string(),
   similarity: z.number(),
-  category: z.string(),
-  aestheticScore: z.number(),
-  labels: z.array(labelSchema),
-  takenAt: z.string(),
-  roi: roiObjectSchema,
+  selected: z.boolean(),
+  favorite: z.boolean(),
+  longitude: z.number(),
+  latitude: z.number(),
+  created_at: z.string(),
+  ingestion_started_at: z.string(),
+  ingestion_at: z.string(),
 });
 
 // Infer types from schemas
