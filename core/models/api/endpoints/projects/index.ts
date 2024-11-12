@@ -12,7 +12,7 @@ export class ProjectEndpoints {
   autofill(body: ProjectAutofillBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/projects/autofill",
+        path: "/designer/v1/projects/autofill",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -32,7 +32,7 @@ export class ProjectEndpoints {
   restyle(body: Project) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/projects/restyle",
+        path: "/designer/v1/projects/restyle",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -52,7 +52,7 @@ export class ProjectEndpoints {
   resize(body: Project) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/projects/resize",
+        path: "/designer/v1/projects/resize",
         options: {
           method: "POST",
           body: JSON.stringify(body),

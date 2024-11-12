@@ -1,3 +1,4 @@
+import { wsReconnectInterval } from "../config";
 import type { MBEvent } from "./event";
 
 type WSMessage = {
@@ -13,7 +14,7 @@ type WSMessage = {
 export class WS {
   connection?: WebSocket;
   private url: string;
-  private reconnectInterval = 5000;
+  private reconnectInterval = wsReconnectInterval;
 
   constructor(url: string) {
     this.url = url;

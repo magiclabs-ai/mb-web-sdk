@@ -16,7 +16,7 @@ export class SurfaceEndpoints {
   autofill(body: SurfaceAutofillBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surfaces/autofill",
+        path: "/designer/v1/surfaces/autofill",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -30,7 +30,7 @@ export class SurfaceEndpoints {
   shuffle(body: SurfaceShuffleBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surfaces/shuffle",
+        path: "/designer/v1/surfaces/shuffle",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -44,7 +44,7 @@ export class SurfaceEndpoints {
   autoAdapt(body: SurfaceAutoAdaptBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surfaces/autoadapt",
+        path: "/designer/v1/surfaces/autoadapt",
         options: {
           method: "POST",
           body: JSON.stringify(body),
@@ -58,7 +58,7 @@ export class SurfaceEndpoints {
   suggest(body: SurfaceSuggestBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/surfaces/suggest",
+        path: "/designer/v1/surfaces/suggest",
         options: {
           method: "POST",
           body: JSON.stringify(body),

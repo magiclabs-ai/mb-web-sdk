@@ -8,7 +8,7 @@ export class AutofillOptionsEndpoints {
   retrieve(imageCount?: number) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: `/v1/autofilloptions${imageCount ? `?imageCount=${imageCount}` : ""}`,
+        path: `/designer/v1/autofilloptions${imageCount ? `?imageCount=${imageCount}` : ""}`,
         factory: AutofillOptionsFactory,
       });
       return res;

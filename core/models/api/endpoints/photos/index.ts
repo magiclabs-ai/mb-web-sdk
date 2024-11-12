@@ -10,7 +10,7 @@ export class PhotoEndpoints {
   analyze(body: PhotoAnalyzeBody) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: "/v1/photos/analyze",
+        path: "/analyzer/v1/photos/analyze",
         options: {
           method: "POST",
           body: JSON.stringify(body),
