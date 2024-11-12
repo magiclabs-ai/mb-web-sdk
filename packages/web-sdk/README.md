@@ -69,7 +69,7 @@ await api.photos.analyse(
 
 #### Autofill
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To create a surface with autofill, call the `surface.autofill` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -92,7 +92,7 @@ await api.surface.autofill({
 
 #### Shuffle
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To create a surface with shuffle, call the `surface.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -115,7 +115,7 @@ await api.surface.shuffle({
 
 #### AutoAdapt
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To create a surface with autoAdapt, call the `surface.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -138,7 +138,7 @@ await api.surface.autoAdapt({
 
 #### Suggest
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To create a surface with suggest, call the `surface.suggest` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -163,7 +163,7 @@ await api.surface.suggest({
 
 #### Autofill
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To create a project with autofill, call the `project.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -181,7 +181,7 @@ await api.project.autofill({
 
 #### Restyle
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To create a project with restyle, call the `project.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -199,7 +199,7 @@ await api.project.restyle({
 
 #### Resize
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To resize a project, call the `project.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -217,7 +217,7 @@ await api.project.resize({
 
 ### Autofill Options
 > :warning:
-> Only available on mock mode.
+> Only available in mock mode.
 
 To retrieve autofill options by `imageCount`, call the `autofillOptions` function. This API will send the response directly.
 
