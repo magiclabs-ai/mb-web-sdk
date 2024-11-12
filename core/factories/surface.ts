@@ -1,21 +1,23 @@
 import type { BackgroundContent, LayeredItem, Surface, TextContent } from "@/core/models/surface";
 import { faker } from "@faker-js/faker";
+import { metadataFactory } from "./metadata";
 
 export function surfaceFactory(): Surface {
   return {
-    id: faker.string.uuid(),
-    number: faker.number.int(),
-    data: {
+    surfaceNumber: faker.number.int(),
+    surfaceData: {
       pageDetails: {
         width: faker.number.int({ min: 1000, max: 10000 }),
         height: faker.number.int({ min: 1000, max: 10000 }),
       },
-      layeredItems: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, createRandomLayeredItem),
+      layeredItems: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, LayeredItemFactory),
     },
+    surfaceMetadata: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, metadataFactory),
+    version: "4.0",
   };
 }
 
-function createRandomLayeredItem(): LayeredItem {
+function LayeredItemFactory(): LayeredItem {
   const type = faker.helpers.arrayElement(["background", "text"]) as "background" | "text";
   return {
     container: {
@@ -25,11 +27,11 @@ function createRandomLayeredItem(): LayeredItem {
       height: faker.number.float({ min: 10, max: 3000, multipleOf: 0.01 }),
     },
     type,
-    content: type === "background" ? createRandomBackgroundContent() : createRandomTextContent(),
+    content: type === "background" ? BackgroundContentFactory() : TextContentFactory(),
   };
 }
 
-function createRandomBackgroundContent(): BackgroundContent {
+function BackgroundContentFactory(): BackgroundContent {
   return {
     type: faker.lorem.words(3),
     userData: faker.helpers.arrayElement([
@@ -57,7 +59,7 @@ function createRandomBackgroundContent(): BackgroundContent {
   };
 }
 
-function createRandomTextContent(): TextContent {
+function TextContentFactory(): TextContent {
   return {
     type: faker.lorem.words(2),
     userData: {

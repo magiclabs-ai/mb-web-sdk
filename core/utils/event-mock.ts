@@ -5,8 +5,8 @@ export async function eventHandler<T>(detail: T, eventName: string) {
     detail: {
       eventName,
       request: {
-        client_id: "test",
-        url: "test",
+        client_id: "mock",
+        url: "mock",
       },
       result: detail,
     },

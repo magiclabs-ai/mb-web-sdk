@@ -1,6 +1,5 @@
-import { SurfaceEndpoints } from "./endpoints/surfaces";
+// import { SurfaceEndpoints } from "./endpoints/surfaces";
 import { Fetcher, type FetchOptions } from "../fetcher";
-import { AutofillOptionsEndpoints } from "@/core/models/api/endpoints/autofill-options";
 import { defaultApiHost } from "@/core/config";
 import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
@@ -23,8 +22,8 @@ type MagicBookAPIProps =
 
 export class MagicBookAPI {
   private clientId = faker.string.uuid();
-  readonly analyzerWS?: WS;
-  readonly projectWS?: WS;
+  analyzerWS?: WS;
+  projectWS?: WS;
   readonly fetcher: Fetcher;
 
   constructor(props: MagicBookAPIProps) {
@@ -44,16 +43,14 @@ export class MagicBookAPI {
       // this.projectWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
     }
 
-    this.fetcher = new Fetcher(apiHost, options, mock, this.areWSOpen);
+    this.fetcher = new Fetcher(apiHost, options, mock, () => this.areWSOpen());
   }
 
   private areWSOpen() {
-    return this.analyzerWS?.isOpen();
+    return this.analyzerWS?.isOpen() ?? false;
     // && this.projectWS?.isOpen();
   }
 
-  readonly surfaces = new SurfaceEndpoints(this);
   readonly projects = new ProjectEndpoints(this);
-  readonly autofillOptions = new AutofillOptionsEndpoints(this);
   readonly photos = new PhotoEndpoints(this);
 }

@@ -14,7 +14,12 @@
     "ignore": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/.turbo/**"],
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "style": {
+        "noNonNullAssertion": {
+          "level": "off"
+        }
+      }
     }
   }
 }

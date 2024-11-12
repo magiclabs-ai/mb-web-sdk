@@ -33,7 +33,7 @@ describe("WS", () => {
       event_name: "test_event",
       result: "test_result",
       request: {
-        client_id: "test_client",
+        clientId: "test_client",
         url: "test_url",
       },
     };

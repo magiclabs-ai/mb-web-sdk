@@ -4,9 +4,6 @@
 
 TypeScript package to interact with the MagicBook API.
 
-> :warning:
-> This is currently a **mock** SDK. It only makes network calls if the `mock` property on `MagicBookAPI` is not set or is set to `false`. Otherwise, it returns canned responses and fake data. It is intended for testing purposes and does not reflect the design quality of the upcoming operational SDK.
-
 ## Installation
 
 ```bash
@@ -36,7 +33,7 @@ window.addEventListener(
 );
 ```
 
-the events you will receive will have two props
+The events you will receive will have three props
 
 ```json
 {
@@ -49,8 +46,6 @@ the events you will receive will have two props
 ### Photos
 
 #### Analyze
-
-
 To analyze an array of photos, call the `photos.analyze` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
@@ -59,170 +54,36 @@ await api.photos.analyse(
     id: photo.handle,
     width: photo.width,
     height: photo.height,
-    orientation: photo.rotation,
     url: photo.url,
   }))
 );
 ```
 
-### Surface
-
-#### Autofill
-> :warning:
-> Only available in mock mode.
-
-To create a surface with autofill, call the `surfaces.autofill` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surfaces.autofill({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
-#### Shuffle
-> :warning:
-> Only available in mock mode.
-
-To create a surface with shuffle, call the `surfaces.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surfaces.shuffle({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
-#### AutoAdapt
-> :warning:
-> Only available in mock mode.
-
-To create a surface with autoAdapt, call the `surfaces.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surfaces.autoAdapt({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
-#### Suggest
-> :warning:
-> Only available in mock mode.
-
-To create a surface with suggest, call the `surfaces.suggest` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surfaces.suggest({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
 ### Project
 
 #### Autofill
-> :warning:
-> Only available in mock mode.
-
 To create a project with autofill, call the `projects.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
 ```ts
 await api.projects.autofill({
-  photos: [...],
-  metadata: [
-    {
-      name: "designName",
-      value: "Travel Memories",
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8.5,
+      height: 11,
     },
-  ],
-});
-```
-
-#### Restyle
-> :warning:
-> Only available in mock mode.
-
-To create a project with restyle, call the `projects.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
-
-```ts
-await api.projects.restyle({
-  photos: [...],
-  metadata: [
-    {
-      name: "designName",
-      value: "Travel Memories",
+    cover: {
+      width: 8.5,
+      height: 11,
     },
-  ],
+  },
+  images: [...],
 });
-```
-
-#### Resize
-> :warning:
-> Only available in mock mode.
-
-To resize a project, call the `projects.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
-
-```ts
-await api.projects.resize({
-  photos: [...],
-  metadata: [
-    {
-      name: "designName",
-      value: "Travel Memories",
-    },
-  ],
-});
-```
-
-### Autofill Options
-> :warning:
-> Only available in mock mode.
-
-To retrieve autofill options by `imageCount`, call the `autofillOptions` function. This API will send the response directly.
-
-```ts
-await api.autofillOptions.retrieve(100);
 ```
 
 ---

@@ -25,7 +25,7 @@ describe("Photo", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("photos.analyze");
+    expect(event.eventName).toBe("photo.analyze");
     expect(analyzedPhotoSchema.parse(event.result)).toStrictEqual(event.result);
   });
 });

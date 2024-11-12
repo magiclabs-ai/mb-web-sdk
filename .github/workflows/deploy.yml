@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{github.event.release.prerelease && 'dev' || 'prod'}}
     env:
-      WEBSOCKET_HOST: ${{vars.WEBSOCKET_HOST}}
+      WS_RECONNECT_INTERVAL: ${{vars.WS_RECONNECT_INTERVAL}}
       API_HOST: ${{vars.API_HOST}}
     steps:
       - uses: actions/checkout@v3

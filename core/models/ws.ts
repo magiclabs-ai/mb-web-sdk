@@ -1,11 +1,12 @@
 import { wsReconnectInterval } from "../config";
+import { snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
 import type { MBEvent } from "./event";
 
 type WSMessage = {
-  event_name: string;
+  eventName: string;
   result: unknown;
   request: {
-    client_id: string;
+    clientId: string;
     url: string;
     [key: string]: unknown;
   };
@@ -14,7 +15,6 @@ type WSMessage = {
 export class WS {
   connection?: WebSocket;
   private url: string;
-  private reconnectInterval = wsReconnectInterval;
 
   constructor(url: string) {
     this.url = url;
@@ -25,10 +25,10 @@ export class WS {
     this.connection = new WebSocket(this.url);
 
     this.connection.onmessage = (event: MessageEvent) => {
-      const { result, request, event_name } = JSON.parse(event.data) as WSMessage;
+      const { result, request, eventName } = snakeCaseObjectKeysToCamelCase(JSON.parse(event.data)) as WSMessage;
       const customEvent = new CustomEvent<MBEvent<unknown>>("MagicBook", {
         detail: {
-          eventName: event_name,
+          eventName,
           request,
           result,
         },
@@ -37,7 +37,7 @@ export class WS {
     };
 
     this.connection.onclose = () => {
-      setTimeout(() => this.connect(), this.reconnectInterval);
+      setTimeout(() => this.connect(), wsReconnectInterval);
     };
   }
 

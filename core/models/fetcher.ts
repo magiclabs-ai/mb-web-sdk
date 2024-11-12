@@ -20,9 +20,9 @@ export class Fetcher {
   baseUrl: URL;
   options: RequestInit;
   mock: boolean;
-  areWsOpen?: () => boolean | undefined;
+  areWsOpen: () => boolean;
 
-  constructor(baseUrl: string, options: RequestInit, mock: boolean, areWsOpen: () => boolean | undefined) {
+  constructor(baseUrl: string, options: RequestInit, mock: boolean, areWsOpen: () => boolean) {
     this.baseUrl = new URL(baseUrl);
     this.options = mergeNestedObject(baseOptions, options);
     this.mock = mock;
@@ -34,7 +34,7 @@ export class Fetcher {
       if (!props.factory) throw Error("factory-not-found");
       return props.factory();
     }
-    if (!this.areWsOpen?.()) {
+    if (!this.areWsOpen()) {
       throw Error("ws-connection-not-open");
     }
     try {
