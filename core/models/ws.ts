@@ -23,10 +23,6 @@ export class WS {
   private connect() {
     this.connection = new WebSocket(this.url);
 
-    this.connection.onopen = () => {
-      console.log("WebSocket connection established");
-    };
-
     this.connection.onmessage = (event: MessageEvent) => {
       const { result, request, event_name } = JSON.parse(event.data) as WSMessage;
       const customEvent = new CustomEvent<MBEvent<unknown>>("MagicBook", {
@@ -39,12 +35,7 @@ export class WS {
       window.dispatchEvent(customEvent);
     };
 
-    this.connection.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
     this.connection.onclose = () => {
-      console.log("WebSocket connection closed, attempting to reconnect...");
       setTimeout(() => this.connect(), this.reconnectInterval);
     };
   }
