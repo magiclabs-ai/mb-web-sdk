@@ -1,125 +1,125 @@
 {
-    "dominic-budapest-low-res": [
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3895.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 0,
-            "taken_at": "2017-10-23 12:13:43",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3895.jpg",
-            "handle": "IMG_3895.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3881.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-23 11:37:33",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3881.jpg",
-            "handle": "IMG_3881.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3856.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-22 11:51:20",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3856.jpg",
-            "handle": "IMG_3856.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3920.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-23 12:43:45",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3920.jpg",
-            "handle": "IMG_3920.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4068.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 0,
-            "taken_at": "2017-10-24 17:01:01",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4068.jpg",
-            "handle": "IMG_4068.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3897.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-23 12:15:39",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3897.jpg",
-            "handle": "IMG_3897.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4135.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-25 12:53:23",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4135.jpg",
-            "handle": "IMG_4135.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3855.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-22 11:27:12",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3855.jpg",
-            "handle": "IMG_3855.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4082.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-24 17:32:56",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4082.jpg",
-            "handle": "IMG_4082.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4096.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 0,
-            "taken_at": "2017-10-24 18:09:21",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4096.jpg",
-            "handle": "IMG_4096.jpg"
-        },
-        {
-            "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4243.jpg",
-            "width": 1000,
-            "height": 750,
-            "orientation": 270,
-            "taken_at": "2017-10-26 13:17:00",
-            "camera": "iPhone 6s",
-            "camera_make": "Apple",
-            "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4243.jpg",
-            "handle": "IMG_4243.jpg"
-        }
-    ]
+  "dominic-budapest-low-res": [
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3895.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 0,
+      "taken_at": "2017-10-23 12:13:43",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3895.jpg",
+      "handle": "IMG_3895.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3881.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-23 11:37:33",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3881.jpg",
+      "handle": "IMG_3881.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3856.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-22 11:51:20",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3856.jpg",
+      "handle": "IMG_3856.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3920.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-23 12:43:45",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3920.jpg",
+      "handle": "IMG_3920.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4068.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 0,
+      "taken_at": "2017-10-24 17:01:01",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4068.jpg",
+      "handle": "IMG_4068.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3897.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-23 12:15:39",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3897.jpg",
+      "handle": "IMG_3897.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4135.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-25 12:53:23",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4135.jpg",
+      "handle": "IMG_4135.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_3855.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-22 11:27:12",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_3855.jpg",
+      "handle": "IMG_3855.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4082.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-24 17:32:56",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4082.jpg",
+      "handle": "IMG_4082.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4096.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 0,
+      "taken_at": "2017-10-24 18:09:21",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4096.jpg",
+      "handle": "IMG_4096.jpg"
+    },
+    {
+      "url": "https://mb-sls-engine-shared.s3.amazonaws.com/sample-imagesets/dominic-budapest-low-res/IMG_4243.jpg",
+      "width": 1000,
+      "height": 750,
+      "orientation": 270,
+      "taken_at": "2017-10-26 13:17:00",
+      "camera": "iPhone 6s",
+      "camera_make": "Apple",
+      "filename": "sample-imagesets/dominic-budapest-low-res/IMG_4243.jpg",
+      "handle": "IMG_4243.jpg"
+    }
+  ]
 }

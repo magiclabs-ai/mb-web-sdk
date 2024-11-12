@@ -8,20 +8,10 @@
     "lineEnding": "lf",
     "lineWidth": 120,
     "attributePosition": "auto",
-    "ignore": [
-      "**/dist/**",
-      "**/node_modules/**",
-      "**/coverage/**",
-      "**/.turbo/**"
-    ]
+    "ignore": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/.turbo/**"]
   },
   "linter": {
-    "ignore": [
-      "**/dist/**",
-      "**/node_modules/**",
-      "**/coverage/**",
-      "**/.turbo/**"
-    ],
+    "ignore": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/.turbo/**"],
     "enabled": true,
     "rules": {
       "recommended": true

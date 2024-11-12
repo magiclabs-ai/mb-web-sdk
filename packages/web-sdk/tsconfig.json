@@ -2,12 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "@/client/*": [
-        "./*"
-      ],
-      "@/core/*": [
-        "../../core/*"
-      ]
+      "@/client/*": ["./*"],
+      "@/core/*": ["../../core/*"]
     }
   }
 }

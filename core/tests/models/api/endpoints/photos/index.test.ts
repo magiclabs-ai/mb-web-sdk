@@ -26,6 +26,6 @@ describe("Photo", () => {
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("photos.analyze");
-    expect(analyzedPhotoSchema.parse(event.payload)).toStrictEqual(event.payload);
+    expect(analyzedPhotoSchema.parse(event.result)).toStrictEqual(event.result);
   });
 });

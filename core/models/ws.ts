@@ -11,7 +11,7 @@ type WSMessage = {
 };
 
 export class WS {
-  private connection?: WebSocket;
+  connection?: WebSocket;
   private url: string;
   private reconnectInterval = 5000;
 

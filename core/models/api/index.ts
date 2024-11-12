@@ -1,7 +1,7 @@
 import { SurfaceEndpoints } from "./endpoints/surfaces";
 import { Fetcher, type FetchOptions } from "../fetcher";
 import { AutofillOptionsEndpoints } from "@/core/models/api/endpoints/autofill-options";
-import { defaultApiHost, defaultWebSocketHost } from "@/core/config";
+import { defaultApiHost } from "@/core/config";
 import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
@@ -23,13 +23,14 @@ type MagicBookAPIProps =
 
 export class MagicBookAPI {
   private clientId = faker.string.uuid();
-  readonly analyserWS?: WS;
+  readonly analyzerWS?: WS;
   readonly projectWS?: WS;
   readonly fetcher: Fetcher;
 
   constructor(props: MagicBookAPIProps) {
-    const apiHost = props.apiHost || defaultApiHost;
-    const webSocketHost = props.webSocketHost || defaultWebSocketHost;
+    const host = props.apiHost || defaultApiHost;
+    const apiHost = `https://${host}`;
+    const webSocketHost = `wss://${host}`;
     const mock = props.mock ?? false;
     const options = {
       headers: {
@@ -38,8 +39,8 @@ export class MagicBookAPI {
     } as FetchOptions;
 
     if (!mock) {
-      if (props.apiKey) options.headers.Authorization = `API-Key ${props.apiKey}`;
-      this.analyserWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
+      options.headers.Authorization = `API-Key ${props.apiKey}`;
+      this.analyzerWS = new WS(`${webSocketHost}/ws/analyzer?clientId=${this.clientId}`);
       // this.projectWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
     }
 
@@ -47,7 +48,7 @@ export class MagicBookAPI {
   }
 
   private areWSOpen() {
-    return this.analyserWS?.isOpen();
+    return this.analyzerWS?.isOpen();
     // && this.projectWS?.isOpen();
   }
 

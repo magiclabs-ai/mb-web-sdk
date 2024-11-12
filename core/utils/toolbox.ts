@@ -1,13 +1,20 @@
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function mergeNestedObject(obj: Record<string, any>, objToMerge: Record<string, any>) {
-  Object.keys(objToMerge).map((key) => {
-    if (typeof obj[key] === "object" && typeof objToMerge[key] === "object") {
-      mergeNestedObject(obj[key], objToMerge[key]);
+export function mergeNestedObject(obj: Record<string, any>, objToMerge: Record<string, any>): Record<string, any> {
+  const result = { ...obj };
+
+  for (const [key, value] of Object.entries(objToMerge)) {
+    if (typeof value === "object" && value !== null) {
+      if (Array.isArray(value)) {
+        result[key] = [...value];
+      } else {
+        result[key] = mergeNestedObject(result[key] && typeof result[key] === "object" ? result[key] : {}, value);
+      }
     } else {
-      obj[key] = objToMerge[key];
+      result[key] = value;
     }
-  });
-  return obj;
+  }
+
+  return result;
 }
 
 export async function handleAsyncFunction<T>(fn: () => Promise<T>) {

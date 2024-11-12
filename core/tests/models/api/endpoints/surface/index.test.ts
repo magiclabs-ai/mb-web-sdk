@@ -29,7 +29,7 @@ describe("Surface", () => {
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.autofill");
-    expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
+    expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
 
   test("shuffle", async () => {
@@ -45,7 +45,7 @@ describe("Surface", () => {
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.shuffle");
-    expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
+    expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
 
   test("autoAdapt", async () => {
@@ -61,7 +61,7 @@ describe("Surface", () => {
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.autoAdapt");
-    expect(surfaceSchema.parse(event.payload)).toStrictEqual(event.payload);
+    expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
 
   test("suggest", async () => {
@@ -77,6 +77,6 @@ describe("Surface", () => {
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.suggest");
-    expect(z.array(surfaceSchema).parse(event.payload)).toStrictEqual(event.payload);
+    expect(z.array(surfaceSchema).parse(event.result)).toStrictEqual(event.result);
   });
 });

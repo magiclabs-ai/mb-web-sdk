@@ -3,9 +3,9 @@ import { describe, expect, test } from "vitest";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
 
 describe("Fetcher", () => {
-  const fetcher = new Fetcher("https://api.fake-server.com", {}, true);
+  const fetcher = new Fetcher("https://api.fake-server.com", {}, false, () => true);
   test("init without options", async () => {
-    expect(fetcher.options).toBe(baseOptions);
+    expect(fetcher.options).toStrictEqual(baseOptions);
   });
   test.fails("fail call", async () => {
     fetchMocker.mockReject(() => Promise.reject("Something went wrong. Please try again."));
@@ -59,11 +59,24 @@ describe("Fetcher", () => {
       factory: () => new Promise((resolve) => resolve({})),
       options: {
         method: "POST",
-        body: JSON.stringify({
+        body: {
+          // @ts-ignore
           test: "test",
-        }),
+        },
       },
     });
     expect(res).toStrictEqual({});
+  });
+});
+
+describe("Fetcher in mock mode", () => {
+  const fetcher = new Fetcher("https://api.fake-server.com", {}, true, () => true);
+  test("init without options", async () => {
+    expect(fetcher.options).toStrictEqual(baseOptions);
+  });
+  test.fails("mock call", async () => {
+    fetchMocker.mockResponse(() => Promise.resolve({}));
+    const res = await fetcher.call({ path: "/books" });
+    expect(res).toStrictEqual("factory-not-found");
   });
 });
