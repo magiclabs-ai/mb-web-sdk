@@ -4,7 +4,11 @@ export async function eventHandler<T>(detail: T, eventName: string) {
   const customEvent = new CustomEvent<MBEvent<T>>("MagicBook", {
     detail: {
       eventName,
-      payload: detail,
+      request: {
+        client_id: "test",
+        url: "test",
+      },
+      result: detail,
     },
   });
   new Promise(() => {

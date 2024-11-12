@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
 
 describe("Fetcher", () => {
-  const fetcher = new Fetcher("https://api.fake-server.com");
+  const fetcher = new Fetcher("https://api.fake-server.com", {}, true);
   test("init without options", async () => {
     expect(fetcher.options).toBe(baseOptions);
   });
@@ -36,19 +36,32 @@ describe("Fetcher", () => {
     expect(res).toThrowError("400 Detail error");
   });
   test.fails("fail call when status code is > 300", async () => {
-    fetchMocker.mockResponse({ status: 400, statusText: "Error 400" });
+    fetchMocker.mockResponse(
+      () =>
+        new Promise((resolve) => {
+          resolve({
+            status: 400,
+          });
+        }),
+    );
     const res = await fetcher.call({ path: "/books" });
     expect(res).toThrowError("Error 400");
   });
   test("body as object", async () => {
-    fetchMocker.mockResponse({ status: 200, statusText: "Test" });
+    fetchMocker.mockResponse(
+      () =>
+        new Promise((resolve) => {
+          resolve({ status: 200, statusText: "Test" });
+        }),
+    );
     const res = await fetcher.call({
       path: "/books",
+      factory: () => new Promise((resolve) => resolve({})),
       options: {
         method: "POST",
-        body: {
+        body: JSON.stringify({
           test: "test",
-        },
+        }),
       },
     });
     expect(res).toStrictEqual({});

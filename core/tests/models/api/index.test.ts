@@ -6,7 +6,6 @@ describe("API", () => {
   test("apiKey is used properly", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
-      mock: true,
     });
     const apiKey = "fake key";
     expect(api.fetcher.options.headers.Authorization).toEqual(`API-Key ${apiKey}`);
@@ -14,12 +13,12 @@ describe("API", () => {
   test("Without mock", async () => {
     fetchMocker.mockResponse(JSON.stringify({}));
 
-    const api2 = new MagicBookAPI({
+    const api = new MagicBookAPI({
       apiKey: "fake key",
     });
 
     expect(
-      await api2.surface.autofill({
+      await api.surface.autofill({
         metadata: [],
         photos: [],
       }),

@@ -18,7 +18,10 @@ npm install @magiclabs.ai/mb-web-sdk
 Create a MagicBook API instance
 
 ```ts
-const api = new MagicBookAPI();
+const api = new MagicBookAPI({
+  apiKey: string,
+  mock?: boolean // Default to false
+});
 ```
 
 First, set up a callback to handle the asynchronous responses from the request you will make.
@@ -38,18 +41,20 @@ the events you will receive will have two props
 ```json
 {
   "eventName": "surface.autofill"
-  "payload": {...}
+  "request": {...}
+  "result": {...}
 }
 ```
 
-### Photo
+### Photos
 
 #### Analyze
 
-To analyze an array of photos, call the `photo.analyze` function. Once ready, an event will be sent to the listener you created earlier.
+
+To analyze an array of photos, call the `photos.analyze` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
-await api.photo.analyse(
+await api.photos.analyse(
   photos.map((photo) => ({
     id: photo.handle,
     width: photo.width,
@@ -63,6 +68,8 @@ await api.photo.analyse(
 ### Surface
 
 #### Autofill
+> :warning:
+> Only available on mock mode.
 
 To create a surface with autofill, call the `surface.autofill` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -84,6 +91,8 @@ await api.surface.autofill({
 ```
 
 #### Shuffle
+> :warning:
+> Only available on mock mode.
 
 To create a surface with shuffle, call the `surface.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -105,6 +114,8 @@ await api.surface.shuffle({
 ```
 
 #### AutoAdapt
+> :warning:
+> Only available on mock mode.
 
 To create a surface with autoAdapt, call the `surface.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -126,6 +137,8 @@ await api.surface.autoAdapt({
 ```
 
 #### Suggest
+> :warning:
+> Only available on mock mode.
 
 To create a surface with suggest, call the `surface.suggest` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -149,6 +162,8 @@ await api.surface.suggest({
 ### Project
 
 #### Autofill
+> :warning:
+> Only available on mock mode.
 
 To create a project with autofill, call the `project.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -165,6 +180,8 @@ await api.project.autofill({
 ```
 
 #### Restyle
+> :warning:
+> Only available on mock mode.
 
 To create a project with restyle, call the `project.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -181,6 +198,8 @@ await api.project.restyle({
 ```
 
 #### Resize
+> :warning:
+> Only available on mock mode.
 
 To resize a project, call the `project.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -197,6 +216,8 @@ await api.project.resize({
 ```
 
 ### Autofill Options
+> :warning:
+> Only available on mock mode.
 
 To retrieve autofill options by `imageCount`, call the `autofillOptions` function. This API will send the response directly.
 

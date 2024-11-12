@@ -1,30 +1,21 @@
-import {
-  MagicBookAPI,
-  type MBEvent,
-  type AnalyzedPhoto,
-  type Project,
-} from "@magiclabs.ai/mb-web-sdk";
+import { MagicBookAPI, type MBEvent, type AnalyzedPhoto, type Project } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
 
 function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
   const [project, setProject] = useState<Project>();
-  const mb = new MagicBookAPI();
+  const mb = new MagicBookAPI({
+    apiKey: "TEST",
+  });
 
   useEffect(() => {
     function addMagicBookEventListener() {
-      window.addEventListener(
-        "MagicBook",
-        handleDesignRequestUpdated as EventListener
-      );
+      window.addEventListener("MagicBook", handleDesignRequestUpdated as EventListener);
     }
 
     function removeMagicBookEventListener() {
-      window.removeEventListener(
-        "MagicBook",
-        handleDesignRequestUpdated as EventListener
-      );
+      window.removeEventListener("MagicBook", handleDesignRequestUpdated as EventListener);
     }
     addMagicBookEventListener();
     return () => {
@@ -33,13 +24,13 @@ function App() {
   }, []);
 
   function handleDesignRequestUpdated(event: CustomEvent<MBEvent<unknown>>) {
-    console.log("MagicBook", event.detail.eventName, event.detail.payload);
-    if (event.detail.eventName === "photo.analyze") {
-      const photo = event.detail.payload as AnalyzedPhoto;
+    console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result);
+    if (event.detail.eventName === "photos.analyze") {
+      const photo = event.detail.result as AnalyzedPhoto;
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
     if (event.detail.eventName === "project.autofill") {
-      const project = event.detail.payload as Project;
+      const project = event.detail.result as Project;
       setProject(project);
     }
   }
@@ -51,21 +42,18 @@ function App() {
   }, [photos]);
 
   async function getAutofillOptions() {
-    console.log(
-      "mb.autofillOptions.retrieve ->",
-      await mb.autofillOptions.retrieve()
-    );
+    console.log("mb.autofillOptions.retrieve ->", await mb.autofillOptions.retrieve());
   }
 
   async function analyzeImages() {
-    await mb.photo.analyze(
+    await mb.photos.analyze(
       niceAndRome["00-nice-and-rome"].map((image) => ({
         id: image.handle,
         width: image.width,
         height: image.height,
         orientation: image.rotation,
         url: image.url,
-      }))
+      })),
     );
   }
 
@@ -171,11 +159,7 @@ function App() {
       <button type="button" className="text-left" onClick={analyzeImages}>
         1. Analyse Images
       </button>
-      <button
-        type="button"
-        className="text-left"
-        onClick={createProjectWithAutofill}
-      >
+      <button type="button" className="text-left" onClick={createProjectWithAutofill}>
         2. Create Project with Autofill
       </button>
       <button type="button" className="text-left" onClick={restyleProject}>
