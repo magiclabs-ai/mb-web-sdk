@@ -15,14 +15,20 @@ type WSMessage = {
 export class WS {
   connection?: WebSocket;
   private url: string;
+  private onConnectionOpened: () => void;
 
-  constructor(url: string) {
+  constructor(url: string, onConnectionOpened: () => void) {
     this.url = url;
     this.connect();
+    this.onConnectionOpened = onConnectionOpened;
   }
 
   private connect() {
     this.connection = new WebSocket(this.url);
+
+    this.connection.onopen = () => {
+      this.onConnectionOpened();
+    };
 
     this.connection.onmessage = (event: MessageEvent) => {
       const { result, request, eventName } = snakeCaseObjectKeysToCamelCase(JSON.parse(event.data)) as WSMessage;
@@ -41,7 +47,7 @@ export class WS {
     };
   }
 
-  isOpen() {
+  isConnectionOpen() {
     return this.connection?.readyState === 1;
   }
 }

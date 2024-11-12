@@ -5,6 +5,7 @@ import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
+import { eventHandler } from "@/core/utils/event-mock";
 
 type MagicBookAPIProps =
   | {
@@ -39,16 +40,22 @@ export class MagicBookAPI {
 
     if (!mock) {
       options.headers.Authorization = `API-Key ${props.apiKey}`;
-      this.analyzerWS = new WS(`${webSocketHost}/ws/analyzer?clientId=${this.clientId}`);
+      this.analyzerWS = new WS(`${webSocketHost}/ws/analyzer?clientId=${this.clientId}`, () =>
+        this.onConnectionOpened(),
+      );
       // this.projectWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
     }
 
     this.fetcher = new Fetcher(apiHost, options, mock, () => this.areWSOpen());
   }
 
-  private areWSOpen() {
-    return this.analyzerWS?.isOpen() ?? false;
-    // && this.projectWS?.isOpen();
+  areWSOpen() {
+    const isConnectionOpen = this.analyzerWS?.isConnectionOpen() ?? false;
+    return isConnectionOpen;
+  }
+
+  onConnectionOpened() {
+    eventHandler({ areConnectionsOpen: this.areWSOpen() }, "ws", true);
   }
 
   readonly projects = new ProjectEndpoints(this);

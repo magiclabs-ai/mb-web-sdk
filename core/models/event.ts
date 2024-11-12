@@ -1,5 +1,5 @@
 export type MBEvent<T> = {
   eventName: string;
-  request: unknown;
+  request?: unknown;
   result: T;
 };

@@ -6,7 +6,7 @@ describe("WS", () => {
   const url = "ws://localhost:8080";
 
   beforeEach(() => {
-    ws = new WS(url);
+    ws = new WS(url, () => {});
   });
 
   test("should initialize with the correct URL", () => {
@@ -14,9 +14,9 @@ describe("WS", () => {
   });
 
   test("should establish a WebSocket connection", () => {
-    expect(ws.isOpen()).toBe(false);
+    expect(ws.isConnectionOpen()).toBe(false);
     ws.connection = { readyState: 1 } as WebSocket;
-    expect(ws.isOpen()).toBe(true);
+    expect(ws.isConnectionOpen()).toBe(true);
   });
 
   test("should reconnect on close", () => {

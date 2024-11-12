@@ -12,15 +12,6 @@ npm install @magiclabs.ai/mb-web-sdk
 
 ## Usage
 
-Create a MagicBook API instance
-
-```ts
-const api = new MagicBookAPI({
-  apiKey: string,
-  mock?: boolean // Default to false
-});
-```
-
 First, set up a callback to handle the asynchronous responses from the request you will make.
 
 ```ts
@@ -33,7 +24,7 @@ window.addEventListener(
 );
 ```
 
-The events you will receive will have three props
+the events you will receive will have three props
 
 ```json
 {
@@ -42,6 +33,23 @@ The events you will receive will have three props
   "result": {...}
 }
 ```
+
+Create a MagicBook API instance
+
+```ts
+const api = new MagicBookAPI({
+  apiKey: string,
+  mock?: boolean // Default to false
+});
+```
+
+Once you receive event `ws` with result
+```json
+{
+  "areConnectionsOpen": true
+}
+```
+you are ready to go!
 
 ### Photos
 
@@ -109,8 +117,24 @@ app.use(
     ></script>
   </head>
   <script type="text/javascript">
-    const api = new MagicLabs.MagicBookAPI()
-    ...
+    const api = new MagicLabs.MagicBookAPI({...})
+    
+    window.addEventListener("MagicBook", async (event) => {
+      if (event.detail.eventName === 'ws' && event.detail.result.areConnectionsOpen) {
+        await makeBookRequest();
+      }
+    });
+
+    async function makeBookRequest() {
+      const test = await api.photos.analyze([
+        {
+          id: "photo.handle",
+          width: 100,
+          height: 100,
+          url: "photo.url",
+        },
+      ]);
+    }
   </script>
 </html>
 ```

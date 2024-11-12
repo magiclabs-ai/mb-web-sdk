@@ -4,26 +4,34 @@ import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-clien
 
 function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
-  const mb = new MagicBookAPI({
-    apiKey: "TEST",
-  });
+  const [areConnectionsOpen, setAreConnectionsOpen] = useState(false);
+  const [mb, setMbApi] = useState<MagicBookAPI>();
 
   useEffect(() => {
     function addMagicBookEventListener() {
-      window.addEventListener("MagicBook", handleDesignRequestUpdated as EventListener);
+      window.addEventListener("MagicBook", handleEvent as EventListener);
     }
 
     function removeMagicBookEventListener() {
-      window.removeEventListener("MagicBook", handleDesignRequestUpdated as EventListener);
+      window.removeEventListener("MagicBook", handleEvent as EventListener);
     }
     addMagicBookEventListener();
+
+    setMbApi(
+      new MagicBookAPI({
+        apiKey: "TEST",
+      }),
+    );
     return () => {
       removeMagicBookEventListener();
     };
   }, []);
 
-  function handleDesignRequestUpdated(event: CustomEvent<MBEvent<unknown>>) {
+  function handleEvent(event: CustomEvent<MBEvent<unknown>>) {
     console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result);
+    if (event.detail.eventName === "ws" && event.detail.result.areConnectionsOpen) {
+      setAreConnectionsOpen(true);
+    }
     if (event.detail.eventName === "photo.analyze") {
       const photo = event.detail.result as AnalyzedPhoto;
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
@@ -71,20 +79,29 @@ function App() {
   }
 
   return (
-    <div className="flex gap-10">
-      <div className="flex flex-col items-start gap-4 p-4">
-        <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
-        <button type="button" onClick={analyzePhotos}>
-          2. Analyse Photos
-        </button>
+    <>
+      <div className="p-4">
+        <h1 className="text-lg font-semibold">MagicBook Web SDK Example</h1>
+        <div className="text-sm">
+          <span>WS Connections Open: </span>
+          <span>{areConnectionsOpen ? "✅" : "🔴"}</span>
+        </div>
       </div>
-      <div className="flex flex-col items-start gap-4 p-4">
-        <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
-        <button type="button" onClick={createProjectWithAutofill} disabled>
-          1. Create Project with Autofill
-        </button>
+      <div className="flex gap-10">
+        <div className="flex flex-col items-start gap-4 p-4">
+          <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
+          <button type="button" onClick={analyzePhotos}>
+            2. Analyse Photos
+          </button>
+        </div>
+        <div className="flex flex-col items-start gap-4 p-4">
+          <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
+          <button type="button" onClick={createProjectWithAutofill} disabled>
+            1. Create Project with Autofill
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
