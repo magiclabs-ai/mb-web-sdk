@@ -152,34 +152,43 @@ function App() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 p-4">
-      <button type="button" className="text-left" onClick={getAutofillOptions}>
-        Get Autofill Options
-      </button>
-      <button type="button" className="text-left" onClick={analyzeImages}>
-        1. Analyse Images
-      </button>
-      <button type="button" className="text-left" onClick={createProjectWithAutofill}>
-        2. Create Project with Autofill
-      </button>
-      <button type="button" className="text-left" onClick={restyleProject}>
-        3. Restyle Project
-      </button>
-      <button type="button" className="text-left" onClick={resizeProject}>
-        3. Resize Project
-      </button>
-      <div className="grid grid-cols-1 gap-4 p-4">
-        <h2>Surface</h2>
-        <button type="button" className="text-left" onClick={autofillSurface}>
+    <div className="flex gap-10">
+      <div className="flex flex-col items-start gap-4 p-4">
+        <h2 className="w-full pb-1 text-lg font-semibold border-b">Autofill Options</h2>
+        <button type="button" onClick={getAutofillOptions}>
+          1. Get Autofill Options
+        </button>
+      </div>
+      <div className="flex flex-col items-start gap-4 p-4">
+        <h2 className="w-full pb-1 text-lg font-semibold border-b">Images</h2>
+        <button type="button" onClick={analyzeImages}>
+          2. Analyse Images
+        </button>
+      </div>
+      <div className="flex flex-col items-start gap-4 p-4">
+        <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
+        <button type="button" onClick={createProjectWithAutofill}>
+          1. Create Project with Autofill
+        </button>
+        <button type="button" onClick={restyleProject}>
+          2. Restyle Project
+        </button>
+        <button type="button" onClick={resizeProject}>
+          3. Resize Project
+        </button>
+      </div>
+      <div className="flex flex-col items-start gap-4 p-4">
+        <h2 className="w-full pb-1 text-lg font-semibold border-b">Surface</h2>
+        <button type="button" onClick={autofillSurface}>
           1. Autofill Surface
         </button>
-        <button type="button" className="text-left" onClick={autoAdaptSurface}>
+        <button type="button" onClick={autoAdaptSurface}>
           2. Auto Adapt Surface
         </button>
-        <button type="button" className="text-left" onClick={suggestSurface}>
+        <button type="button" onClick={suggestSurface}>
           3. Suggest Surface
         </button>
-        <button type="button" className="text-left" onClick={shuffleSurface}>
+        <button type="button" onClick={shuffleSurface}>
           4. Shuffle Surface
         </button>
       </div>
