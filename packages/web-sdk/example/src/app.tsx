@@ -25,11 +25,11 @@ function App() {
 
   function handleDesignRequestUpdated(event: CustomEvent<MBEvent<unknown>>) {
     console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result);
-    if (event.detail.eventName === "photos.analyze") {
+    if (event.detail.eventName === "photo.analyze") {
       const photo = event.detail.result as AnalyzedPhoto;
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
-    if (event.detail.eventName === "projects.autofill") {
+    if (event.detail.eventName === "project.autofill") {
       const project = event.detail.result as Project;
       setProject(project);
     }
@@ -45,7 +45,7 @@ function App() {
     console.log("mb.autofillOptions.retrieve ->", await mb.autofillOptions.retrieve());
   }
 
-  async function analyzeImages() {
+  async function analyzePhotos() {
     await mb.photos.analyze(
       niceAndRome["00-nice-and-rome"].map((image) => ({
         id: image.handle,
@@ -74,10 +74,10 @@ function App() {
       return;
     }
     await mb.projects.restyle({
-      id: projects.id,
-      metadata: projects.metadata,
-      photos: projects.photos,
-      surfaces: projects.surfaces,
+      id: project.id,
+      metadata: project.metadata,
+      photos: project.photos,
+      surfaces: project.surfaces,
     });
   }
 
@@ -86,10 +86,10 @@ function App() {
       return;
     }
     await mb.projects.resize({
-      id: projects.id,
-      metadata: projects.metadata,
-      photos: projects.photos,
-      surfaces: projects.surfaces,
+      id: project.id,
+      metadata: project.metadata,
+      photos: project.photos,
+      surfaces: project.surfaces,
     });
   }
 
@@ -160,9 +160,9 @@ function App() {
         </button>
       </div>
       <div className="flex flex-col items-start gap-4 p-4">
-        <h2 className="w-full pb-1 text-lg font-semibold border-b">Images</h2>
-        <button type="button" onClick={analyzeImages}>
-          2. Analyse Images
+        <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
+        <button type="button" onClick={analyzePhotos}>
+          2. Analyse Photos
         </button>
       </div>
       <div className="flex flex-col items-start gap-4 p-4">
