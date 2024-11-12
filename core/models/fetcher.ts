@@ -1,5 +1,4 @@
 import { mergeNestedObject } from "../utils/toolbox";
-import type { WS } from "./ws";
 
 export type FetchOptions = RequestInit & { headers: { Authorization?: string } };
 
@@ -21,13 +20,13 @@ export class Fetcher {
   baseUrl: URL;
   options: RequestInit;
   mock: boolean;
-  ws?: WS;
+  areWsOpen?: () => boolean | undefined;
 
-  constructor(baseUrl: string, options: RequestInit, mock: boolean, ws?: WS) {
+  constructor(baseUrl: string, options: RequestInit, mock: boolean, areWsOpen: () => boolean | undefined) {
     this.baseUrl = new URL(baseUrl);
     this.options = mergeNestedObject(baseOptions, options || {});
     this.mock = mock;
-    this.ws = ws;
+    this.areWsOpen = areWsOpen;
   }
 
   async call<T>(props: CallProps<T>) {
@@ -35,7 +34,7 @@ export class Fetcher {
       if (!props.factory) throw Error("factory-not-found");
       return props.factory();
     }
-    if (!this.ws?.isOpen()) {
+    if (this.areWsOpen?.()) {
       throw Error("ws-connection-not-open");
     }
     try {

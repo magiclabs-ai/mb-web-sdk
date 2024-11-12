@@ -23,7 +23,8 @@ type MagicBookAPIProps =
 
 export class MagicBookAPI {
   private clientId = faker.string.uuid();
-  readonly ws?: WS;
+  readonly analyserWS?: WS;
+  readonly projectWS?: WS;
   readonly fetcher: Fetcher;
 
   constructor(props: MagicBookAPIProps) {
@@ -38,10 +39,16 @@ export class MagicBookAPI {
 
     if (!mock) {
       if (props.apiKey) options.headers.Authorization = `API-Key ${props.apiKey}`;
-      this.ws = new WS(`${webSocketHost}?clientId=${this.clientId}`);
+      this.analyserWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
+      // this.projectWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
     }
 
-    this.fetcher = new Fetcher(apiHost, options, mock, this.ws);
+    this.fetcher = new Fetcher(apiHost, options, mock, this.areWSOpen);
+  }
+
+  private areWSOpen() {
+    return this.analyserWS?.isOpen();
+    // && this.projectWS?.isOpen();
   }
 
   readonly surfaces = new SurfaceEndpoints(this);
