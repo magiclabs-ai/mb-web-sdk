@@ -11,13 +11,11 @@ type MagicBookAPIProps =
   | {
       apiKey: string;
       apiHost?: string;
-      webSocketHost?: string;
       mock?: false;
     }
   | {
       apiKey?: string;
       apiHost?: string;
-      webSocketHost?: string;
       mock: true;
     };
 
