@@ -5,7 +5,7 @@
 TypeScript package to interact with the MagicBook API.
 
 > :warning:
-> This is currently a **mock** SDK. It makes no network calls and returns canned responses and fake data. It is to be used for testing purposes and by no means represents the design quality of the upcoming **operational** SDK. 
+> This is currently a **mock** SDK. It only makes network calls if the `mock` property on `MagicBookAPI` is not set or is set to `false`. Otherwise, it returns canned responses and fake data. It is intended for testing purposes and does not reflect the design quality of the upcoming operational SDK.
 
 ## Installation
 
