@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    button:disabled {
+        @apply text-gray-400 cursor-not-allowed;
+    }
+}

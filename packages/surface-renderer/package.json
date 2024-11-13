@@ -1,0 +1,44 @@
+{
+  "name": "@magiclabs.ai/mb-surface-renderer",
+  "version": "0.0.0",
+  "private": false,
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magiclabs-ai/mb-web-sdk"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build": "../../scripts/build/before.sh && tsup && ../../scripts/build/after.sh",
+    "watch": "../../scripts/build/before.sh --watch && tsup --watch"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "dependencies": {
+    "react-konva": "^18.2.10",
+    "konva": "^9.3.16",
+
+    "dotenv": "^16.4.5",
+    "flatted": "^3.3.1",
+    "json": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+
+    "jsdom": "^24.1.1",
+    "tsup": "^8.2.3"
+  },
+  "packageManager": "pnpm@8.6.11"
+}
