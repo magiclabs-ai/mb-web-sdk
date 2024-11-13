@@ -3,8 +3,6 @@ import { defineConfig } from "tsup";
 
 dotenv.config({ path: "../../.env" });
 
-console.log(process.env);
-
 export default defineConfig({
   clean: true,
   dts: true,
