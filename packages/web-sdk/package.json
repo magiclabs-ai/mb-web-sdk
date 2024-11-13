@@ -18,7 +18,7 @@
   "module": "./dist/index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "build": "../../scripts/build/before.sh && tsup && ../../scripts/build/after.sh && esbuild dist/index.js --bundle --outfile=dist/index.iife.js --format=iife --global-name=MagicLabs",
+    "build": "../../scripts/build/before.sh && tsup && ../../scripts/build/after.sh && esbuild dist/index.js --bundle --outfile=dist/index.iife.js --format=iife --global-name=MagicLabs && esbuild dist/index.js --bundle --outfile=dist/index.iife.min.js --format=iife --global-name=MagicLabs --minify",
     "watch": "../../scripts/build/before.sh --watch && tsup --watch"
   },
   "dependencies": {
