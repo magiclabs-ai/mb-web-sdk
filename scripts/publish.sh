@@ -6,7 +6,7 @@ packages=("web-sdk")
 baseDir=$PWD
 
 if [[ "$1" == "--canary" ]]; then
-    version=$version-canary
+    version=$version-canary.1
     publishCommand="$publishCommand canary"
 else
     publishCommand="$publishCommand latest"
