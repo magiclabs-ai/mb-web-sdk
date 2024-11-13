@@ -4,9 +4,6 @@
 
 TypeScript package to interact with the MagicBook API.
 
-> :warning:
-> This is currently a **mock** SDK. It makes no network calls and returns canned responses and fake data. It is to be used for testing purposes and by no means represents the design quality of the upcoming **operational** SDK. 
-
 ## Installation
 
 ```bash
@@ -14,12 +11,6 @@ npm install @magiclabs.ai/mb-web-sdk
 ```
 
 ## Usage
-
-Create a MagicBook API instance
-
-```ts
-const api = new MagicBookAPI();
-```
 
 First, set up a callback to handle the asynchronous responses from the request you will make.
 
@@ -33,175 +24,74 @@ window.addEventListener(
 );
 ```
 
-the events you will receive will have two props
+the events you will receive will have three props
 
 ```json
 {
-  "eventName": "surface.autofill"
-  "payload": {...}
+  "eventName": "surfaces.autofill"
+  "request": {...}
+  "result": {...}
 }
 ```
 
-### Photo
-
-#### Analyze
-
-To analyze an array of photos, call the `photo.analyze` function. Once ready, an event will be sent to the listener you created earlier.
+Create a MagicBook API instance
 
 ```ts
-await api.photo.analyse(
+const api = new MagicBookAPI({
+  apiKey: string,
+  mock?: boolean // Default to false
+});
+```
+
+Once you receive event `ws` with result
+```json
+{
+  "areConnectionsOpen": true
+}
+```
+you are ready to go!
+
+### Photos
+
+#### Analyze
+To analyze an array of photos, call the `photos.analyze` function. Once ready, an event will be sent to the listener you created earlier.
+
+```ts
+await api.photos.analyse(
   photos.map((photo) => ({
     id: photo.handle,
     width: photo.width,
     height: photo.height,
-    orientation: photo.rotation,
     url: photo.url,
   }))
 );
 ```
 
-### Surface
-
-#### Autofill
-
-To create a surface with autofill, call the `surface.autofill` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surface.autofill({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
-#### Shuffle
-
-To create a surface with shuffle, call the `surface.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surface.shuffle({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
-#### AutoAdapt
-
-To create a surface with autoAdapt, call the `surface.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surface.autoAdapt({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
-#### Suggest
-
-To create a surface with suggest, call the `surface.suggest` function. Once ready, an event will be sent to the listener you created earlier.
-
-```ts
-await api.surface.suggest({
-  photos: [...],
-  surface: {
-    id: "surfaceId",
-    number: 1,
-    data: {
-      pageDetails: {
-        width: 100,
-        height: 100,
-      },
-      layeredItems: [],
-    },
-  },
-});
-```
-
 ### Project
 
 #### Autofill
-
-To create a project with autofill, call the `project.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
+To create a project with autofill, call the `projects.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
 ```ts
-await api.project.autofill({
-  photos: [...],
-  metadata: [
-    {
-      name: "designName",
-      value: "Travel Memories",
+await api.projects.autofill({
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8.5,
+      height: 11,
     },
-  ],
-});
-```
-
-#### Restyle
-
-To create a project with restyle, call the `project.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
-
-```ts
-await api.project.restyle({
-  photos: [...],
-  metadata: [
-    {
-      name: "designName",
-      value: "Travel Memories",
+    cover: {
+      width: 8.5,
+      height: 11,
     },
-  ],
+  },
+  images: [...],
 });
-```
-
-#### Resize
-
-To resize a project, call the `project.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
-
-```ts
-await api.project.resize({
-  photos: [...],
-  metadata: [
-    {
-      name: "designName",
-      value: "Travel Memories",
-    },
-  ],
-});
-```
-
-### Autofill Options
-
-To retrieve autofill options by `imageCount`, call the `autofillOptions` function. This API will send the response directly.
-
-```ts
-await api.autofillOptions.retrieve(100);
 ```
 
 ---
@@ -227,8 +117,24 @@ app.use(
     ></script>
   </head>
   <script type="text/javascript">
-    const api = new MagicLabs.MagicBookAPI()
-    ...
+    const api = new MagicLabs.MagicBookAPI({...})
+    
+    window.addEventListener("MagicBook", async (event) => {
+      if (event.detail.eventName === 'ws' && event.detail.result.areConnectionsOpen) {
+        await makeBookRequest();
+      }
+    });
+
+    async function makeBookRequest() {
+      const test = await api.photos.analyze([
+        {
+          id: "1234",
+          width: 100,
+          height: 100,
+          url: "https://...",
+        },
+      ]);
+    }
   </script>
 </html>
 ```

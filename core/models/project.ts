@@ -1,19 +1,24 @@
-import { metadataSchema } from "@/core/models/metadata";
 import { analyzedPhotoSchema } from "@/core/models/photo";
-import { surfaceSchema } from "@/core/models/surface";
 import { z } from "zod";
 
-export const projectSchema = z.object({
-  id: z.string(),
-  metadata: z.array(metadataSchema),
-  surfaces: z.array(surfaceSchema),
-  photos: z.array(analyzedPhotoSchema),
-});
-
 export const projectAutofillBodySchema = z.object({
-  photos: z.array(analyzedPhotoSchema),
-  metadata: z.array(metadataSchema),
+  designMode: z.string(),
+  occasion: z.string(),
+  style: z.string(),
+  imageDensityLevel: z.string(),
+  embellishmentLevel: z.string(),
+  bookFormat: z.object({
+    targetPageRange: z.array(z.number()),
+    page: z.object({
+      width: z.number(),
+      height: z.number(),
+    }),
+    cover: z.object({
+      width: z.number(),
+      height: z.number(),
+    }),
+  }),
+  images: z.array(analyzedPhotoSchema),
 });
 
-export type Project = z.infer<typeof projectSchema>;
 export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;

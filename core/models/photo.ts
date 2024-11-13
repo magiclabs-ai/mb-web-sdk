@@ -6,7 +6,6 @@ export const photoAnalyzeBodySchema = z.array(
     id: z.string(),
     width: z.number(),
     height: z.number(),
-    orientation: z.number(),
     url: z.string(),
   }),
 );
@@ -40,27 +39,31 @@ const roiSchema = z.object({
   height: z.number(),
 });
 
-// Roi schema
-export const roiObjectSchema = z.object({
-  primary: roiSchema,
-  maxL: roiSchema,
-  maxP: roiSchema,
-});
-
 // AnalyzedPhoto schema
 export const analyzedPhotoSchema = z.object({
   id: z.string(),
+  url: z.string(),
+  roi: roiSchema,
+  faces: z.array(faceSchema),
+  aestheticScore: z.number(),
+  handle: z.string(),
+  filename: z.string(),
   width: z.number(),
   height: z.number(),
   orientation: z.number(),
-  url: z.string(),
-  faces: z.array(faceSchema),
-  similarity: z.number(),
-  category: z.string(),
-  aestheticScore: z.number(),
-  labels: z.array(labelSchema),
+  sequence: z.number(),
   takenAt: z.string(),
-  roi: roiObjectSchema,
+  takenAtOffset: z.number(),
+  cameraMake: z.string(),
+  camera: z.string(),
+  similarity: z.number(),
+  selected: z.boolean(),
+  favorite: z.boolean(),
+  longitude: z.number(),
+  latitude: z.number(),
+  createdAt: z.string(),
+  ingestionStartedAt: z.string(),
+  ingestionAt: z.string(),
 });
 
 // Infer types from schemas
@@ -68,4 +71,3 @@ export type PhotoAnalyzeBody = z.infer<typeof photoAnalyzeBodySchema>;
 export type AnalyzedPhoto = z.infer<typeof analyzedPhotoSchema>;
 export type Label = z.infer<typeof labelSchema>;
 export type Face = z.infer<typeof faceSchema>;
-export type Roi = z.infer<typeof roiObjectSchema>;

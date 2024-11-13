@@ -1,46 +1,41 @@
-import {
-  MagicBookAPI,
-  type MBEvent,
-  type AnalyzedPhoto,
-  type Project,
-} from "@magiclabs.ai/mb-web-sdk";
+import { MagicBookAPI, type MBEvent, type AnalyzedPhoto } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
 
 function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
-  const [project, setProject] = useState<Project>();
-  const mb = new MagicBookAPI();
+  const [areConnectionsOpen, setAreConnectionsOpen] = useState(false);
+  const [mb, setMbApi] = useState<MagicBookAPI>();
 
   useEffect(() => {
     function addMagicBookEventListener() {
-      window.addEventListener(
-        "MagicBook",
-        handleDesignRequestUpdated as EventListener
-      );
+      window.addEventListener("MagicBook", handleEvent as EventListener);
     }
 
     function removeMagicBookEventListener() {
-      window.removeEventListener(
-        "MagicBook",
-        handleDesignRequestUpdated as EventListener
-      );
+      window.removeEventListener("MagicBook", handleEvent as EventListener);
     }
     addMagicBookEventListener();
+
+    setMbApi(
+      new MagicBookAPI({
+        apiKey: import.meta.env.VITE_MB_API_KEY,
+        mock: true,
+      }),
+    );
     return () => {
       removeMagicBookEventListener();
     };
   }, []);
 
-  function handleDesignRequestUpdated(event: CustomEvent<MBEvent<unknown>>) {
-    console.log("MagicBook", event.detail.eventName, event.detail.payload);
-    if (event.detail.eventName === "photo.analyze") {
-      const photo = event.detail.payload as AnalyzedPhoto;
-      setPhotos((prevPhotos) => [...prevPhotos, photo]);
+  function handleEvent(event: CustomEvent<MBEvent<unknown>>) {
+    console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result);
+    if (event.detail.eventName === "ws" && event.detail.result.areConnectionsOpen) {
+      setAreConnectionsOpen(true);
     }
-    if (event.detail.eventName === "project.autofill") {
-      const project = event.detail.payload as Project;
-      setProject(project);
+    if (event.detail.eventName === "photo.analyze") {
+      const photo = event.detail.result as AnalyzedPhoto;
+      setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
   }
 
@@ -50,156 +45,64 @@ function App() {
     }
   }, [photos]);
 
-  async function getAutofillOptions() {
-    console.log(
-      "mb.autofillOptions.retrieve ->",
-      await mb.autofillOptions.retrieve()
-    );
-  }
-
-  async function analyzeImages() {
-    await mb.photo.analyze(
+  async function analyzePhotos() {
+    await mb.photos.analyze(
       niceAndRome["00-nice-and-rome"].map((image) => ({
         id: image.handle,
         width: image.width,
         height: image.height,
         orientation: image.rotation,
         url: image.url,
-      }))
+      })),
     );
   }
 
   async function createProjectWithAutofill() {
-    await mb.project.autofill({
-      photos,
-      metadata: [
-        {
-          name: "projectName",
-          value: "My Project",
+    await mb.projects.autofill({
+      designMode: "automatic",
+      occasion: "birthday",
+      style: "modern",
+      imageDensityLevel: "high",
+      embellishmentLevel: "high",
+      bookFormat: {
+        targetPageRange: [20, 40],
+        page: {
+          width: 8,
+          height: 11,
         },
-      ],
-    });
-  }
-
-  async function restyleProject() {
-    if (!project) {
-      return;
-    }
-    await mb.project.restyle({
-      id: project.id,
-      metadata: project.metadata,
-      photos: project.photos,
-      surfaces: project.surfaces,
-    });
-  }
-
-  async function resizeProject() {
-    if (!project) {
-      return;
-    }
-    await mb.project.resize({
-      id: project.id,
-      metadata: project.metadata,
-      photos: project.photos,
-      surfaces: project.surfaces,
-    });
-  }
-
-  async function autofillSurface() {
-    await mb.surface.autofill({
-      metadata: [],
-      photos,
-    });
-  }
-
-  async function autoAdaptSurface() {
-    await mb.surface.autoAdapt({
-      photos,
-      surface: {
-        id: "surfaceId",
-        number: 1,
-        data: {
-          pageDetails: {
-            width: 100,
-            height: 100,
-          },
-          layeredItems: [],
+        cover: {
+          width: 8,
+          height: 11,
         },
       },
-    });
-  }
-
-  async function suggestSurface() {
-    await mb.surface.suggest({
-      photos,
-      surface: {
-        id: "surfaceId",
-        number: 1,
-        data: {
-          pageDetails: {
-            width: 100,
-            height: 100,
-          },
-          layeredItems: [],
-        },
-      },
-    });
-  }
-
-  async function shuffleSurface() {
-    await mb.surface.shuffle({
-      photos,
-      surface: {
-        id: "surfaceId",
-        number: 1,
-        data: {
-          pageDetails: {
-            width: 100,
-            height: 100,
-          },
-          layeredItems: [],
-        },
-      },
+      images: photos,
     });
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 p-4">
-      <button type="button" className="text-left" onClick={getAutofillOptions}>
-        Get Autofill Options
-      </button>
-      <button type="button" className="text-left" onClick={analyzeImages}>
-        1. Analyse Images
-      </button>
-      <button
-        type="button"
-        className="text-left"
-        onClick={createProjectWithAutofill}
-      >
-        2. Create Project with Autofill
-      </button>
-      <button type="button" className="text-left" onClick={restyleProject}>
-        3. Restyle Project
-      </button>
-      <button type="button" className="text-left" onClick={resizeProject}>
-        3. Resize Project
-      </button>
-      <div className="grid grid-cols-1 gap-4 p-4">
-        <h2>Surface</h2>
-        <button type="button" className="text-left" onClick={autofillSurface}>
-          1. Autofill Surface
-        </button>
-        <button type="button" className="text-left" onClick={autoAdaptSurface}>
-          2. Auto Adapt Surface
-        </button>
-        <button type="button" className="text-left" onClick={suggestSurface}>
-          3. Suggest Surface
-        </button>
-        <button type="button" className="text-left" onClick={shuffleSurface}>
-          4. Shuffle Surface
-        </button>
+    <>
+      <div className="p-4">
+        <h1 className="text-lg font-semibold">MagicBook Web SDK Example</h1>
+        <div className="text-sm">
+          <span>WS Connections Open: </span>
+          <span>{areConnectionsOpen ? "✅" : "🔴"}</span>
+        </div>
       </div>
-    </div>
+      <div className="flex gap-10">
+        <div className="flex flex-col items-start gap-4 p-4">
+          <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
+          <button type="button" onClick={analyzePhotos}>
+            1. Analyse Photos
+          </button>
+        </div>
+        <div className="flex flex-col items-start gap-4 p-4">
+          <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
+          <button type="button" onClick={createProjectWithAutofill}>
+            2. Create Project with Autofill
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 

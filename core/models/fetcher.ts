@@ -6,7 +6,7 @@ export type CallProps<T> = {
   path: string;
   options?: RequestInit;
   apiKey?: string;
-  factory: () => Promise<T>;
+  factory?: () => Promise<T>;
 };
 
 export const baseOptions: RequestInit = {
@@ -19,17 +19,23 @@ export const baseOptions: RequestInit = {
 export class Fetcher {
   baseUrl: URL;
   options: RequestInit;
-  mock?: boolean;
+  mock: boolean;
+  areWsOpen: () => boolean;
 
-  constructor(baseUrl: string, options?: RequestInit | undefined, mock?: boolean) {
+  constructor(baseUrl: string, options: RequestInit, mock: boolean, areWsOpen: () => boolean) {
     this.baseUrl = new URL(baseUrl);
-    this.options = mergeNestedObject(baseOptions, options || {});
+    this.options = mergeNestedObject(baseOptions, options);
     this.mock = mock;
+    this.areWsOpen = areWsOpen;
   }
 
   async call<T>(props: CallProps<T>) {
     if (this.mock) {
+      if (!props.factory) throw Error("factory-not-found");
       return props.factory();
+    }
+    if (!this.areWsOpen()) {
+      throw Error("ws-connection-not-open");
     }
     try {
       if (props.options?.body && typeof props.options.body !== "string") {

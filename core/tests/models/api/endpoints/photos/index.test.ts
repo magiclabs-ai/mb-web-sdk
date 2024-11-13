@@ -19,13 +19,13 @@ describe("Photo", () => {
   test("analyze", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
-    const res = await api.photo.analyze([photoFactory()]);
+    const res = await api.photos.analyze([photoFactory()]);
     expect(res).toStrictEqual({});
 
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("photo.analyze");
-    expect(analyzedPhotoSchema.parse(event.payload)).toStrictEqual(event.payload);
+    expect(analyzedPhotoSchema.parse(event.result)).toStrictEqual(event.result);
   });
 });

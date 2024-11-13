@@ -9,6 +9,7 @@
   "scripts": {
     "coverage": "vitest --config ./configs/vitest/vitest.config.ts run --coverage",
     "lint": "biome lint --error-on-warnings ./",
+    "format": "biome format --error-on-warnings ./",
     "pub:canary": "pnpm run turbo:build && ./scripts/publish.sh --canary",
     "pub:release": "pnpm run turbo:build && ./scripts/publish.sh",
     "turbo:build": "pnpm i && turbo run build",

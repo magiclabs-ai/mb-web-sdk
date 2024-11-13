@@ -53,15 +53,16 @@ const layeredItemSchema = z.object({
 });
 
 export const surfaceSchema = z.object({
-  id: z.string(),
-  number: z.number(),
-  data: z.object({
+  surfaceNumber: z.number(),
+  surfaceData: z.object({
     pageDetails: z.object({
       width: z.number(),
       height: z.number(),
     }),
     layeredItems: z.array(layeredItemSchema),
   }),
+  surfaceMetadata: z.array(metadataSchema),
+  version: z.string(),
 });
 
 const surfaceAutofillBodySchema = z.object({

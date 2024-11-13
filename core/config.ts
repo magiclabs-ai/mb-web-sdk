@@ -1,2 +1,4 @@
-export const defaultApiHost: string = process.env.API_HOST || 'http://localhost:2812'
-export const defaultWebSocketHost: string = process.env.WEBSOCKET_HOST || 'wss://localhost:2812'
+export const defaultApiHost: string = process.env.API_HOST || "localhost:2812";
+export const wsReconnectInterval: number = process.env.WS_RECONNECT_INTERVAL
+  ? Number.parseInt(process.env.WS_RECONNECT_INTERVAL)
+  : 5000;
