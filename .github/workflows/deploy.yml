@@ -10,6 +10,7 @@ jobs:
       WS_RECONNECT_INTERVAL: ${{vars.WS_RECONNECT_INTERVAL}}
       API_HOST: ${{vars.API_HOST}}
     steps:
+        
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:

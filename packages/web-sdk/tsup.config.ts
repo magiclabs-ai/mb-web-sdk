@@ -3,6 +3,8 @@ import { defineConfig } from "tsup";
 
 dotenv.config({ path: "../../.env" });
 
+console.log(process.env);
+
 export default defineConfig({
   clean: true,
   dts: true,
@@ -10,8 +12,8 @@ export default defineConfig({
   format: ["esm", "cjs"],
   sourcemap: true,
   env: {
-    API_HOST: process.env.API_HOST || "",
-    WS_RECONNECT_INTERVAL: process.env.WS_RECONNECT_INTERVAL || "",
+    API_HOST: process.env.API_HOST!,
+    WS_RECONNECT_INTERVAL: process.env.WS_RECONNECT_INTERVAL!,
   },
   target: "esnext",
   outDir: "dist",
