@@ -19,7 +19,8 @@ function App() {
 
     setMbApi(
       new MagicBookAPI({
-        apiKey: "TEST",
+        apiKey: import.meta.env.VITE_MB_API_KEY,
+        mock: true,
       }),
     );
     return () => {
@@ -66,11 +67,11 @@ function App() {
       bookFormat: {
         targetPageRange: [20, 40],
         page: {
-          width: 8.5,
+          width: 8,
           height: 11,
         },
         cover: {
-          width: 8.5,
+          width: 8,
           height: 11,
         },
       },
@@ -91,13 +92,13 @@ function App() {
         <div className="flex flex-col items-start gap-4 p-4">
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
           <button type="button" onClick={analyzePhotos}>
-            2. Analyse Photos
+            1. Analyse Photos
           </button>
         </div>
         <div className="flex flex-col items-start gap-4 p-4">
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
-          <button type="button" onClick={createProjectWithAutofill} disabled>
-            1. Create Project with Autofill
+          <button type="button" onClick={createProjectWithAutofill}>
+            2. Create Project with Autofill
           </button>
         </div>
       </div>

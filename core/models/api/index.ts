@@ -22,7 +22,7 @@ type MagicBookAPIProps =
 export class MagicBookAPI {
   private clientId = faker.string.uuid();
   analyzerWS?: WS;
-  projectWS?: WS;
+  designerWS?: WS;
   readonly fetcher: Fetcher;
 
   constructor(props: MagicBookAPIProps) {
@@ -41,14 +41,16 @@ export class MagicBookAPI {
       this.analyzerWS = new WS(`${webSocketHost}/ws/analyzer?clientId=${this.clientId}`, () =>
         this.onConnectionOpened(),
       );
-      // this.projectWS = new WS(`${webSocketHost}?clientId=${this.clientId}`);
+      this.designerWS = new WS(`${webSocketHost}/ws/designer?clientId=${this.clientId}`, () =>
+        this.onConnectionOpened(),
+      );
     }
 
     this.fetcher = new Fetcher(apiHost, options, mock, () => this.areWSOpen());
   }
 
   areWSOpen() {
-    const isConnectionOpen = this.analyzerWS?.isConnectionOpen() ?? false;
+    const isConnectionOpen = (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
     return isConnectionOpen;
   }
 
