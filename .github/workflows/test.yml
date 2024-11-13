@@ -20,4 +20,4 @@ jobs:
           version: 8
           run_install: true
       - run: pnpm run turbo:coverage
-      - run: cd packages/web-sdk && pnpm run build
+      - run: cd packages/web-sdk && pnpm run build && cat dist/index.js
