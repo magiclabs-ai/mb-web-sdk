@@ -82,11 +82,11 @@ await api.projects.autofill({
   bookFormat: {
     targetPageRange: [20, 40],
     page: {
-      width: 8.5,
+      width: 8,
       height: 11,
     },
     cover: {
-      width: 8.5,
+      width: 8,
       height: 11,
     },
   },
