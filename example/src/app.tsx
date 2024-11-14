@@ -141,8 +141,8 @@ function App() {
                 surface.surfaceData.layeredItems = surface.surfaceData.layeredItem;
                 return (
                   <div className="border w-fit" key={surface.surfaceNumber}>
-                    <SurfaceRenderer surface={surface} photos={test} debug height={350} />
-                    <div className="flex justify-between p-2 text-sm">
+                    <SurfaceRenderer surface={surface} photos={test} height={350} />
+                    <div className="flex justify-between p-2 text-sm border-t">
                       <span className="font-semibold ">{surface.surfaceNumber}</span>
                       <span>{surface.surfaceMetadata[0].value}</span>
                     </div>
