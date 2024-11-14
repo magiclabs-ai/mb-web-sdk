@@ -14,6 +14,8 @@ const photoContentSchema = z.object({
   }),
 });
 
+const photoContentSchema = textContentSchema;
+
 const layeredItemSchema = z.object({
   container: z.object({
     x: z.number(),

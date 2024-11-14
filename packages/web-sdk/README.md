@@ -281,7 +281,6 @@ app.use(
 To see the MagicBook client in action, run the following commands (make sure you created a `.env` file before building):
 
 ```bash
-npm run build
 cd example
 npm i
 npm run dev

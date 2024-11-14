@@ -1,17 +1,23 @@
-import { Stage, Layer, Rect } from "react-konva";
+import { Stage, Layer, Rect, Image as Img, Group } from "react-konva";
+import useImage from "use-image";
+import type { LayeredItem, Surface } from "@/core/models/surface";
+import type { PhotoAnalyzeBody } from "@/core/models/photo";
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-function convertToPixels(surface: Record<string, any>, scale = 100) {
-  surface.surfaceData.pageDetails.width *= scale;
-  surface.surfaceData.pageDetails.height *= scale;
+function aspectRation(w: number, h: number): number {
+  return w / h;
+}
 
-  const { pageDetails, layeredItem } = surface.surfaceData;
+function convertToPixels(surface: Surface, targetHeight = 100) {
+  const ar = aspectRation(surface.surfaceData.pageDetails.width, surface.surfaceData.pageDetails.height);
+  surface.surfaceData.pageDetails.width = targetHeight * ar;
+  surface.surfaceData.pageDetails.height = targetHeight;
+
+  const { pageDetails, layeredItems } = surface.surfaceData;
   const { width, height } = pageDetails;
 
   const convert = (value: number, dimension: number) => value * dimension;
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const convertedLayeredItems = layeredItem.map((item: any) => ({
+  const convertedLayeredItems = layeredItems.map((item) => ({
     ...item,
     container: {
       ...item.container,
@@ -32,7 +38,6 @@ function convertToPixels(surface: Record<string, any>, scale = 100) {
     },
   }));
 
-  // Return a new surface object with updated layered items
   return {
     ...surface,
     surfaceData: {
@@ -42,26 +47,56 @@ function convertToPixels(surface: Record<string, any>, scale = 100) {
   };
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function SurfaceRenderer({ surface }: { surface: any }) {
-  const convertedSurface = convertToPixels(surface);
-  const width = convertedSurface.surfaceData.pageDetails.width;
-  const height = convertedSurface.surfaceData.pageDetails.height;
+function Image({
+  x,
+  y,
+  width,
+  height,
+  url,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  url: string;
+}) {
+  const [image] = useImage(url);
+  return <Img image={image} x={x} y={y} width={width} height={height} />;
+}
+
+export function SurfaceRenderer({
+  surface,
+  photos,
+  debug,
+  height,
+}: { surface: Surface; photos: PhotoAnalyzeBody; debug?: boolean; height?: number }) {
+  const convertedSurface = convertToPixels(surface, height);
+  const pageWidth = convertedSurface.surfaceData.pageDetails.width;
+  const pageHeight = convertedSurface.surfaceData.pageDetails.height;
 
   return (
-    <Stage width={width} height={height}>
+    <Stage width={pageWidth} height={pageHeight}>
       <Layer>
-        <Rect width={width} height={height} fill="white" strokeWidth={1} stroke="#ff0000" />
-        {/* biome-ignore lint/suspicious/noExplicitAny: <explanation> */}
-        {convertedSurface.surfaceData.layeredItem.map((item: any) => (
-          <Rect
-            key={item.content.userData.assetId}
-            x={item.container.x}
-            y={item.container.y}
-            width={item.container.w}
-            height={item.container.h}
-            fill="red"
-          />
+        {debug ? <Rect width={pageWidth} height={pageHeight} strokeWidth={1} stroke="blue" StrokeWidth={2} /> : null}
+        {convertedSurface.surfaceData.layeredItem.map(({ container, content }: LayeredItem) => (
+          <Group
+            key={content.userData.assetId}
+            x={container.x}
+            y={container.y}
+            clipHeight={container.h}
+            clipWidth={container.w}
+          >
+            <Image
+              url={photos.find((photo) => photo.id === content.userData.assetId)?.url || ""}
+              x={content.userData.x - container.x}
+              y={content.userData.y - container.y}
+              width={content.userData.w}
+              height={content.userData.h}
+            />
+            {debug ? (
+              <Rect width={container.w} height={container.h} stroke="red" strokeWidth={2} fill="transparent" />
+            ) : null}
+          </Group>
         ))}
       </Layer>
     </Stage>
