@@ -2,7 +2,7 @@
   "name": "@magiclabs.ai/mb-surface-renderer",
   "version": "0.0.0",
   "private": false,
-  "description": "",
+  "description": "React package to render a project surface from aurora.",
   "repository": {
     "type": "git",
     "url": "https://github.com/magiclabs-ai/mb-web-sdk"

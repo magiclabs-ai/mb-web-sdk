@@ -91,7 +91,7 @@ function App() {
           <h1 className="text-lg font-semibold">MagicBook Web SDK Example</h1>
           <div className="text-sm">
             <span>WS Connections Open: </span>
-            <span>{areConnectionsOpen ? "✅" : "🔴"}</span>
+            <span>{areConnectionsOpen ? "✅" : "❌"}</span>
           </div>
         </div>
 
@@ -99,12 +99,7 @@ function App() {
           <div>
             <h2 className="w-full pb-1 text-lg font-semibold">Photos</h2>
             <div className="flex flex-col items-start gap-4">
-              <button
-                type="button"
-                className="rounded-md bg-slate-900 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
-                onClick={analyzePhotos}
-                disabled={!areConnectionsOpen}
-              >
+              <button type="button" onClick={analyzePhotos} disabled={!areConnectionsOpen}>
                 1. Analyse Photos
               </button>
             </div>
@@ -115,7 +110,6 @@ function App() {
               <button
                 type="button"
                 disabled={!areConnectionsOpen && photos.length === 0}
-                className="rounded-md bg-slate-900 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
                 onClick={createProjectWithAutofill}
               >
                 2. Create Project with Autofill
