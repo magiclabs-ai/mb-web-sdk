@@ -2,7 +2,7 @@
 
 # mb-web-sdk
 
-TypeScript repo that contains `@magiclabs.ai/mb-web-sdk`
+TypeScript repo that contains `@magiclabs.ai/mb-web-sdk` & `@magiclabs.ai/mb-surface-renderer` 
 
 ## Usage
 
