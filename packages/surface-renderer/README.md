@@ -14,6 +14,13 @@ npm install @magiclabs.ai/mb-surface-renderer
 To render a surface simply use the SurfaceRenderer component.
 
 ```tsx
+<SurfaceRenderer surface={surface} photos={[...]} height={350} />
+```
+
+## Debug Mode
+To render a surface in debug set debug prop to `true`.
+
+```tsx
 <SurfaceRenderer surface={surface} photos={[...]} debug height={350} />
 ```
 
