@@ -1,4 +1,4 @@
-import { MagicBookAPI, type MBEvent, type AnalyzedPhoto } from "@magiclabs.ai/mb-web-sdk";
+import { MagicBookAPI, type MBEvent, type AnalyzedPhoto, type Project } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
 
@@ -6,6 +6,7 @@ function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
   const [areConnectionsOpen, setAreConnectionsOpen] = useState(false);
   const [mb, setMbApi] = useState<MagicBookAPI>();
+  const [project, setProject] = useState<Project>();
 
   useEffect(() => {
     function addMagicBookEventListener() {
@@ -77,6 +78,102 @@ function App() {
       },
       images: photos,
     });
+
+    setProject({
+      id: "project-id",
+      metadata: [],
+      photos,
+      surfaces: [],
+    });
+  }
+
+  async function restyleProject() {
+    if (!project) {
+      return;
+    }
+    await mb.projects.restyle({
+      id: project.id,
+      metadata: project.metadata,
+      photos: project.photos,
+      surfaces: project.surfaces,
+    });
+  }
+
+  async function resizeProject() {
+    if (!project) {
+      return;
+    }
+    await mb.projects.resize({
+      id: project.id,
+      metadata: project.metadata,
+      photos: project.photos,
+      surfaces: project.surfaces,
+    });
+  }
+
+  async function autofillSurface() {
+    await mb.surfaces.autofill({
+      metadata: [],
+      photos,
+    });
+  }
+
+  async function autoAdaptSurface() {
+    await mb.surfaces.autoAdapt({
+      photos,
+      surface: {
+        surfaceMetadata: [],
+        version: "4.0",
+        surfaceNumber: 1,
+        surfaceData: {
+          pageDetails: {
+            width: 100,
+            height: 100,
+          },
+          layeredItems: [],
+        },
+      },
+    });
+  }
+
+  async function suggestSurface() {
+    await mb.surfaces.suggest({
+      photos,
+      surface: {
+        surfaceMetadata: [],
+        version: "4.0",
+        surfaceNumber: 1,
+        surfaceData: {
+          pageDetails: {
+            width: 100,
+            height: 100,
+          },
+          layeredItems: [],
+        },
+      },
+    });
+  }
+
+  async function shuffleSurface() {
+    await mb.surfaces.shuffle({
+      photos,
+      surface: {
+        surfaceMetadata: [],
+        version: "4.0",
+        surfaceNumber: 1,
+        surfaceData: {
+          pageDetails: {
+            width: 100,
+            height: 100,
+          },
+          layeredItems: [],
+        },
+      },
+    });
+  }
+
+  async function getAutofillOptions() {
+    console.log("mb.autofillOptions.retrieve ->", await mb.autofillOptions.retrieve());
   }
 
   return (
@@ -90,15 +187,42 @@ function App() {
       </div>
       <div className="flex gap-10">
         <div className="flex flex-col items-start gap-4 p-4">
+          <h2 className="w-full pb-1 text-lg font-semibold border-b">Autofill Options</h2>
+          <button type="button" className="text-left" onClick={getAutofillOptions}>
+            Get Autofill Options
+          </button>
+        </div>
+        <div className="flex flex-col items-start gap-4 p-4">
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
           <button type="button" onClick={analyzePhotos}>
-            1. Analyse Photos
+            Analyse Photos
           </button>
         </div>
         <div className="flex flex-col items-start gap-4 p-4">
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
           <button type="button" onClick={createProjectWithAutofill}>
-            2. Create Project with Autofill
+            Create Project with Autofill
+          </button>
+          <button type="button" className="text-left" onClick={restyleProject}>
+            Restyle Project
+          </button>
+          <button type="button" className="text-left" onClick={resizeProject}>
+            Resize Project
+          </button>
+        </div>
+        <div className="flex flex-col items-start gap-4 p-4">
+          <h2 className="w-full pb-1 text-lg font-semibold border-b">Project</h2>
+          <button type="button" className="text-left" onClick={autofillSurface}>
+            Autofill Surface
+          </button>
+          <button type="button" className="text-left" onClick={autoAdaptSurface}>
+            Auto Adapt Surface
+          </button>
+          <button type="button" className="text-left" onClick={suggestSurface}>
+            Suggest Surface
+          </button>
+          <button type="button" className="text-left" onClick={shuffleSurface}>
+            Shuffle Surface
           </button>
         </div>
       </div>

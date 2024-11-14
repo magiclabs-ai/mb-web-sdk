@@ -1,4 +1,11 @@
-import { handleAsyncFunction, mergeNestedObject } from "@/core/utils/toolbox";
+import {
+  handleAsyncFunction,
+  mergeNestedObject,
+  camelCaseToSnakeCase,
+  camelCaseObjectKeysToSnakeCase,
+  snakeCaseToCamelCase,
+  snakeCaseObjectKeysToCamelCase,
+} from "@/core/utils/toolbox";
 import { describe, expect, test } from "vitest";
 
 describe("Toolbox", () => {
@@ -61,5 +68,31 @@ describe("Toolbox", () => {
       throw new Error("error");
     });
     expect(res).toThrowError("error");
+  });
+  test("camelCaseToSnakeCase", () => {
+    expect(camelCaseToSnakeCase("helloWorld")).toBe("hello_world");
+    expect(camelCaseToSnakeCase("helloWorldTest")).toBe("hello_world_test");
+  });
+  test("camelCaseObjectKeysToSnakeCase", () => {
+    const camelCaseObject = { helloWorld: "helloWorld", helloWorldTest: "helloWorldTest" };
+    const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
+    expect(camelCaseObjectKeysToSnakeCase(camelCaseObject)).toStrictEqual(snakeCaseObject);
+  });
+  test("snakeCaseToCamelCase", () => {
+    expect(snakeCaseToCamelCase("hello_world")).toBe("helloWorld");
+    expect(snakeCaseToCamelCase("hello_world_test")).toBe("helloWorldTest");
+  });
+  test("snakeCaseObjectKeysToCamelCase", () => {
+    const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
+    const camelCaseObject = { helloWorld: "helloWorld", helloWorldTest: "helloWorldTest" };
+    expect(snakeCaseObjectKeysToCamelCase(snakeCaseObject)).toStrictEqual(camelCaseObject);
+  });
+  test("snakeCaseObjectKeysToCamelCase with exclude keys", () => {
+    const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
+    const camelCaseObject = { helloWorld: "helloWorld", helloWorldTest: "helloWorldTest" };
+    expect(snakeCaseObjectKeysToCamelCase(snakeCaseObject, ["hello_world"])).toStrictEqual({
+      hello_world: "helloWorld",
+      helloWorldTest: "helloWorldTest",
+    });
   });
 });

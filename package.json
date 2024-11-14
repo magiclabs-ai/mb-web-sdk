@@ -30,7 +30,8 @@
     "@vitest/ui": "^2.0.4",
     "typescript": "^5.5.4",
     "vitest": "^2.0.4",
-    "vitest-fetch-mock": "^0.3.0"
+    "vitest-fetch-mock": "^0.3.0",
+    "vitest-websocket-mock": "^0.4.0"
   },
   "packageManager": "pnpm@8.6.11"
 }

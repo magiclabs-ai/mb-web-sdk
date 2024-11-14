@@ -6,6 +6,8 @@ import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
 import { eventHandler } from "@/core/utils/event-mock";
+import { AutofillOptionsEndpoints } from "@/core/models/api/endpoints/autofill-options";
+import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
 
 type MagicBookAPIProps =
   | {
@@ -60,4 +62,6 @@ export class MagicBookAPI {
 
   readonly projects = new ProjectEndpoints(this);
   readonly photos = new PhotoEndpoints(this);
+  readonly surfaces = new SurfaceEndpoints(this);
+  readonly autofillOptions = new AutofillOptionsEndpoints(this);
 }

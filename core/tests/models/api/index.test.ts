@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { MagicBookAPI } from "@/core/models/api";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
 import type { FetchOptions } from "@/core/models/fetcher";
@@ -25,5 +25,28 @@ describe("API", () => {
     });
 
     expect(await api.photos.analyze([])).toStrictEqual("ws-connection-not-open");
+  });
+
+  test("onConnectionOpened function in mock mode", async () => {
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+      mock: true,
+    });
+    api.onConnectionOpened();
+  });
+
+  test("onConnectionOpened function", async () => {
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+    const test = vi.spyOn(api, "onConnectionOpened");
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 100);
+    });
+
+    expect(test).toBeCalled();
   });
 });

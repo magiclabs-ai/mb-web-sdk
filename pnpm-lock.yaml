@@ -48,6 +48,9 @@ importers:
       vitest-fetch-mock:
         specifier: ^0.3.0
         version: 0.3.0(vitest@2.0.4(@types/node@22.0.0)(@vitest/ui@2.0.4)(jsdom@24.1.1))
+      vitest-websocket-mock:
+        specifier: ^0.4.0
+        version: 0.4.0(vitest@2.0.4(@types/node@22.0.0)(@vitest/ui@2.0.4)(jsdom@24.1.1))
 
   packages/web-sdk:
     dependencies:
@@ -1210,6 +1213,10 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  mock-socket@9.3.1:
+    resolution: {integrity: sha512-qxBgB7Qa2sEQgHFjj0dSigq7fX4k6Saisd5Nelwp2q8mlbAFh5dHV9JTTlF8viYJLSSWgMCZFUom8PJcMNBoJw==}
+    engines: {node: '>= 8'}
+
   mrmime@2.0.0:
     resolution: {integrity: sha512-eu38+hdgojoyq63s+yTpN4XMBdt5l8HhMhc4VKLO9KM5caLIBvUm4thi7fFaxyTmCKeNnXZ5pAlBwCUnhA09uw==}
     engines: {node: '>=10'}
@@ -1647,6 +1654,11 @@ packages:
     engines: {node: '>=14.14.0'}
     peerDependencies:
       vitest: '>=2.0.0'
+
+  vitest-websocket-mock@0.4.0:
+    resolution: {integrity: sha512-tGnOwE2nC8jfioQXDrX+lZ8EVrF+IO2NVqe1vV9h945W/hlR0S6ZYbMqCJGG3Nyd//c5XSe1IGLD2ZgE2D1I7Q==}
+    peerDependencies:
+      vitest: '>=2'
 
   vitest@2.0.4:
     resolution: {integrity: sha512-luNLDpfsnxw5QSW4bISPe6tkxVvv5wn2BBs/PuDRkhXZ319doZyLOBr1sjfB5yCEpTiU7xCAdViM8TNVGPwoog==}
@@ -2794,6 +2806,8 @@ snapshots:
 
   minipass@7.1.2: {}
 
+  mock-socket@9.3.1: {}
+
   mrmime@2.0.0: {}
 
   ms@2.1.2: {}
@@ -3181,6 +3195,12 @@ snapshots:
       vitest: 2.0.4(@types/node@22.0.0)(@vitest/ui@2.0.4)(jsdom@24.1.1)
     transitivePeerDependencies:
       - encoding
+
+  vitest-websocket-mock@0.4.0(vitest@2.0.4(@types/node@22.0.0)(@vitest/ui@2.0.4)(jsdom@24.1.1)):
+    dependencies:
+      '@vitest/utils': 2.0.4
+      mock-socket: 9.3.1
+      vitest: 2.0.4(@types/node@22.0.0)(@vitest/ui@2.0.4)(jsdom@24.1.1)
 
   vitest@2.0.4(@types/node@22.0.0)(@vitest/ui@2.0.4)(jsdom@24.1.1):
     dependencies:
