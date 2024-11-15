@@ -78,6 +78,16 @@ describe("Toolbox", () => {
     const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
     expect(camelCaseObjectKeysToSnakeCase(camelCaseObject)).toStrictEqual(snakeCaseObject);
   });
+  test("camelCaseObjectKeysToSnakeCase should handle arrays of objects", () => {
+    const input = [{ firstName: "John" }, { lastName: "Doe" }];
+    const expected = [{ first_name: "John" }, { last_name: "Doe" }];
+    expect(camelCaseObjectKeysToSnakeCase(input)).toEqual(expected);
+  });
+  test("camelCaseObjectKeysToSnakeCase should return the same array if it contains primitive values", () => {
+    const input = ["one", "two", "three"];
+    const expected = ["one", "two", "three"];
+    expect(camelCaseObjectKeysToSnakeCase(input)).toEqual(expected);
+  });
   test("snakeCaseToCamelCase", () => {
     expect(snakeCaseToCamelCase("hello_world")).toBe("helloWorld");
     expect(snakeCaseToCamelCase("hello_world_test")).toBe("helloWorldTest");
@@ -94,5 +104,15 @@ describe("Toolbox", () => {
       hello_world: "helloWorld",
       helloWorldTest: "helloWorldTest",
     });
+  });
+  test("snakeCaseObjectKeysToCamelCase should handle arrays of objects", () => {
+    const input = [{ first_name: "John" }, { last_name: "Doe" }];
+    const expected = [{ firstName: "John" }, { lastName: "Doe" }];
+    expect(snakeCaseObjectKeysToCamelCase(input)).toEqual(expected);
+  });
+  test("snakeCaseObjectKeysToCamelCase should return the same array if it contains primitive values", () => {
+    const input = ["one", "two", "three"];
+    const expected = ["one", "two", "three"];
+    expect(snakeCaseObjectKeysToCamelCase(input)).toEqual(expected);
   });
 });
