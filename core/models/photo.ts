@@ -46,6 +46,7 @@ export const analyzedPhotoSchema = z.object({
   roi: roiSchema,
   faces: z.array(faceSchema),
   aestheticScore: z.number(),
+  categoryWeight: z.number(),
   handle: z.string(),
   filename: z.string(),
   width: z.number(),

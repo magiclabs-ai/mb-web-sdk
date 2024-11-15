@@ -31,9 +31,9 @@ function App() {
   });
 
   useEffect(() => {
-    setProject((oldProject) => ({
+    setProject((oldProject: Project) => ({
       ...oldProject,
-      images: photos,
+      images: [...photos],
       surfaces,
     }));
   }, [surfaces, photos]);
@@ -70,6 +70,7 @@ function App() {
     }
     if (event.detail.eventName === "photo.analyze") {
       const photo = event.detail.result as AnalyzedPhoto;
+      console.log("Photo Analyzed", photo);
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
     if (event.detail.eventName === "project.autofilled") {
@@ -113,7 +114,7 @@ function App() {
           height: 11,
         },
       },
-      images: photos,
+      images: [...photos],
     });
   }
 

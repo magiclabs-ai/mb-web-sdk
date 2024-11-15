@@ -28,7 +28,7 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.shuffle");
+    expect(event.eventName).toBe("surface.shuffled");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
 
@@ -44,7 +44,7 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.autoAdapt");
+    expect(event.eventName).toBe("surface.autoAdapted");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
 
@@ -60,7 +60,7 @@ describe("Surface", () => {
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.suggest");
+    expect(event.eventName).toBe("surface.suggested");
     expect(z.array(surfaceSchema).parse(event.result)).toStrictEqual(event.result);
   });
 });

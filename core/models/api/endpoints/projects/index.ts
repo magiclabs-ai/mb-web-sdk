@@ -4,9 +4,7 @@ import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/util
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
-import { projectFactory } from "@/core/factories/project";
 
-// CHECK FACTORY EVENTS
 export class ProjectEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
 
@@ -16,7 +14,7 @@ export class ProjectEndpoints {
         path: "/designer/projects/autofill",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
@@ -35,12 +33,11 @@ export class ProjectEndpoints {
         path: "/designer/projects/restyle",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
         factory: async () => {
-          eventHandler(await projectFactory({ ...body, noSurfaces: true }), "project.restyle");
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler(await surfaceFactory(), "project.restyle.surface");
+            eventHandler([surfaceFactory()], "project.restyled");
           });
           return {};
         },
@@ -55,18 +52,11 @@ export class ProjectEndpoints {
         path: "/designer/projects/resize",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body, ["surfaces"])),
         },
         factory: async () => {
-          eventHandler(
-            await projectFactory({
-              ...body,
-              noSurfaces: true,
-            }),
-            "project.resize",
-          );
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler(await surfaceFactory(), "project.resize.surface");
+            eventHandler([surfaceFactory()], "project.resized");
           });
           return {};
         },

@@ -1,5 +1,5 @@
 import type { MagicBookAPI } from "../..";
-import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
+import { handleAsyncFunction } from "@/core/utils/toolbox";
 import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
 import type { SurfaceShuffleBody, SurfaceAutoAdaptBody, SurfaceSuggestBody } from "@/core/models/surface";
@@ -14,9 +14,9 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/shuffle",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(body),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.shuffle"),
+        factory: () => eventHandler(surfaceFactory(), "surface.shuffled"),
       });
       return res;
     });
@@ -28,9 +28,9 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/autoadapt",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(body),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.autoAdapt"),
+        factory: () => eventHandler(surfaceFactory(), "surface.autoAdapted"),
       });
       return res;
     });
@@ -42,13 +42,14 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/suggest",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(body),
         },
-        factory: () =>
-          eventHandler(
-            Array.from({ length: faker.number.int({ min: 2, max: 10 }) }).map(surfaceFactory),
-            "surface.suggest",
-          ),
+        factory: async () => {
+          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
+            eventHandler([surfaceFactory()], "surface.suggested"),
+          );
+          return {};
+        },
       });
       return res;
     });
