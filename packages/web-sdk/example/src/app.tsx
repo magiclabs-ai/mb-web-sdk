@@ -172,10 +172,6 @@ function App() {
     });
   }
 
-  async function getAutofillOptions() {
-    console.log("mb.autofillOptions.retrieve ->", await mb.autofillOptions.retrieve());
-  }
-
   return (
     <>
       <div className="p-4">
@@ -186,12 +182,6 @@ function App() {
         </div>
       </div>
       <div className="flex gap-10">
-        <div className="flex flex-col items-start gap-4 p-4">
-          <h2 className="w-full pb-1 text-lg font-semibold border-b">Autofill Options</h2>
-          <button type="button" className="text-left" onClick={getAutofillOptions}>
-            Get Autofill Options
-          </button>
-        </div>
         <div className="flex flex-col items-start gap-4 p-4">
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
           <button type="button" onClick={analyzePhotos}>

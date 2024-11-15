@@ -63,5 +63,4 @@ export class MagicBookAPI {
   readonly projects = new ProjectEndpoints(this);
   readonly photos = new PhotoEndpoints(this);
   readonly surfaces = new SurfaceEndpoints(this);
-  readonly autofillOptions = new AutofillOptionsEndpoints(this);
 }
