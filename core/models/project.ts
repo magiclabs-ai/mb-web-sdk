@@ -1,16 +1,8 @@
 import { analyzedPhotoSchema } from "@/core/models/photo";
 import { z } from "zod";
-import { metadataSchema } from "./metadata";
 import { surfaceSchema } from "./surface";
 
 export const projectSchema = z.object({
-  id: z.string(),
-  metadata: z.array(metadataSchema),
-  surfaces: z.array(surfaceSchema),
-  photos: z.array(analyzedPhotoSchema),
-});
-
-export const projectAutofillBodySchema = z.object({
   designMode: z.string(),
   occasion: z.string(),
   style: z.string(),
@@ -28,7 +20,18 @@ export const projectAutofillBodySchema = z.object({
     }),
   }),
   images: z.array(analyzedPhotoSchema),
+  surfaces: z.array(z.array(surfaceSchema)),
 });
 
+export const projectAutofillBodySchema = projectSchema.omit({
+  surfaces: true,
+});
+
+// export const projectRestyleBodySchema = projectAutofillBodySchema.extend({
+//   surfaces: z.array(z.array(surfaceSchema)),
+// });
+
 export type Project = z.infer<typeof projectSchema>;
+
 export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
+// export type ProjectRestyleBody = z.infer<typeof projectRestyleBodySchema>;

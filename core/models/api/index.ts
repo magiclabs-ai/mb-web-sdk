@@ -1,4 +1,3 @@
-// import { SurfaceEndpoints } from "./endpoints/surfaces";
 import { Fetcher, type FetchOptions } from "../fetcher";
 import { defaultApiHost } from "@/core/config";
 import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
@@ -6,7 +5,6 @@ import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
 import { eventHandler } from "@/core/utils/event-mock";
-import { AutofillOptionsEndpoints } from "@/core/models/api/endpoints/autofill-options";
 import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
 
 type MagicBookAPIProps =

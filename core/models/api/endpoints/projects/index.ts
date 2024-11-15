@@ -1,4 +1,4 @@
-import type { Project, ProjectAutofillBody } from "@/core/models/project";
+import type { ProjectAutofillBody, Project } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
@@ -6,6 +6,7 @@ import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
 import { projectFactory } from "@/core/factories/project";
 
+// CHECK FACTORY EVENTS
 export class ProjectEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
 
@@ -34,7 +35,7 @@ export class ProjectEndpoints {
         path: "/designer/projects/restyle",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
         },
         factory: async () => {
           eventHandler(await projectFactory({ ...body, noSurfaces: true }), "project.restyle");
@@ -54,7 +55,7 @@ export class ProjectEndpoints {
         path: "/designer/projects/resize",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
         },
         factory: async () => {
           eventHandler(

@@ -1,31 +1,12 @@
 import type { MagicBookAPI } from "../..";
-import { handleAsyncFunction } from "@/core/utils/toolbox";
+import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
 import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
-import type {
-  SurfaceAutofillBody,
-  SurfaceShuffleBody,
-  SurfaceAutoAdaptBody,
-  SurfaceSuggestBody,
-} from "@/core/models/surface";
+import type { SurfaceShuffleBody, SurfaceAutoAdaptBody, SurfaceSuggestBody } from "@/core/models/surface";
 import { faker } from "@faker-js/faker";
 
 export class SurfaceEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
-
-  autofill(body: SurfaceAutofillBody) {
-    return handleAsyncFunction(async () => {
-      const res = await this.magicBookAPI.fetcher.call({
-        path: "/designer/surfaces/autofill",
-        options: {
-          method: "POST",
-          body: JSON.stringify(body),
-        },
-        factory: () => eventHandler(surfaceFactory(), "surface.autofill"),
-      });
-      return res;
-    });
-  }
 
   shuffle(body: SurfaceShuffleBody) {
     return handleAsyncFunction(async () => {
@@ -33,7 +14,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/shuffle",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
         },
         factory: () => eventHandler(surfaceFactory(), "surface.shuffle"),
       });
@@ -47,7 +28,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/autoadapt",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
         },
         factory: () => eventHandler(surfaceFactory(), "surface.autoAdapt"),
       });
@@ -61,7 +42,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/suggest",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
         },
         factory: () =>
           eventHandler(

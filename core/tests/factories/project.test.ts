@@ -7,12 +7,6 @@ describe("Project factory", () => {
     expect(projectSchema.parse(projectFactory())).toBeTruthy();
   });
   test("With props", async () => {
-    expect(
-      projectSchema.parse(
-        projectFactory({
-          id: "123",
-        }),
-      ),
-    ).toBeTruthy();
+    expect(projectSchema.parse(projectFactory())).toBeTruthy();
   });
 });

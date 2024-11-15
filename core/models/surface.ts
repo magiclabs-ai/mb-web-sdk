@@ -65,31 +65,19 @@ export const surfaceSchema = z.object({
   version: z.string(),
 });
 
-const surfaceAutofillBodySchema = z.object({
-  photos: z.array(analyzedPhotoSchema),
-  metadata: z.array(metadataSchema),
-});
-
 const surfaceShuffleBodySchema = z.object({
-  surface: surfaceSchema,
-  photos: z.array(analyzedPhotoSchema),
+  surface: z.array(surfaceSchema),
+  images: z.array(analyzedPhotoSchema),
 });
 
 const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
 const surfaceSuggestBodySchema = surfaceShuffleBodySchema;
 
-const surfacePhotoResizeBodySchema = z.object({
-  id: z.string(),
-  surfaces: z.array(surfaceSchema),
-  photos: z.array(analyzedPhotoSchema),
-});
-
 // Infer types from schemas
-export type SurfaceAutofillBody = z.infer<typeof surfaceAutofillBodySchema>;
 export type SurfaceShuffleBody = z.infer<typeof surfaceShuffleBodySchema>;
 export type SurfaceAutoAdaptBody = z.infer<typeof surfaceAutoAdaptBodySchema>;
 export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
-export type SurfacePhotoResizeBody = z.infer<typeof surfacePhotoResizeBodySchema>;
+
 export type Surface = z.infer<typeof surfaceSchema>;
 export type LayeredItem = z.infer<typeof layeredItemSchema>;
 export type BackgroundContent = z.infer<typeof backgroundContentSchema>;

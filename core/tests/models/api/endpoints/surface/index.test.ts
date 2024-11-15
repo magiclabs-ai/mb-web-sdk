@@ -16,22 +16,6 @@ describe("Surface", () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
   });
 
-  test("autofill", async () => {
-    const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
-
-    const res = await api.surfaces.autofill({
-      metadata: [],
-      photos: [],
-    });
-    expect(res).toStrictEqual({});
-
-    vi.advanceTimersToNextTimer();
-
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
-    expect(event.eventName).toBe("surface.autofill");
-    expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
-  });
-
   test("shuffle", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
