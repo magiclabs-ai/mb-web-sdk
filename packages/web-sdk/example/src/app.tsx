@@ -73,7 +73,7 @@ function App() {
       console.log("Photo Analyzed", photo);
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
-    if (event.detail.eventName === "project.autofilled") {
+    if (event.detail.eventName === "project.edited") {
       setSurfaces((prev) => [...prev, event.detail.result as Array<Surface>]);
     }
   }
