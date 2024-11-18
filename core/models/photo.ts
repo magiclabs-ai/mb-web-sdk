@@ -39,14 +39,8 @@ const roiSchema = z.object({
   height: z.number(),
 });
 
-const originSchema = z.object({
-  x: z.number(),
-  y: z.number(),
-});
-
 // AnalyzedPhoto schema
 export const analyzedPhotoSchema = z.object({
-  origin: originSchema,
   roi: roiSchema,
   id: z.string(),
   filename: z.string(),

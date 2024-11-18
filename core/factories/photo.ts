@@ -26,10 +26,6 @@ export function photoFactory(): AnalyzedPhoto {
     })),
     aestheticScore: faker.number.float({ min: 0, max: 1 }),
     categoryWeight: faker.number.float({ min: 0, max: 1 }),
-    origin: {
-      x: faker.number.float({ min: 0, max: 1 }),
-      y: faker.number.float({ min: 0, max: 1 }),
-    },
     filename: faker.system.fileName(),
     width: faker.number.int({ min: 100, max: 4000 }),
     height: faker.number.int({ min: 100, max: 4000 }),
