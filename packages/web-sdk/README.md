@@ -67,7 +67,7 @@ await api.photos.analyse(
 );
 ```
 
-### Project
+### Projects
 
 #### Autofill
 To create a project with autofill, call the `projects.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
@@ -91,6 +91,105 @@ await api.projects.autofill({
     },
   },
   images: [...],
+});
+```
+
+#### Restyle
+> :warning:
+> Only available in mock mode
+
+To create a project with restyle, call the `projects.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
+
+```ts
+await api.projects.restyle({
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8,
+      height: 11,
+    },
+    cover: {
+      width: 8,
+      height: 11,
+    },
+  },
+  images: [...],
+  surfaces: [[surface1], [surface2], ...]
+});
+```
+
+#### Resize
+> :warning:
+> Only available in mock mode
+
+To resize a project, call the `projects.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
+
+```ts
+await api.projects.resize({
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8,
+      height: 11,
+    },
+    cover: {
+      width: 8,
+      height: 11,
+    },
+  },
+  images: [...],
+  surfaces: [[surface1], [surface2], ...]
+});
+```
+
+### Surfaces
+
+#### Shuffle
+> :warning:
+> Only available in mock mode
+
+To create a surface with shuffle, call the `surfaces.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
+
+```ts
+await api.surfaces.shuffle({
+  images: [...],
+  surface: [{...}],
+});
+```
+
+#### AutoAdapt
+> :warning:
+> Only available in mock mode
+
+To create a surface with autoAdapt, call the `surfaces.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
+
+```ts
+await api.surfaces.autoAdapt({
+  images: [...],
+  surface: [{...}],
+});
+```
+
+#### Suggest
+> :warning:
+> Only available in mock mode
+
+To create a surface with suggest, call the `surfaces.suggest` function. Once ready, an event will be sent to the listener you created earlier.
+
+```ts
+await api.surfaces.suggest({
+  images: [...],
+  surface: [{...}],
 });
 ```
 

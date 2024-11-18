@@ -1,4 +1,4 @@
-import type { ProjectAutofillBody } from "@/core/models/project";
+import type { ProjectAutofillBody, Project } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
@@ -14,12 +14,50 @@ export class ProjectEndpoints {
         path: "/designer/projects/autofill",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body)),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
-            eventHandler([surfaceFactory()], "project.autofilled"),
+            eventHandler([surfaceFactory()], "project.edited"),
           );
+          return {};
+        },
+      });
+      return res;
+    });
+  }
+
+  restyle(body: Project) {
+    return handleAsyncFunction(async () => {
+      const res = await this.magicBookAPI.fetcher.call({
+        path: "/designer/projects/restyle",
+        options: {
+          method: "POST",
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
+        },
+        factory: async () => {
+          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
+            eventHandler([surfaceFactory()], "project.restyled");
+          });
+          return {};
+        },
+      });
+      return res;
+    });
+  }
+
+  resize(body: Project) {
+    return handleAsyncFunction(async () => {
+      const res = await this.magicBookAPI.fetcher.call({
+        path: "/designer/projects/resize",
+        options: {
+          method: "POST",
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body, ["surfaces"])),
+        },
+        factory: async () => {
+          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
+            eventHandler([surfaceFactory()], "project.resized");
+          });
           return {};
         },
       });

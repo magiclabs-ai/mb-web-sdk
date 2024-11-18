@@ -29,47 +29,78 @@ export function camelCaseToSnakeCase(str: string) {
   return str.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
 }
 
-export function camelCaseObjectKeysToSnakeCase(camelCaseObject: Record<string, unknown>, excludeKeys: string[] = []) {
-  Object.keys(camelCaseObject).map((key) => {
+export function camelCaseObjectKeysToSnakeCase(
+  camelCaseObject: Record<string, unknown> | unknown[],
+  excludeKeys: string[] = [],
+): Record<string, unknown> | unknown[] {
+  if (Array.isArray(camelCaseObject)) {
+    return camelCaseObject.map((item) => {
+      if (typeof item === "object" && item !== null) {
+        return camelCaseObjectKeysToSnakeCase(item as Record<string, unknown>, excludeKeys);
+      }
+      return item;
+    });
+  }
+
+  const result: Record<string, unknown> = {};
+
+  for (const key of Object.keys(camelCaseObject as Record<string, unknown>)) {
     const snakeCaseKey = camelCaseToSnakeCase(key);
-    if (snakeCaseKey.includes("_")) {
-      camelCaseObject[snakeCaseKey] = camelCaseObject[key];
-      delete camelCaseObject[key];
+
+    if (excludeKeys.includes(key)) {
+      result[key] = (camelCaseObject as Record<string, unknown>)[key];
+    } else {
+      const value = (camelCaseObject as Record<string, unknown>)[key];
+
+      if (typeof value === "object" && value !== null) {
+        result[snakeCaseKey] = camelCaseObjectKeysToSnakeCase(value as Record<string, unknown>, excludeKeys);
+      } else {
+        result[snakeCaseKey] = value;
+      }
     }
-    if (typeof camelCaseObject[snakeCaseKey] === "object" && camelCaseObject[snakeCaseKey] !== null) {
-      camelCaseObject[snakeCaseKey] = camelCaseObjectKeysToSnakeCase(
-        camelCaseObject[snakeCaseKey] as Record<string, unknown>,
-        excludeKeys,
-      );
-    }
-  });
-  return camelCaseObject;
+  }
+
+  return result;
 }
 
-export function snakeCaseToCamelCase(str: string) {
+export function snakeCaseToCamelCase(str: string): string {
   return str.replace(/([-_][a-z])/g, ($1) => $1.toUpperCase().replace("-", "").replace("_", ""));
 }
+
 export function snakeCaseObjectKeysToCamelCase(
-  snakeCaseObject: Record<string, unknown>,
+  snakeCaseObject: Record<string, unknown> | unknown[],
   excludeKeys: string[] = [],
-): Record<string, unknown> {
-  for (const key of Object.keys(snakeCaseObject)) {
+): Record<string, unknown> | unknown[] {
+  if (Array.isArray(snakeCaseObject)) {
+    const resultArray: unknown[] = [];
+    for (const item of snakeCaseObject) {
+      if (typeof item === "object" && item !== null) {
+        resultArray.push(snakeCaseObjectKeysToCamelCase(item as Record<string, unknown>, excludeKeys));
+      } else {
+        resultArray.push(item);
+      }
+    }
+    return resultArray;
+  }
+
+  const result: Record<string, unknown> = {};
+
+  for (const key of Object.keys(snakeCaseObject as Record<string, unknown>)) {
     if (excludeKeys.includes(key)) {
+      result[key] = (snakeCaseObject as Record<string, unknown>)[key];
       continue;
     }
 
     const camelCaseKey = snakeCaseToCamelCase(key);
-    if (camelCaseKey !== key) {
-      snakeCaseObject[camelCaseKey] = snakeCaseObject[key];
-      delete snakeCaseObject[key];
-    }
 
-    if (typeof snakeCaseObject[camelCaseKey] === "object" && snakeCaseObject[camelCaseKey] !== null) {
-      snakeCaseObject[camelCaseKey] = snakeCaseObjectKeysToCamelCase(
-        snakeCaseObject[camelCaseKey] as Record<string, unknown>,
-        excludeKeys,
-      );
+    const value = (snakeCaseObject as Record<string, unknown>)[key];
+
+    if (typeof value === "object" && value !== null) {
+      result[camelCaseKey] = snakeCaseObjectKeysToCamelCase(value as Record<string, unknown>, excludeKeys);
+    } else {
+      result[camelCaseKey] = value;
     }
   }
-  return snakeCaseObject;
+
+  return result;
 }

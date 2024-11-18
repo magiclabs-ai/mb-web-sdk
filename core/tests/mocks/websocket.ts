@@ -6,12 +6,23 @@ export class WebSocketMock {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   onmessage: ((event: MessageEvent<any>) => void) | undefined;
 
-  // biome-ignore lint/complexity/noUselessConstructor: <explanation>
-  constructor(url: string | URL) {}
+  readyState: number;
+
+  constructor(url: string | URL) {
+    setTimeout(() => {
+      this.test();
+    }, 100);
+  }
+
+  async test() {
+    this.readyState = 1;
+    if (this.onopen) this.onopen();
+  }
+
+  onopen: (() => void) | undefined;
 
   close() {
-    // biome-ignore lint/complexity/useOptionalChain: <explanation>
-    this.onclose && this.onclose();
+    if (this.onclose) this.onclose();
   }
 }
 
