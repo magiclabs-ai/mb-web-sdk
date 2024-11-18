@@ -1,6 +1,5 @@
 import { metadataSchema } from "@/core/models/metadata";
 import { z } from "zod";
-import { projectSchema } from "@/core/models/project";
 
 const photoContentSchema = z.object({
   contentType: z.string(),
