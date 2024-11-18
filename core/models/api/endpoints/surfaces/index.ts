@@ -30,7 +30,7 @@ export class SurfaceEndpoints {
           method: "POST",
           body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.shuffled"),
+        factory: () => eventHandler(surfaceFactory(), "project.edited"),
       });
       return res;
     });
@@ -44,7 +44,7 @@ export class SurfaceEndpoints {
           method: "POST",
           body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
-        factory: () => eventHandler(surfaceFactory(), "surface.autoAdapted"),
+        factory: () => eventHandler(surfaceFactory(), "project.edited"),
       });
       return res;
     });
@@ -60,7 +60,7 @@ export class SurfaceEndpoints {
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
-            eventHandler([surfaceFactory()], "surface.suggested"),
+            eventHandler([surfaceFactory()], "project.edited"),
           );
           return {};
         },

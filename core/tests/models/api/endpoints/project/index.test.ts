@@ -44,7 +44,7 @@ describe("Project", () => {
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
       const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<MBEvent<unknown>>).detail;
-      expect(surfaceEvent.eventName).toBe("project.restyled");
+      expect(surfaceEvent.eventName).toBe("project.edited");
       expect(surfaceSchema.parse(surfaceEvent.result[0])).toStrictEqual(surfaceEvent.result[0]);
     }
   });
@@ -59,7 +59,7 @@ describe("Project", () => {
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
       const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<MBEvent<unknown>>).detail;
-      expect(surfaceEvent.eventName).toBe("project.resized");
+      expect(surfaceEvent.eventName).toBe("project.edited");
       expect(surfaceSchema.parse(surfaceEvent.result[0])).toStrictEqual(surfaceEvent.result[0]);
     }
   });

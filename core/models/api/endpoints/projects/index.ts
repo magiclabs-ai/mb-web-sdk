@@ -40,7 +40,7 @@ export class ProjectEndpoints {
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler([surfaceFactory()], "project.restyled");
+            eventHandler([surfaceFactory()], "project.edited");
           });
           return {};
         },
@@ -59,7 +59,7 @@ export class ProjectEndpoints {
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler([surfaceFactory()], "project.resized");
+            eventHandler([surfaceFactory()], "project.edited");
           });
           return {};
         },
