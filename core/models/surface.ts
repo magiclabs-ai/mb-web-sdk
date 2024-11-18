@@ -42,18 +42,6 @@ export const surfaceSchema = z.object({
   version: z.string(),
 });
 
-const surfaceShuffleBodySchema = projectSchema.extend({
-  surfaces: z.array(surfaceSchema),
-});
-
-const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
-const surfaceSuggestBodySchema = surfaceShuffleBodySchema;
-
-// Infer types from schemas
-export type SurfaceShuffleBody = z.infer<typeof surfaceShuffleBodySchema>;
-export type SurfaceAutoAdaptBody = z.infer<typeof surfaceAutoAdaptBodySchema>;
-export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
-
 export type Surface = z.infer<typeof surfaceSchema>;
 export type LayeredItem = z.infer<typeof layeredItemSchema>;
 export type PhotoContent = z.infer<typeof photoContentSchema>;

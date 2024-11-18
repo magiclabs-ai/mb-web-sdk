@@ -28,5 +28,3 @@ export const projectAutofillBodySchema = projectSchema.omit({
 });
 
 export type Project = z.infer<typeof projectSchema>;
-
-export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;

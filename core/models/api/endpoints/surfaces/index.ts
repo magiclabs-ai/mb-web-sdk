@@ -2,8 +2,22 @@ import type { MagicBookAPI } from "../..";
 import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
 import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
-import type { SurfaceShuffleBody, SurfaceAutoAdaptBody, SurfaceSuggestBody } from "@/core/models/surface";
 import { faker } from "@faker-js/faker";
+import { projectSchema } from "@/core/models/project";
+import { z } from "zod";
+import { surfaceSchema } from "@/core/models/surface";
+
+const surfaceShuffleBodySchema = projectSchema.extend({
+  surfaces: z.array(surfaceSchema),
+});
+
+const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
+const surfaceSuggestBodySchema = surfaceShuffleBodySchema;
+
+// Infer types from schemas
+export type SurfaceShuffleBody = z.infer<typeof surfaceShuffleBodySchema>;
+export type SurfaceAutoAdaptBody = z.infer<typeof surfaceAutoAdaptBodySchema>;
+export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
 
 export class SurfaceEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
