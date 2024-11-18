@@ -8,7 +8,6 @@ export class WebSocketMock {
 
   readyState: number;
 
-  // biome-ignore lint/complexity/noUselessConstructor: <explanation>
   constructor(url: string | URL) {
     setTimeout(() => {
       this.test();

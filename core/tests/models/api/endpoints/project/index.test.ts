@@ -29,7 +29,7 @@ describe("Project", () => {
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
       const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<MBEvent<unknown>>).detail;
-      expect(surfaceEvent.eventName).toBe("project.autofilled");
+      expect(surfaceEvent.eventName).toBe("project.edited");
       expect(surfaceSchema.parse(surfaceEvent.result[0])).toStrictEqual(surfaceEvent.result[0]);
     }
   });
