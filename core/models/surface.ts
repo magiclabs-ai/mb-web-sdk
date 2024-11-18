@@ -2,42 +2,16 @@ import { metadataSchema } from "@/core/models/metadata";
 import { analyzedPhotoSchema } from "@/core/models/photo";
 import { z } from "zod";
 
-const backgroundContentSchema = z.object({
-  type: z.string(),
+const photoContentSchema = z.object({
+  contentType: z.string(),
   userData: z.object({
-    font: z
-      .object({
-        family: z.string(),
-        size: z.number(),
-        color: z.string(),
-      })
-      .optional(),
-    lineSpacing: z.number().optional(),
-    lines: z
-      .array(
-        z.object({
-          x: z.number(),
-          y: z.number(),
-          text: z.string(),
-        }),
-      )
-      .optional(),
-    x: z.number().optional(),
-    y: z.number().optional(),
-    width: z.number().optional(),
-    height: z.number().optional(),
-    assetId: z.string().optional(),
-  }),
-});
-
-const textContentSchema = z.object({
-  type: z.string(),
-  userData: z.object({
+    assetId: z.string(),
+    w: z.number(),
+    h: z.number(),
     x: z.number(),
     y: z.number(),
-    width: z.number(),
-    height: z.number(),
-    assetId: z.string(),
+    rot: z.number(),
+    journalCore: z.string(),
   }),
 });
 
@@ -47,9 +21,11 @@ const layeredItemSchema = z.object({
     y: z.number(),
     width: z.number(),
     height: z.number(),
+    rotation: z.number(),
   }),
-  type: z.enum(["background", "text"]),
-  content: z.union([backgroundContentSchema, textContentSchema]),
+  type: z.enum(["photo"]),
+  content: photoContentSchema,
+  layerMetadata: z.array(metadataSchema),
 });
 
 export const surfaceSchema = z.object({
@@ -58,6 +34,7 @@ export const surfaceSchema = z.object({
     pageDetails: z.object({
       width: z.number(),
       height: z.number(),
+      dpi: z.number(),
     }),
     layeredItems: z.array(layeredItemSchema),
   }),
@@ -80,5 +57,6 @@ export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
 
 export type Surface = z.infer<typeof surfaceSchema>;
 export type LayeredItem = z.infer<typeof layeredItemSchema>;
-export type BackgroundContent = z.infer<typeof backgroundContentSchema>;
-export type TextContent = z.infer<typeof textContentSchema>;
+// export type BackgroundContent = z.infer<typeof backgroundContentSchema>;
+// export type TextContent = z.infer<typeof textContentSchema>;
+export type PhotoContent = z.infer<typeof photoContentSchema>;

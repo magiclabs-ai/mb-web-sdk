@@ -3,7 +3,10 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "moduleResolution": "Node",
     "strict": true,
     "resolveJsonModule": true,
@@ -15,10 +18,20 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "paths": {
-      "@/client/*": ["./packages/client/*"],
-      "@/cli/*": ["./packages/cli/*"],
-      "@/core/*": ["./core/*"]
+      "@/client/*": [
+        "./packages/client/*"
+      ],
+      "@/cli/*": [
+        "./packages/cli/*"
+      ],
+      "@/core/*": [
+        "./core/*"
+      ]
     }
   },
-  "exclude": ["node_modules", "packages/client/example", "**/tests"]
+  "exclude": [
+    "node_modules",
+    "packages/client/example",
+    "**/tests"
+  ]
 }
