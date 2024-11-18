@@ -1,6 +1,6 @@
 import { metadataSchema } from "@/core/models/metadata";
-import { analyzedPhotoSchema } from "@/core/models/photo";
 import { z } from "zod";
+import { projectSchema } from "@/core/models/project";
 
 const photoContentSchema = z.object({
   contentType: z.string(),
@@ -42,9 +42,8 @@ export const surfaceSchema = z.object({
   version: z.string(),
 });
 
-const surfaceShuffleBodySchema = z.object({
-  surface: z.array(surfaceSchema),
-  images: z.array(analyzedPhotoSchema),
+const surfaceShuffleBodySchema = projectSchema.extend({
+  surfaces: z.array(surfaceSchema),
 });
 
 const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
@@ -57,6 +56,4 @@ export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
 
 export type Surface = z.infer<typeof surfaceSchema>;
 export type LayeredItem = z.infer<typeof layeredItemSchema>;
-// export type BackgroundContent = z.infer<typeof backgroundContentSchema>;
-// export type TextContent = z.infer<typeof textContentSchema>;
 export type PhotoContent = z.infer<typeof photoContentSchema>;

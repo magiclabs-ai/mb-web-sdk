@@ -1,5 +1,5 @@
 import type { MagicBookAPI } from "../..";
-import { handleAsyncFunction } from "@/core/utils/toolbox";
+import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
 import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
 import type { SurfaceShuffleBody, SurfaceAutoAdaptBody, SurfaceSuggestBody } from "@/core/models/surface";
@@ -14,7 +14,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/shuffle",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
         factory: () => eventHandler(surfaceFactory(), "surface.shuffled"),
       });
@@ -28,7 +28,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/autoadapt",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
         factory: () => eventHandler(surfaceFactory(), "surface.autoAdapted"),
       });
@@ -42,7 +42,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/suggest",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
