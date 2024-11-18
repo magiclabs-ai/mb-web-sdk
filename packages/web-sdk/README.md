@@ -156,8 +156,24 @@ To create a surface with shuffle, call the `surfaces.shuffle` function. Once rea
 
 ```ts
 await api.surfaces.shuffle({
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8,
+      height: 11,
+    },
+    cover: {
+      width: 8,
+      height: 11,
+    },
+  },
   images: [...],
-  surface: [{...}],
+  surfaces: [surface1, ...]
 });
 ```
 
@@ -167,8 +183,24 @@ To create a surface with autoAdapt, call the `surfaces.autoAdapt` function. Once
 
 ```ts
 await api.surfaces.autoAdapt({
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8,
+      height: 11,
+    },
+    cover: {
+      width: 8,
+      height: 11,
+    },
+  },
   images: [...],
-  surface: [{...}],
+  surfaces: [surface1, ...]
 });
 ```
 
@@ -178,8 +210,24 @@ To create a surface with suggest, call the `surfaces.suggest` function. Once rea
 
 ```ts
 await api.surfaces.suggest({
+  designMode: "automatic",
+  occasion: "birthday",
+  style: "modern",
+  imageDensityLevel: "high",
+  embellishmentLevel: "high",
+  bookFormat: {
+    targetPageRange: [20, 40],
+    page: {
+      width: 8,
+      height: 11,
+    },
+    cover: {
+      width: 8,
+      height: 11,
+    },
+  },
   images: [...],
-  surface: [{...}],
+  surfaces: [surface1, ...]
 });
 ```
 
