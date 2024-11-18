@@ -25,8 +25,8 @@ function LayeredItemFactory(): LayeredItem {
     container: {
       x: faker.number.float({ min: 0, max: 5000, multipleOf: 0.01 }),
       y: faker.number.float({ min: 0, max: 5000, multipleOf: 0.01 }),
-      width: faker.number.float({ min: 10, max: 3000, multipleOf: 0.01 }),
-      height: faker.number.float({ min: 10, max: 3000, multipleOf: 0.01 }),
+      w: faker.number.float({ min: 10, max: 3000, multipleOf: 0.01 }),
+      h: faker.number.float({ min: 10, max: 3000, multipleOf: 0.01 }),
       rotation: faker.number.float({ min: 0, max: 360, multipleOf: 0.01 }),
     },
     type,

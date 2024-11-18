@@ -18,8 +18,8 @@ const layeredItemSchema = z.object({
   container: z.object({
     x: z.number(),
     y: z.number(),
-    width: z.number(),
-    height: z.number(),
+    w: z.number(),
+    h: z.number(),
     rotation: z.number(),
   }),
   type: z.enum(["photo"]),
