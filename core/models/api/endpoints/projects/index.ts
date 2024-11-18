@@ -18,7 +18,7 @@ export class ProjectEndpoints {
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
-            eventHandler([surfaceFactory()], "project.autofilled"),
+            eventHandler([surfaceFactory()], "project.edited"),
           );
           return {};
         },
