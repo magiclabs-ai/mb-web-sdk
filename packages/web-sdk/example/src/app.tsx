@@ -134,22 +134,22 @@ function App() {
 
   async function autoAdaptSurface() {
     await mb?.surfaces.autoAdapt({
-      images: photos,
-      surface: surfaces[0],
+      ...project,
+      surfaces: surfaces[0],
     });
   }
 
   async function suggestSurface() {
     await mb?.surfaces.suggest({
-      images: photos,
-      surface: surfaces[0],
+      ...project,
+      surfaces: surfaces[0],
     });
   }
 
   async function shuffleSurface() {
     await mb?.surfaces.shuffle({
-      images: photos,
-      surface: surfaces[0],
+      ...project,
+      surfaces: surfaces[0],
     });
   }
 

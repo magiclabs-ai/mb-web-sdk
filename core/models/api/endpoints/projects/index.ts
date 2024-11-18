@@ -1,9 +1,12 @@
-import type { ProjectAutofillBody, Project } from "@/core/models/project";
+import type { Project, projectAutofillBodySchema } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
+import type { z } from "zod";
+
+export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
 
 export class ProjectEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
@@ -37,7 +40,7 @@ export class ProjectEndpoints {
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler([surfaceFactory()], "project.restyled");
+            eventHandler([surfaceFactory()], "project.edited");
           });
           return {};
         },
@@ -56,7 +59,7 @@ export class ProjectEndpoints {
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler([surfaceFactory()], "project.resized");
+            eventHandler([surfaceFactory()], "project.edited");
           });
           return {};
         },

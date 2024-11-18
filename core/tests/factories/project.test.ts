@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { projectFactory } from "@/core/factories/project";
 import { projectSchema } from "@/core/models/project";
+import { projectFactory } from "@/core/factories/project";
 
 describe("Project factory", () => {
   test("Without props", async () => {

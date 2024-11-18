@@ -27,11 +27,4 @@ export const projectAutofillBodySchema = projectSchema.omit({
   surfaces: true,
 });
 
-// export const projectRestyleBodySchema = projectAutofillBodySchema.extend({
-//   surfaces: z.array(z.array(surfaceSchema)),
-// });
-
 export type Project = z.infer<typeof projectSchema>;
-
-export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
-// export type ProjectRestyleBody = z.infer<typeof projectRestyleBodySchema>;

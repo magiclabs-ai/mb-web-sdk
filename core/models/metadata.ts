@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const metadataSchema = z.object({
   name: z.string(),
-  value: z.string(),
+  value: z.any(),
   metadataType: z.string(),
 });
 
