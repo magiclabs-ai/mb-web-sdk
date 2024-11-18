@@ -39,6 +39,11 @@ const roiSchema = z.object({
   height: z.number(),
 });
 
+const originSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+});
+
 // AnalyzedPhoto schema
 export const analyzedPhotoSchema = z.object({
   id: z.string(),
@@ -47,6 +52,7 @@ export const analyzedPhotoSchema = z.object({
   faces: z.array(faceSchema),
   aestheticScore: z.number(),
   categoryWeight: z.number(),
+  origin: originSchema,
   handle: z.string(),
   filename: z.string(),
   width: z.number(),
