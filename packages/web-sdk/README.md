@@ -95,8 +95,6 @@ await api.projects.autofill({
 ```
 
 #### Restyle
-> :warning:
-> Only available in mock mode
 
 To create a project with restyle, call the `projects.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -124,8 +122,6 @@ await api.projects.restyle({
 ```
 
 #### Resize
-> :warning:
-> Only available in mock mode
 
 To resize a project, call the `projects.resize` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -155,8 +151,6 @@ await api.projects.resize({
 ### Surfaces
 
 #### Shuffle
-> :warning:
-> Only available in mock mode
 
 To create a surface with shuffle, call the `surfaces.shuffle` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -168,8 +162,6 @@ await api.surfaces.shuffle({
 ```
 
 #### AutoAdapt
-> :warning:
-> Only available in mock mode
 
 To create a surface with autoAdapt, call the `surfaces.autoAdapt` function. Once ready, an event will be sent to the listener you created earlier.
 
@@ -181,8 +173,6 @@ await api.surfaces.autoAdapt({
 ```
 
 #### Suggest
-> :warning:
-> Only available in mock mode
 
 To create a surface with suggest, call the `surfaces.suggest` function. Once ready, an event will be sent to the listener you created earlier.
 
