@@ -74,8 +74,16 @@ describe("Toolbox", () => {
     expect(camelCaseToSnakeCase("helloWorldTest")).toBe("hello_world_test");
   });
   test("camelCaseObjectKeysToSnakeCase", () => {
-    const camelCaseObject = { helloWorld: "helloWorld", helloWorldTest: "helloWorldTest" };
-    const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
+    const camelCaseObject = {
+      helloWorld: "helloWorld",
+      helloWorldTest: "helloWorldTest",
+      hello_world_test2: "helloWorldTest2",
+    };
+    const snakeCaseObject = {
+      hello_world: "helloWorld",
+      hello_world_test: "helloWorldTest",
+      hello_world_test2: "helloWorldTest2",
+    };
     expect(camelCaseObjectKeysToSnakeCase(camelCaseObject)).toStrictEqual(snakeCaseObject);
   });
   test("camelCaseObjectKeysToSnakeCase should handle arrays of objects", () => {
@@ -93,8 +101,16 @@ describe("Toolbox", () => {
     expect(snakeCaseToCamelCase("hello_world_test")).toBe("helloWorldTest");
   });
   test("snakeCaseObjectKeysToCamelCase", () => {
-    const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
-    const camelCaseObject = { helloWorld: "helloWorld", helloWorldTest: "helloWorldTest" };
+    const snakeCaseObject = {
+      hello_world: "helloWorld",
+      hello_world_test: "helloWorldTest",
+      helloWorldTest2: "helloWorldTest2",
+    };
+    const camelCaseObject = {
+      helloWorld: "helloWorld",
+      helloWorldTest: "helloWorldTest",
+      helloWorldTest2: "helloWorldTest2",
+    };
     expect(snakeCaseObjectKeysToCamelCase(snakeCaseObject)).toStrictEqual(camelCaseObject);
   });
   test("snakeCaseObjectKeysToCamelCase with exclude keys", () => {
