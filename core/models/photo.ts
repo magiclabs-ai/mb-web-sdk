@@ -6,6 +6,7 @@ export const photoAnalyzeBodySchema = z.array(
     id: z.string(),
     width: z.number(),
     height: z.number(),
+    orientation: z.number(),
     url: z.string(),
   }),
 );

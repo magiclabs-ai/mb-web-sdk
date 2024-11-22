@@ -57,12 +57,13 @@ you are ready to go!
 To analyze an array of photos, call the `photos.analyze` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
-await api.photos.analyse(
+await api.photos.analyze(
   photos.map((photo) => ({
-    id: photo.handle,
-    width: photo.width,
-    height: photo.height,
-    url: photo.url,
+    id: photo.handle, // string
+    width: photo.width, // number
+    height: photo.height, // number
+    orientation: photo.orientation, // number
+    url: photo.url, // string
   }))
 );
 ```
@@ -266,6 +267,7 @@ app.use(
       const test = await api.photos.analyze([
         {
           id: "1234",
+          orientation: 0,
           width: 100,
           height: 100,
           url: "https://...",
