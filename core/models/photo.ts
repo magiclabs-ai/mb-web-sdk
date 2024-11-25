@@ -3,7 +3,7 @@ import { z } from "zod";
 // PhotoAnalyzeBody schema
 export const photoAnalyzeBodySchema = z.array(
   z.object({
-    id: z.string(),
+    id: z.string().or(z.number()),
     width: z.number(),
     height: z.number(),
     orientation: z.number(),
@@ -43,8 +43,8 @@ const roiSchema = z.object({
 // AnalyzedPhoto schema
 export const analyzedPhotoSchema = z.object({
   roi: roiSchema,
-  id: z.string(),
-  filename: z.string(),
+  id: z.string().or(z.number()),
+  filename: z.string().or(z.number()),
   width: z.number(),
   height: z.number(),
   orientation: z.number(),

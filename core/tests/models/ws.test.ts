@@ -50,4 +50,28 @@ describe("WS", () => {
     expect(customEvent.detail.result).toBe(eventDetail.result);
     expect(customEvent.detail.request).toEqual(eventDetail.request);
   });
+
+  test("should dispatch a custom event on message with useIntAsPhotoId", () => {
+    const wsWithIntAsPhotoId = new WS(url, () => {}, true);
+    const eventDetail = {
+      event_name: "test_event",
+      result: "test_result",
+      request: {
+        clientId: "test_client",
+        url: "test_url",
+      },
+    };
+    const messageEvent = new MessageEvent("message", {
+      data: JSON.stringify(eventDetail),
+    });
+
+    const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
+    wsWithIntAsPhotoId.connection?.onmessage?.(messageEvent);
+
+    expect(dispatchEventSpy).toHaveBeenCalled();
+    const customEvent = dispatchEventSpy.mock.calls[0][0] as CustomEvent;
+    expect(customEvent.detail.eventName).toBe(eventDetail.event_name);
+    expect(customEvent.detail.result).toBe(eventDetail.result);
+    expect(customEvent.detail.request).toEqual(eventDetail.request);
+  });
 });

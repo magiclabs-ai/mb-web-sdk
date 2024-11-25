@@ -1,6 +1,6 @@
 import type { Project, projectAutofillBodySchema } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
-import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
+import { handleAsyncFunction } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
@@ -17,7 +17,7 @@ export class ProjectEndpoints {
         path: "/designer/projects/autofill",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
@@ -36,7 +36,7 @@ export class ProjectEndpoints {
         path: "/designer/projects/restyle",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
@@ -55,7 +55,7 @@ export class ProjectEndpoints {
         path: "/designer/projects/resize",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase(body, ["surfaces"])),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {

@@ -40,6 +40,7 @@ Create a MagicBook API instance
 const api = new MagicBookAPI({
   apiKey: string,
   mock?: boolean // Default to false
+  useIntAsPhotoId?: boolean // Default to false
 });
 ```
 
@@ -59,7 +60,7 @@ To analyze an array of photos, call the `photos.analyze` function. Once ready, a
 ```ts
 await api.photos.analyze(
   photos.map((photo) => ({
-    id: photo.handle, // string
+    id: photo.handle, // string | number if useIntAsPhotoId is set to `true`
     width: photo.width, // number
     height: photo.height, // number
     orientation: photo.orientation, // number
