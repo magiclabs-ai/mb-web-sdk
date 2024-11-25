@@ -83,7 +83,6 @@ export function photoIdConverter<T>(obj: T, type: "response" | "request") {
     const project = obj as ProjectAutofillBody;
     processPhotos(project.images);
   } else if (z.array(surfaceSchema).safeParse(obj).success) {
-    console.log("Array of surfaces");
     const surfaces = obj as Array<Surface>;
     for (const surface of surfaces) {
       processLayeredItems(surface.surfaceData.layeredItems);
