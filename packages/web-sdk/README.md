@@ -39,7 +39,7 @@ Create a MagicBook API instance
 ```ts
 const api = new MagicBookAPI({
   apiKey: string,
-  mock?: boolean // Default to false
+  mock?: boolean, // Default to false
   useIntAsPhotoId?: boolean // Default to false
 });
 ```
