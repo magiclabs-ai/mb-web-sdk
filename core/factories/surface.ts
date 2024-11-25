@@ -11,7 +11,7 @@ export function surfaceFactory(): Surface {
         height: faker.number.int({ min: 1000, max: 10000 }),
         dpi: faker.number.int({ min: 100, max: 600 }),
       },
-      layeredItems: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, LayeredItemFactory),
+      layeredItems: Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, LayeredItemFactory),
     },
     surfaceMetadata: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, metadataFactory),
     version: "4.0",
@@ -38,7 +38,7 @@ function photoContentFactory(): PhotoContent {
   return {
     contentType: "photo",
     userData: {
-      assetId: faker.string.uuid(),
+      assetId: faker.number.int({ min: 100, max: 4000 }).toString(),
       w: faker.number.int({ min: 100, max: 4000 }),
       h: faker.number.int({ min: 100, max: 4000 }),
       x: faker.number.int({ min: 0, max: 4000 }),

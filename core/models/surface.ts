@@ -4,7 +4,7 @@ import { z } from "zod";
 const photoContentSchema = z.object({
   contentType: z.string(),
   userData: z.object({
-    assetId: z.string(),
+    assetId: z.string().or(z.number()),
     w: z.number(),
     h: z.number(),
     x: z.number(),
@@ -22,7 +22,8 @@ const layeredItemSchema = z.object({
     h: z.number(),
     rot: z.number(),
   }),
-  type: z.enum(["photo"]),
+  // type: z.enum(["photo"]),
+  type: z.string(),
   content: photoContentSchema,
   layerMetadata: z.array(metadataSchema),
 });

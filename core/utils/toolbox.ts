@@ -1,3 +1,15 @@
+import { z } from "zod";
+import {
+  type AnalyzedPhoto,
+  analyzedPhotoSchema,
+  type PhotoAnalyzeBody,
+  photoAnalyzeBodySchema,
+} from "../models/photo";
+import { type Project, projectAutofillBodySchema, projectSchema } from "../models/project";
+import { type Surface, surfaceSchema } from "../models/surface";
+import { type SurfaceShuffleBody, surfaceShuffleBodySchema } from "../models/api/endpoints/surfaces";
+import type { ProjectAutofillBody } from "../models/api/endpoints/projects";
+
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function mergeNestedObject(obj: Record<string, any>, objToMerge: Record<string, any>): Record<string, any> {
   const result = { ...obj };
@@ -27,6 +39,55 @@ export async function handleAsyncFunction<T>(fn: () => Promise<T>) {
 
 export function camelCaseToSnakeCase(str: string) {
   return str.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+}
+
+export function parseId(id: string | number, type: "response" | "request"): string | number {
+  return type === "request" ? id.toString() : Number.parseInt(id as string);
+}
+
+export function photoIdConverter<T>(obj: T, type: "response" | "request") {
+  const processPhotos = (photos: Array<{ id: string | number }>) => {
+    for (const photo of photos) {
+      photo.id = parseId(photo.id, type);
+    }
+  };
+
+  const processLayeredItems = (
+    layeredItems: Array<{ type: string; content: { userData: { assetId: string | number } } }>,
+  ) => {
+    for (const layeredItem of layeredItems) {
+      if (layeredItem.type === "photo") {
+        layeredItem.content.userData.assetId = parseId(layeredItem.content.userData.assetId, type);
+      }
+    }
+  };
+  if (photoAnalyzeBodySchema.safeParse(obj).success) {
+    processPhotos(obj as PhotoAnalyzeBody);
+  } else if (analyzedPhotoSchema.safeParse(obj).success) {
+    (obj as AnalyzedPhoto).id = parseId((obj as AnalyzedPhoto).id, type);
+  } else if (projectSchema.safeParse(obj).success) {
+    const project = obj as Project;
+    processPhotos(project.images);
+    for (const aSurface of project.surfaces) {
+      for (const surface of aSurface) {
+        processLayeredItems(surface.surfaceData.layeredItems);
+      }
+    }
+  } else if (surfaceShuffleBodySchema.safeParse(obj).success) {
+    const surfaces = obj as SurfaceShuffleBody;
+    processPhotos(surfaces.images);
+    for (const surface of surfaces.surfaces) {
+      processLayeredItems(surface.surfaceData.layeredItems);
+    }
+  } else if (projectAutofillBodySchema.safeParse(obj).success) {
+    const project = obj as ProjectAutofillBody;
+    processPhotos(project.images);
+  } else if (z.array(surfaceSchema).safeParse(obj).success) {
+    const surfaces = obj as Array<Surface>;
+    for (const surface of surfaces) {
+      processLayeredItems(surface.surfaceData.layeredItems);
+    }
+  }
 }
 
 export function camelCaseObjectKeysToSnakeCase(

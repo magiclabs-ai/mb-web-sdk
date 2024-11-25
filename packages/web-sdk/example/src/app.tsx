@@ -50,9 +50,9 @@ function App() {
 
     setMbApi(
       new MagicBookAPI({
-        apiKey: import.meta.env.VITE_MB_API_KEY,
         apiHost: "api.dev.magiclabs-aurora.io",
-        mock: true,
+        apiKey: import.meta.env.VITE_MB_API_KEY,
+        useIntAsPhotoId: true,
       }),
     );
     return () => {
@@ -86,8 +86,8 @@ function App() {
 
   async function analyzePhotos() {
     await mb?.photos.analyze(
-      niceAndRome["00-nice-and-rome"].map((image) => ({
-        id: image.handle,
+      niceAndRome["00-nice-and-rome"].map((image, idx) => ({
+        id: idx,
         width: image.width,
         height: image.height,
         orientation: image.rotation,

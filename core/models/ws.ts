@@ -1,5 +1,5 @@
 import { wsReconnectInterval } from "../config";
-import { snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
+import { photoIdConverter, snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
 import type { MBEvent } from "./event";
 
 type WSMessage = {
@@ -16,11 +16,13 @@ export class WS {
   connection?: WebSocket;
   private url: string;
   private onConnectionOpened: () => void;
+  private useIntAsPhotoId?: boolean;
 
-  constructor(url: string, onConnectionOpened: () => void) {
+  constructor(url: string, onConnectionOpened: () => void, useIntAsPhotoId?: boolean) {
     this.url = url;
     this.connect();
     this.onConnectionOpened = onConnectionOpened;
+    this.useIntAsPhotoId = useIntAsPhotoId;
   }
 
   private connect() {
@@ -32,6 +34,7 @@ export class WS {
 
     this.connection.onmessage = (event: MessageEvent) => {
       const { result, request, eventName } = snakeCaseObjectKeysToCamelCase(JSON.parse(event.data)) as WSMessage;
+      result && this.useIntAsPhotoId && photoIdConverter(result, "response");
       const customEvent = new CustomEvent<MBEvent<unknown>>("MagicBook", {
         detail: {
           eventName,

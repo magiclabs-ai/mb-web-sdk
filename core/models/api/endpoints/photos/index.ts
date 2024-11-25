@@ -13,7 +13,7 @@ export class PhotoEndpoints {
         path: "/analyzer/photos/analyze",
         options: {
           method: "POST",
-          body: JSON.stringify(body),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: async () => {
           Array.from({ length: body.length }, () => eventHandler(photoFactory(), "photo.analyze"));

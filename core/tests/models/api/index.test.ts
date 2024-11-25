@@ -26,7 +26,6 @@ describe("API", () => {
 
     expect(await api.photos.analyze([])).toStrictEqual("ws-connection-not-open");
   });
-
   test("onConnectionOpened function in mock mode", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",

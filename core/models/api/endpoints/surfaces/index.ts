@@ -1,5 +1,5 @@
 import type { MagicBookAPI } from "../..";
-import { camelCaseObjectKeysToSnakeCase, handleAsyncFunction } from "@/core/utils/toolbox";
+import { handleAsyncFunction } from "@/core/utils/toolbox";
 import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
 import { faker } from "@faker-js/faker";
@@ -7,7 +7,7 @@ import { projectSchema } from "@/core/models/project";
 import { z } from "zod";
 import { surfaceSchema } from "@/core/models/surface";
 
-const surfaceShuffleBodySchema = projectSchema.extend({
+export const surfaceShuffleBodySchema = projectSchema.extend({
   surfaces: z.array(surfaceSchema),
 });
 
@@ -28,7 +28,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/shuffle",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: () => eventHandler(surfaceFactory(), "project.edited"),
       });
@@ -42,7 +42,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/autoadapt",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: () => eventHandler(surfaceFactory(), "project.edited"),
       });
@@ -56,7 +56,7 @@ export class SurfaceEndpoints {
         path: "/designer/surfaces/suggest",
         options: {
           method: "POST",
-          body: JSON.stringify(camelCaseObjectKeysToSnakeCase({ ...body }, ["surfaces"])),
+          body: this.magicBookAPI.bodyParse(body),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
