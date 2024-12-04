@@ -118,6 +118,77 @@ function App() {
     });
   }
 
+  async function createProjectWithMakeMyBook() {
+    console.log("mb:", mb);
+    console.log("mb.projects:", mb?.projects.autofill);
+    console.log("mb?.projects.makeMyBook:", mb?.projects);
+    await mb?.projects.makeMyBook({
+      customer: {
+        email: "customer@example.com",
+        firstName: "John",
+        lastName: "Doe",
+        userId: "user123",
+        refreshToken: null,
+        accessToken: null,
+        context: "web",
+      },
+      order: {
+        creationTime: new Date().toISOString(),
+        curate: true,
+        photoStripCount: 10,
+        priority: "high",
+        promoCode: "PROMO2023",
+        size: "large",
+        specialInstructions: "Handle with care",
+        subTitle: "Vacation Memories",
+        title: "My Vacation",
+        phoneNumber: "123-456-7890",
+        initialDevice: "iPhone",
+        spreadDensity: "dense",
+        coverStyle: "hardcover",
+        focusOption: "auto",
+        hasSixColorPrinting: true,
+        productType: "photoBook",
+        coverSpecId: "cover123",
+        curateDensity: 5,
+        stickerDensity: 3,
+        occasion: "vacation",
+        photoStripSort: "chronological",
+        styleId: 1,
+        style: 1,
+        styleName: "Modern",
+        binding: "perfect",
+      },
+      photoStrip: photos.map((photo, idx) => ({
+        photoRefId: idx,
+        encryptId: `enc${idx}`,
+        url: photo.url,
+        urlWithEdits: `${photo.url}?edit=true`,
+        photoMetadata: {
+          id: `photo${idx}`,
+          title: `Photo ${idx}`,
+          width: photo.width,
+          source: "camera",
+          height: photo.height,
+          data: "base64data",
+          uploadTime: new Date().toISOString(),
+          rotation: photo.orientation,
+          effect: "none",
+          llx: 0,
+          lly: 0,
+          urx: photo.width,
+          ury: photo.height,
+        },
+      })),
+      reportingData: {
+        properties: [
+          { key: "projectId", value: "project123" },
+          { key: "userId", value: "user123" },
+        ],
+      },
+    });
+  }
+
   async function restyleProject() {
     if (!project) {
       return;
@@ -173,6 +244,9 @@ function App() {
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Projects</h2>
           <button type="button" onClick={createProjectWithAutofill} disabled={!hasPhotos}>
             Create Project with Autofill
+          </button>
+          <button type="button" onClick={createProjectWithMakeMyBook}>
+            Create Project with Make My Book
           </button>
           <button type="button" onClick={restyleProject} disabled={!(hasPhotos && hasSurface)}>
             Restyle Project

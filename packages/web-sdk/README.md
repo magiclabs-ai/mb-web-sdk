@@ -96,6 +96,85 @@ await api.projects.autofill({
 });
 ```
 
+#### MakeMyBook
+To create a project with Make My Book, call the `projects.makemybook` function. If successful the API will only return a 201 status code. The designed project will be ready much later after a human designer creates the book.
+
+```ts
+{
+  "customer": {
+    "email": "john.doe@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "userId": "b1d2c3a4-f5g6-789h-ijkl-1234567890mn",
+    "refreshToken": null,
+    "accessToken": "o9p8q7r6-s5t4-uvw3-xyz2-1234567890ab",
+    "context": "birthday"
+  },
+  "order": {
+    "creationTime": "2024-12-01T12:34:56.789Z",
+    "curate": true,
+    "photoStripCount": 5,
+    "priority": "medium",
+    "promoCode": "ABC123XYZ",
+    "size": "medium",
+    "specialInstructions": "Add extra embellishments.",
+    "subTitle": "My Holiday Album",
+    "title": "Holiday Memories",
+    "phoneNumber": "123-456-7890",
+    "initialDevice": "mobile",
+    "spreadDensity": "medium",
+    "coverStyle": "modern",
+    "focusOption": "landscape",
+    "hasSixColorPrinting": false,
+    "productType": "photo book",
+    "coverSpecId": "1234-5678-9012-3456",
+    "curateDensity": 0.75,
+    "stickerDensity": 0.5,
+    "occasion": "holiday",
+    "photoStripSort": "date",
+    "styleId": 7,
+    "style": 3,
+    "styleName": "Minimalist",
+    "binding": "hardcover"
+  },
+  "photoStrip": [
+    {
+      "photoRefId": 123,
+      "encryptId": "a1b2c3d4e5f6",
+      "url": "https://example.com/photo1.jpg",
+      "urlWithEdits": "https://example.com/photo1-edited.jpg",
+      "photoMetadata": {
+        "id": "d4e5f6g7h8i9",
+        "title": "Vacation Beach",
+        "width": 1920,
+        "source": "https://example.com/photo1-source.jpg",
+        "height": 1080,
+        "data": "Base64EncodedDataHere",
+        "uploadTime": "2024-11-30T08:45:00.000Z",
+        "rotation": 90,
+        "effect": "sepia",
+        "llx": 0.1,
+        "lly": 0.2,
+        "urx": 0.8,
+        "ury": 0.9
+      }
+    }
+  ],
+  "reportingData": {
+    "properties": [
+      {
+        "key": "album_created",
+        "value": "2024-12-01"
+      },
+      {
+        "key": "theme",
+        "value": "holiday"
+      }
+    ]
+  }
+}
+```
+
 #### Restyle
 
 To create a project with restyle, call the `projects.restyle` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.

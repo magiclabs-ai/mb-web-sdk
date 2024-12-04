@@ -5,6 +5,7 @@ import type { MBEvent } from "@/core/models/event";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import { projectFactory } from "@/core/factories/project";
+import { makeMyBookFactory } from "@/core/factories/mmb";
 
 describe("Project", () => {
   const project = projectFactory();
@@ -32,6 +33,13 @@ describe("Project", () => {
       expect(surfaceEvent.eventName).toBe("project.edited");
       expect(surfaceSchema.parse(surfaceEvent.result[0])).toStrictEqual(surfaceEvent.result[0]);
     }
+  });
+
+  test("makeMyBook", async () => {
+    const projectWithoutSurfaces = makeMyBookFactory();
+
+    const res = await api.projects.makeMyBook(projectWithoutSurfaces);
+    expect(res).toStrictEqual({});
   });
 
   test("restyle", async () => {
