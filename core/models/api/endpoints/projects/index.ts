@@ -1,10 +1,12 @@
 import type { Project, projectAutofillBodySchema } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
-import { handleAsyncFunction } from "@/core/utils/toolbox";
+import type { z } from "zod";
+import { handleAsyncFunction, snakeCaseObjectKeysToCamelCase } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
-import type { z } from "zod";
+import { optionsFactory } from "@/core/factories/options";
+import { optionsSchema } from "@/core/models/options";
 
 export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
 
@@ -27,6 +29,22 @@ export class ProjectEndpoints {
         },
       });
       return res;
+    });
+  }
+
+  autofillOptions(image_count: number) {
+    return handleAsyncFunction(async () => {
+      const res = await this.magicBookAPI.fetcher.call({
+        path: `/designer/projects/autofill/options?image_count=${image_count}`,
+        options: {
+          method: "GET",
+        },
+        factory: async () => {
+          optionsFactory()
+          return {}
+        },
+      });
+      return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res));
     });
   }
 

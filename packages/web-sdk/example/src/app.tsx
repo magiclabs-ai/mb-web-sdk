@@ -18,12 +18,12 @@ function App() {
     bookFormat: {
       targetPageRange: [20, 40],
       page: {
-        width: 8,
-        height: 11,
+        width: 1920,
+        height: 1080,
       },
       cover: {
-        width: 8,
-        height: 11,
+        width: 1920,
+        height: 1080,
       },
     },
     images: photos,
@@ -94,6 +94,11 @@ function App() {
         url: image.url,
       })),
     );
+  }
+
+  async function autofillOptions() {
+    const res = await mb?.projects.autofillOptions(10);
+    console.log("Autofill Options", res);
   }
 
   async function createProjectWithAutofill() {
@@ -171,6 +176,9 @@ function App() {
         </div>
         <div className="flex flex-col items-start gap-4 p-4">
           <h2 className="w-full pb-1 text-lg font-semibold border-b">Projects</h2>
+          <button type="button" onClick={autofillOptions}>
+            Get Autofill Options
+          </button>
           <button type="button" onClick={createProjectWithAutofill} disabled={!hasPhotos}>
             Create Project with Autofill
           </button>
