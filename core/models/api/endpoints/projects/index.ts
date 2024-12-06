@@ -8,7 +8,7 @@ import type { z } from "zod";
 import { makeMyBookSchema } from "@/core/models/mmb";
 
 export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
-export type MakeMyBookBody = z.infer<typeof makeMyBookSchema>;
+
 
 export class ProjectEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
@@ -17,25 +17,6 @@ export class ProjectEndpoints {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
         path: "/designer/projects/autofill",
-        options: {
-          method: "POST",
-          body: this.magicBookAPI.bodyParse(body),
-        },
-        factory: async () => {
-          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
-            eventHandler([surfaceFactory()], "project.edited"),
-          );
-          return {};
-        },
-      });
-      return res;
-    });
-  }
-
-  makeMyBook(body: MakeMyBookBody) {
-    return handleAsyncFunction(async () => {
-      const res = await this.magicBookAPI.fetcher.call({
-        path: "/designer/projects/makemybook",
         options: {
           method: "POST",
           body: this.magicBookAPI.bodyParse(body),
