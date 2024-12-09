@@ -20,9 +20,9 @@ describe("Project", () => {
 
   test("autofillOptions", async () => {
     const autofillOptions = optionsFactory();
-    const image_count = 20;
+    const imageCount = 20;
 
-    const res = await api.projects.autofillOptions(image_count);
+    const res = await api.projects.autofillOptions(imageCount);
     expect(res).toStrictEqual(autofillOptions);
   });
 
