@@ -19,13 +19,12 @@ describe("Project", () => {
   });
 
   test("autofillOptions", async () => {
-    const autofillOptions = optionsFactory()
-    const image_count = 20
+    const autofillOptions = optionsFactory();
+    const image_count = 20;
 
-    const res = await api.projects.autofillOptions(image_count)
+    const res = await api.projects.autofillOptions(image_count);
     expect(res).toStrictEqual(autofillOptions);
-
-  })
+  });
 
   test("autofill", async () => {
     const projectWithoutSurfaces = projectFactory({ noSurfaces: true });
