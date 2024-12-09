@@ -71,6 +71,13 @@ await api.photos.analyze(
 
 ### Projects
 
+### Autofill Options
+To get the autofill options, call the `projects.autofillOptions` function with the image count of the project.
+
+```ts
+await api.projects.autofillOptions(imageCount);
+```
+
 #### Autofill
 To create a project with autofill, call the `projects.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
@@ -257,7 +264,7 @@ app.use(
   </head>
   <script type="text/javascript">
     const api = new MagicLabs.MagicBookAPI({...})
-    
+
     window.addEventListener("MagicBook", async (event) => {
       if (event.detail.eventName === 'ws' && event.detail.result.areConnectionsOpen) {
         await makeBookRequest();

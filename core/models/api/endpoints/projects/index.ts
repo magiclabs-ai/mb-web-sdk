@@ -32,10 +32,10 @@ export class ProjectEndpoints {
     });
   }
 
-  autofillOptions(image_count: number) {
+  autofillOptions(imageCount: number) {
     return handleAsyncFunction(async () => {
       const res = await this.magicBookAPI.fetcher.call({
-        path: `/designer/projects/autofill/options?image_count=${image_count}`,
+        path: `/designer/projects/autofill/options?image_count=${imageCount}`,
         options: {
           method: "GET",
         },
