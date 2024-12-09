@@ -111,12 +111,12 @@ function App() {
       bookFormat: {
         targetPageRange: [20, 40],
         page: {
-          width: 8,
-          height: 11,
+          width: 1920,
+          height: 1080,
         },
         cover: {
-          width: 8,
-          height: 11,
+          width: 1920,
+          height: 1080,
         },
       },
       images: [...photos],
