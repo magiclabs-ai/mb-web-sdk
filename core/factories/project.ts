@@ -1,7 +1,7 @@
+import { faker } from "@faker-js/faker";
 import { photoFactory } from "@/core/factories/photo";
 import { surfaceFactory } from "@/core/factories/surface";
 import type { Project, ProjectAutofillBody } from "@/core/models/project";
-import { faker } from "@faker-js/faker";
 
 export function projectFactory(props?: (ProjectAutofillBody | Project) & { noSurfaces?: boolean }): Project {
   return {
