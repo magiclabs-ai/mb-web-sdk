@@ -40,8 +40,7 @@ export class ProjectEndpoints {
           method: "GET",
         },
         factory: async () => {
-          optionsFactory()
-          return {}
+          return optionsFactory()
         },
       });
       return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res));

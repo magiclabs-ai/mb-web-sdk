@@ -5,6 +5,7 @@ import type { MBEvent } from "@/core/models/event";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import { projectFactory } from "@/core/factories/project";
+import { optionsFactory } from "@/core/factories/options";
 
 describe("Project", () => {
   const project = projectFactory();
@@ -16,6 +17,15 @@ describe("Project", () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
   });
+
+  test("autofillOptions", async () => {
+    const autofillOptions = optionsFactory()
+    const image_count = 20
+
+    const res = await api.projects.autofillOptions(image_count)
+    expect(res).toStrictEqual(autofillOptions);
+
+  })
 
   test("autofill", async () => {
     const projectWithoutSurfaces = projectFactory({ noSurfaces: true });
