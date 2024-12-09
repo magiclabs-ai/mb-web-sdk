@@ -11,7 +11,7 @@ import { optionsSchema } from "@/core/models/options";
 export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
 
 export class ProjectEndpoints {
-  constructor(private readonly magicBookAPI: MagicBookAPI) { }
+  constructor(private readonly magicBookAPI: MagicBookAPI) {}
 
   autofill(body: ProjectAutofillBody) {
     return handleAsyncFunction(async () => {

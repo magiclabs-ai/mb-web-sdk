@@ -6,6 +6,6 @@ export function optionsFactory(): Options {
     embellishmentLevels: [...embellishmentLevels],
     textStickerLevels: [...textStickerLevels],
     imageFilteringLevels: [...imageFilteringLevels],
-    imageDensities: [...imageDensities]
+    imageDensities: [...imageDensities],
   };
 }
