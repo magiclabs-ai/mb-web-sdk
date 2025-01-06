@@ -68,7 +68,7 @@ function App() {
     ) {
       setAreConnectionsOpen(true);
     }
-    if (event.detail.eventName === "photo.analyze") {
+    if (event.detail.eventName === "image.analyzed") {
       const photo = event.detail.result as AnalyzedPhoto;
       console.log("Photo Analyzed", photo);
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
