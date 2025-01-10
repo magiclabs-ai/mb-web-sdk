@@ -12,7 +12,7 @@ function App() {
   const [project, setProject] = useState<Project>({
     designMode: "automatic",
     occasion: "birthday",
-    style: "modern",
+    style: "DG_36907",
     imageDensityLevel: "high",
     embellishmentLevel: "high",
     bookFormat: {
@@ -102,25 +102,10 @@ function App() {
   }
 
   async function createProjectWithAutofill() {
-    await mb?.projects.autofill({
-      designMode: "automatic",
-      occasion: "birthday",
-      style: "modern",
-      imageDensityLevel: "high",
-      embellishmentLevel: "high",
-      bookFormat: {
-        targetPageRange: [20, 40],
-        page: {
-          width: 1920,
-          height: 1080,
-        },
-        cover: {
-          width: 1920,
-          height: 1080,
-        },
-      },
-      images: [...photos],
-    });
+    if (!project) {
+      return;
+    }
+    await mb?.projects.autofill(project);
   }
 
   async function restyleProject() {
@@ -168,14 +153,14 @@ function App() {
         </div>
       </div>
       <div className="flex gap-10">
-        <div className="flex flex-col items-start gap-4 p-4">
-          <h2 className="w-full pb-1 text-lg font-semibold border-b">Photos</h2>
+        <div className="flex flex-col gap-4 items-start p-4">
+          <h2 className="pb-1 w-full text-lg font-semibold border-b">Photos</h2>
           <button type="button" onClick={analyzePhotos}>
             Analyse Photos
           </button>
         </div>
-        <div className="flex flex-col items-start gap-4 p-4">
-          <h2 className="w-full pb-1 text-lg font-semibold border-b">Projects</h2>
+        <div className="flex flex-col gap-4 items-start p-4">
+          <h2 className="pb-1 w-full text-lg font-semibold border-b">Projects</h2>
           <button type="button" onClick={autofillOptions}>
             Get Autofill Options
           </button>
@@ -189,8 +174,8 @@ function App() {
             Resize Project
           </button>
         </div>
-        <div className="flex flex-col items-start gap-4 p-4">
-          <h2 className="w-full pb-1 text-lg font-semibold border-b">Surfaces</h2>
+        <div className="flex flex-col gap-4 items-start p-4">
+          <h2 className="pb-1 w-full text-lg font-semibold border-b">Surfaces</h2>
           <button type="button" onClick={autoAdaptSurface} disabled={!(hasPhotos && hasSurface)}>
             Auto Adapt Surface
           </button>
