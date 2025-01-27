@@ -164,12 +164,10 @@ describe("Toolbox", () => {
     photoIdConverter(project, "request");
     expect(project.images.every((photo) => typeof photo.id === "string")).toBe(true);
     expect(
-      project.surfaces.every((aSurface) =>
-        aSurface.every((surface) =>
-          surface.surfaceData.layeredItems.every(
-            (layeredItem) => typeof layeredItem.content.userData.assetId === "string",
-          ),
-        ),
+      project.surfaces.every((surface) =>
+        surface.surfaceData.layeredItems
+          .filter((layeredItem) => layeredItem.type === "photo")
+          .every((layeredItem) => typeof layeredItem.content.userData.assetId === "string"),
       ),
     ).toBe(true);
   });
@@ -178,12 +176,10 @@ describe("Toolbox", () => {
     photoIdConverter(project, "response");
     expect(project.images.every((photo) => typeof photo.id === "number")).toBe(true);
     expect(
-      project.surfaces.every((aSurface) =>
-        aSurface.every((surface) =>
-          surface.surfaceData.layeredItems
-            .filter((layeredItem) => layeredItem.type === "photo")
-            .every((layeredItem) => typeof layeredItem.content.userData.assetId === "number"),
-        ),
+      project.surfaces.every((surface) =>
+        surface.surfaceData.layeredItems
+          .filter((layeredItem) => layeredItem.type === "photo")
+          .every((layeredItem) => typeof layeredItem.content.userData.assetId === "number"),
       ),
     ).toBe(true);
   });
@@ -192,42 +188,42 @@ describe("Toolbox", () => {
     photoIdConverter(project, "response");
     expect(project.images.every((photo) => typeof photo.id === "number")).toBe(true);
     expect(
-      project.surfaces.every((aSurface) =>
-        aSurface.every((surface) =>
-          surface.surfaceData.layeredItems
-            .filter((layeredItem) => layeredItem.type === "photo")
-            .every((layeredItem) => typeof layeredItem.content.userData.assetId === "number"),
-        ),
-      ),
-    ).toBe(true);
-  });
-  test("photoIdConverter convert surfaceShuffleBody with type response", () => {
-    const surfaceShuffleBody = projectFactory();
-    surfaceShuffleBody.surfaces = surfaceShuffleBody.surfaces[0];
-    photoIdConverter(surfaceShuffleBody, "request");
-    expect(surfaceShuffleBody.images.every((photo) => typeof photo.id === "string")).toBe(true);
-    expect(
-      surfaceShuffleBody.surfaces.every((surface) =>
-        surface.surfaceData.layeredItems
-          .filter((layeredItem) => layeredItem.type === "photo")
-          .every((layeredItem) => typeof layeredItem.content.userData.assetId === "string"),
-      ),
-    ).toBe(true);
-  });
-  test("photoIdConverter convert surfaceShuffleBody with type response", () => {
-    const surfaceShuffleBody = projectFactory();
-    surfaceShuffleBody.surfaces = surfaceShuffleBody.surfaces[0];
-    photoIdConverter(surfaceShuffleBody, "response");
-    expect(surfaceShuffleBody.images.every((photo) => typeof photo.id === "number")).toBe(true);
-    expect(
-      surfaceShuffleBody.surfaces.every((surface) =>
+      project.surfaces.every((surface) =>
         surface.surfaceData.layeredItems
           .filter((layeredItem) => layeredItem.type === "photo")
           .every((layeredItem) => typeof layeredItem.content.userData.assetId === "number"),
       ),
     ).toBe(true);
   });
-  test("photoIdConverter convert projectAutofillBody with type response", () => {
+  test("photoIdConverter convert surfaceShuffleBody with type request", () => {
+    const { surfaces, ...project } = projectFactory();
+    const surfaceShuffleBody = {
+      ...project,
+      surface: surfaces[0],
+    };
+    photoIdConverter(surfaceShuffleBody, "request");
+    expect(surfaceShuffleBody.images.every((photo) => typeof photo.id === "string")).toBe(true);
+    expect(
+      surfaceShuffleBody.surface.surfaceData.layeredItems
+        .filter((layeredItem) => layeredItem.type === "photo")
+        .every((layeredItem) => typeof layeredItem.content.userData.assetId === "string"),
+    ).toBe(true);
+  });
+  test("photoIdConverter convert surfaceShuffleBody with type response", () => {
+    const { surfaces, ...project } = projectFactory();
+    const surfaceShuffleBody = {
+      ...project,
+      surface: surfaces[0],
+    };
+    photoIdConverter(surfaceShuffleBody, "response");
+    expect(surfaceShuffleBody.images.every((photo) => typeof photo.id === "number")).toBe(true);
+    expect(
+      surfaceShuffleBody.surface.surfaceData.layeredItems
+        .filter((layeredItem) => layeredItem.type === "photo")
+        .every((layeredItem) => typeof layeredItem.content.userData.assetId === "number"),
+    ).toBe(true);
+  });
+  test("photoIdConverter convert projectAutofillBody with type request", () => {
     const projectAutofillBody = projectFactory();
     // biome-ignore lint/performance/noDelete: <explanation>
     delete projectAutofillBody.surfaces;
@@ -242,7 +238,7 @@ describe("Toolbox", () => {
     expect(projectAutofillBody.images.every((photo) => typeof photo.id === "number")).toBe(true);
   });
   test("photoIdConverter convert array of surfaces with type response", () => {
-    const surfaces = projectFactory().surfaces[0];
+    const surfaces = projectFactory().surfaces;
     photoIdConverter(surfaces, "response");
     expect(
       surfaces.every((surface) =>
@@ -253,7 +249,7 @@ describe("Toolbox", () => {
     ).toBe(true);
   });
   test("photoIdConverter convert array of surfaces with type response and layeredItem type to text", () => {
-    const surfaces = projectFactory().surfaces[0];
+    const surfaces = projectFactory().surfaces;
     surfaces[0].surfaceData.layeredItems[0].type = "text";
     photoIdConverter(surfaces, "response");
     expect(

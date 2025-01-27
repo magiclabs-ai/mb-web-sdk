@@ -21,9 +21,7 @@ export function projectFactory(props?: (ProjectAutofillBody | Project) & { noSur
         height: 11,
       },
     },
-    surfaces: props?.noSurfaces
-      ? []
-      : Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, surfaceFactory).map((s) => [s]),
+    surfaces: props?.noSurfaces ? [] : Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, surfaceFactory),
     images: props?.images || Array.from({ length: faker.number.int({ min: 10, max: 100 }) }, photoFactory),
   };
 }

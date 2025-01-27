@@ -4,11 +4,11 @@ import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
 import { faker } from "@faker-js/faker";
 import { projectSchema } from "@/core/models/project";
-import { z } from "zod";
+import type { z } from "zod";
 import { surfaceSchema } from "@/core/models/surface";
 
-export const surfaceShuffleBodySchema = projectSchema.extend({
-  surfaces: z.array(surfaceSchema),
+export const surfaceShuffleBodySchema = projectSchema.omit({ surfaces: true }).extend({
+  surface: surfaceSchema,
 });
 
 const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
