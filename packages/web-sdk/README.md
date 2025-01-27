@@ -126,7 +126,7 @@ await api.projects.restyle({
     },
   },
   images: [...],
-  surfaces: [[surface1], [surface2], ...]
+  surfaces: [surface1, surface2, ...]
 });
 ```
 
@@ -153,7 +153,7 @@ await api.projects.resize({
     },
   },
   images: [...],
-  surfaces: [[surface1], [surface2], ...]
+  surfaces: [surface1, surface2, ...]
 });
 ```
 
@@ -182,7 +182,7 @@ await api.surfaces.shuffle({
     },
   },
   images: [...],
-  surfaces: [surface1, ...]
+  surface: {...}
 });
 ```
 
@@ -209,7 +209,7 @@ await api.surfaces.autoAdapt({
     },
   },
   images: [...],
-  surfaces: [surface1, ...]
+  surface: {...}
 });
 ```
 
@@ -236,7 +236,7 @@ await api.surfaces.suggest({
     },
   },
   images: [...],
-  surfaces: [surface1, ...]
+  surface: {...}
 });
 ```
 

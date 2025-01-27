@@ -68,17 +68,13 @@ export function photoIdConverter<T>(obj: T, type: "response" | "request") {
   } else if (projectSchema.safeParse(obj).success) {
     const project = obj as Project;
     processPhotos(project.images);
-    for (const aSurface of project.surfaces) {
-      for (const surface of aSurface) {
-        processLayeredItems(surface.surfaceData.layeredItems);
-      }
-    }
-  } else if (surfaceShuffleBodySchema.safeParse(obj).success) {
-    const surfaces = obj as SurfaceShuffleBody;
-    processPhotos(surfaces.images);
-    for (const surface of surfaces.surfaces) {
+    for (const surface of project.surfaces) {
       processLayeredItems(surface.surfaceData.layeredItems);
     }
+  } else if (surfaceShuffleBodySchema.safeParse(obj).success) {
+    const surfaceBody = obj as SurfaceShuffleBody;
+    processPhotos(surfaceBody.images);
+    processLayeredItems(surfaceBody.surface.surfaceData.layeredItems);
   } else if (projectAutofillBodySchema.safeParse(obj).success) {
     const project = obj as ProjectAutofillBody;
     processPhotos(project.images);

@@ -1,11 +1,18 @@
-import { MagicBookAPI, type MBEvent, type AnalyzedPhoto, type Project, type Surface } from "@magiclabs.ai/mb-web-sdk";
+import {
+  MagicBookAPI,
+  type MBEvent,
+  type AnalyzedPhoto,
+  type Project,
+  type Surface,
+  type SurfaceShuffleBody,
+} from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
 
 function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
   const hasPhotos = photos.length > 0;
-  const [surfaces, setSurfaces] = useState<Array<Array<Surface>>>([]);
+  const [surfaces, setSurfaces] = useState<Array<Surface>>([]);
   const hasSurface = surfaces.length > 0;
   const [areConnectionsOpen, setAreConnectionsOpen] = useState(false);
   const [mb, setMbApi] = useState<MagicBookAPI>();
@@ -29,6 +36,15 @@ function App() {
     images: photos,
     surfaces: surfaces,
   });
+  const [surfaceEndpointProps, setSurfaceEndpointProps] = useState<SurfaceShuffleBody | null>();
+
+  useEffect(() => {
+    const { surfaces, ...projectProps } = project;
+    setSurfaceEndpointProps({
+      ...projectProps,
+      surface: surfaces[0],
+    } as SurfaceShuffleBody);
+  }, [project]);
 
   useEffect(() => {
     setProject((oldProject: Project) => ({
@@ -74,7 +90,7 @@ function App() {
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
     if (event.detail.eventName === "project.edited") {
-      setSurfaces((prev) => [...prev, event.detail.result as Array<Surface>]);
+      setSurfaces((prev) => [...prev, ...(event.detail.result as Array<Surface>)]);
     }
   }
 
@@ -123,24 +139,24 @@ function App() {
   }
 
   async function autoAdaptSurface() {
-    await mb?.surfaces.autoAdapt({
-      ...project,
-      surfaces: surfaces[0],
-    });
+    if (!surfaceEndpointProps) {
+      return;
+    }
+    await mb?.surfaces.autoAdapt(surfaceEndpointProps);
   }
 
   async function suggestSurface() {
-    await mb?.surfaces.suggest({
-      ...project,
-      surfaces: surfaces[0],
-    });
+    if (!surfaceEndpointProps) {
+      return;
+    }
+    await mb?.surfaces.suggest(surfaceEndpointProps);
   }
 
   async function shuffleSurface() {
-    await mb?.surfaces.shuffle({
-      ...project,
-      surfaces: surfaces[0],
-    });
+    if (!surfaceEndpointProps) {
+      return;
+    }
+    await mb?.surfaces.shuffle(surfaceEndpointProps);
   }
 
   return (

@@ -20,7 +20,7 @@ export const projectSchema = z.object({
     }),
   }),
   images: z.array(analyzedPhotoSchema),
-  surfaces: z.array(z.array(surfaceSchema)),
+  surfaces: z.array(surfaceSchema),
 });
 
 export const projectAutofillBodySchema = projectSchema.omit({
