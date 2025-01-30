@@ -5,11 +5,8 @@ import { eventHandler } from "@/core/utils/event-mock";
 import { faker } from "@faker-js/faker";
 import { projectSchema } from "@/core/models/project";
 import type { z } from "zod";
-import { surfaceSchema } from "@/core/models/surface";
 
-export const surfaceShuffleBodySchema = projectSchema.omit({ surfaces: true }).extend({
-  surface: surfaceSchema,
-});
+export const surfaceShuffleBodySchema = projectSchema;
 
 const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
 const surfaceSuggestBodySchema = surfaceShuffleBodySchema;

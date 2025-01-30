@@ -182,7 +182,7 @@ await api.surfaces.shuffle({
     },
   },
   images: [...],
-  surface: {...}
+  surfaces: [surface1, surface2] // array of surfaces max length 2
 });
 ```
 
@@ -209,7 +209,7 @@ await api.surfaces.autoAdapt({
     },
   },
   images: [...],
-  surface: {...}
+  surfaces: [surface1, surface2] // array of surfaces max length 2
 });
 ```
 
@@ -236,7 +236,7 @@ await api.surfaces.suggest({
     },
   },
   images: [...],
-  surface: {...}
+  surfaces: [surface1, surface2] // array of surfaces max length 2
 });
 ```
 

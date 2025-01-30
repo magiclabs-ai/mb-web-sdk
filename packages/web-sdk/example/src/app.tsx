@@ -42,7 +42,7 @@ function App() {
     const { surfaces, ...projectProps } = project;
     setSurfaceEndpointProps({
       ...projectProps,
-      surface: surfaces[0],
+      surfaces: surfaces.slice(0, 2),
     } as SurfaceShuffleBody);
   }, [project]);
 
@@ -66,7 +66,6 @@ function App() {
 
     setMbApi(
       new MagicBookAPI({
-        apiHost: "api.dev.magiclabs-aurora.io",
         apiKey: import.meta.env.VITE_MB_API_KEY,
         useIntAsPhotoId: false,
       }),
