@@ -71,10 +71,6 @@ export function photoIdConverter<T>(obj: T, type: "response" | "request") {
     for (const surface of project.surfaces) {
       processLayeredItems(surface.surfaceData.layeredItems);
     }
-  } else if (surfaceShuffleBodySchema.safeParse(obj).success) {
-    const surfaceBody = obj as SurfaceShuffleBody;
-    processPhotos(surfaceBody.images);
-    processLayeredItems(surfaceBody.surface.surfaceData.layeredItems);
   } else if (projectAutofillBodySchema.safeParse(obj).success) {
     const project = obj as ProjectAutofillBody;
     processPhotos(project.images);
