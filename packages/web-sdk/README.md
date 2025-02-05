@@ -83,6 +83,8 @@ To create a project with autofill, call the `projects.autofill` function. Once r
 
 ```ts
 await api.projects.autofill({
+  title: "My Book", // optional
+  subtitle: "A collection of photos", // optional
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
