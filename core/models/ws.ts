@@ -3,6 +3,7 @@ import { photoIdConverter, snakeCaseObjectKeysToCamelCase } from "../utils/toolb
 import type { MBEvent } from "./event";
 
 type WSMessage = {
+  eventType?: string;
   eventName: string;
   result: unknown;
   request: {
@@ -33,12 +34,11 @@ export class WS {
     };
 
     this.connection.onmessage = (event: MessageEvent) => {
-      const { result, request, eventName } = snakeCaseObjectKeysToCamelCase(JSON.parse(event.data)) as WSMessage;
+      const { result, ...rest } = snakeCaseObjectKeysToCamelCase(JSON.parse(event.data)) as WSMessage;
       result && this.useIntAsPhotoId && photoIdConverter(result, "response");
       const customEvent = new CustomEvent<MBEvent<unknown>>("MagicBook", {
         detail: {
-          eventName,
-          request,
+          ...rest,
           result,
         },
       });

@@ -28,6 +28,7 @@ the events you will receive will have three props
 
 ```json
 {
+  "eventType": "project.autofill", // optional
   "eventName": "surfaces.autofill"
   "request": {...}
   "result": {...}
