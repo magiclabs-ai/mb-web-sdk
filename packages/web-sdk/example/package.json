@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.1",
-    "@magiclabs.ai/mb-web-sdk": "file:../dist",
+    "@magiclabs.ai/mb-web-sdk": "0.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
