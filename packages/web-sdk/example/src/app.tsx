@@ -76,7 +76,7 @@ function App() {
   }, []);
 
   function handleEvent(event: CustomEvent<MBEvent<unknown>>) {
-    console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result);
+    console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result, event.detail.eventType);
     if (
       event.detail.eventName === "ws" &&
       (event.detail.result as { areConnectionsOpen: boolean }).areConnectionsOpen
@@ -107,6 +107,7 @@ function App() {
         height: image.height,
         orientation: image.rotation,
         url: image.url,
+        encryptId: "image.encryptId",
       })),
     );
   }
