@@ -8,6 +8,7 @@ export const photoAnalyzeBodySchema = z.array(
     height: z.number(),
     orientation: z.number(),
     url: z.string(),
+    encryptId: z.string().optional(),
   }),
 );
 

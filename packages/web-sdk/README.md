@@ -66,6 +66,7 @@ await api.photos.analyze(
     height: photo.height, // number
     orientation: photo.orientation, // number
     url: photo.url, // string
+    encryptId // optional string
   }))
 );
 ```
