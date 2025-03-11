@@ -6,8 +6,9 @@ export class WebSocketMock {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   onmessage: ((event: MessageEvent<any>) => void) | undefined;
 
-  readyState: number;
+  readyState?: number;
 
+  // @ts-ignore
   constructor(url: string | URL) {
     setTimeout(() => {
       this.test();

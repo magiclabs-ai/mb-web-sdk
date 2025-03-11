@@ -7,7 +7,6 @@ import {
 } from "../models/photo";
 import { type Project, projectAutofillBodySchema, projectSchema } from "../models/project";
 import { type Surface, surfaceSchema } from "../models/surface";
-import { type SurfaceShuffleBody, surfaceShuffleBodySchema } from "../models/api/endpoints/surfaces";
 import type { ProjectAutofillBody } from "../models/api/endpoints/projects";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -156,4 +155,17 @@ export function snakeCaseObjectKeysToCamelCase(
   }
 
   return result;
+}
+
+export function msFormat(ms: number) {
+  if (ms < 1000) {
+    return `${ms}ms`;
+  }
+  if (ms < 1000 * 60) {
+    return `${(ms / 1000).toFixed(2)}s`;
+  }
+  if (ms < 1000 * 60 * 60) {
+    return `${(ms / 1000 / 60).toFixed(2)}m`;
+  }
+  return `${(ms / 1000 / 60 / 60).toFixed(0)}h`;
 }

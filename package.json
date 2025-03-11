@@ -12,7 +12,7 @@
     "format": "biome format --error-on-warnings ./",
     "pub:canary": "pnpm run turbo:build && ./scripts/publish.sh --canary",
     "pub:release": "pnpm run turbo:build && ./scripts/publish.sh",
-    "turbo:build": "pnpm i && turbo run build",
+    "turbo:build": "pnpm i && tsc --noEmit && turbo run build",
     "turbo:coverage": "./scripts/build/before.sh --watch && turbo run coverage"
   },
   "dependencies": {

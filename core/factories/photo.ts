@@ -1,7 +1,7 @@
 import type { AnalyzedPhoto, PhotoAnalyzeBody } from "@/core/models/photo";
 import { faker } from "@faker-js/faker";
 
-export function photoFactory(idAsInt?: boolean): AnalyzedPhoto {
+export function photoFactory(): AnalyzedPhoto {
   const photo: AnalyzedPhoto = {
     id: faker.number.int({ min: 1, max: 100 }),
     roi: {
@@ -39,15 +39,12 @@ export function photoFactory(idAsInt?: boolean): AnalyzedPhoto {
     })),
     timestamp: faker.date.past().toISOString(),
   };
-  if (!idAsInt) {
-    photo.id = photo.id.toString();
-  }
   return photo;
 }
 
-export function photoAnalyzeBodyFactory(): PhotoAnalyzeBody {
+export function photoAnalyzeBodyFactory(isIntId?: boolean): PhotoAnalyzeBody {
   return Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => ({
-    id: faker.number.int({ min: 1, max: 5 }),
+    id: isIntId ? faker.number.int({ min: 1, max: 5 }) : faker.number.int({ min: 1, max: 5 }).toString(),
     width: faker.number.int({ min: 100, max: 4000 }),
     height: faker.number.int({ min: 100, max: 4000 }),
     orientation: faker.number.int({ min: 0, max: 3 }),

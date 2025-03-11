@@ -1,87 +1,114 @@
 import type { Project, projectAutofillBodySchema } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import type { z } from "zod";
-import { handleAsyncFunction, snakeCaseObjectKeysToCamelCase } from "@/core/utils/toolbox";
+import { snakeCaseObjectKeysToCamelCase } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
 import { optionsFactory } from "@/core/factories/options";
-import { optionsSchema } from "@/core/models/options";
+import { type Options, optionsSchema } from "@/core/models/options";
+import type { RequestResponse } from "@/core/models/fetcher";
+import { simpleResponseFactory } from "@/core/factories/response";
 
 export type ProjectAutofillBody = z.infer<typeof projectAutofillBodySchema>;
+
+type ProjectAutofillResponse = {
+  requestId: string;
+  options: Options;
+};
 
 export class ProjectEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
 
-  autofill(body: ProjectAutofillBody) {
-    return handleAsyncFunction(async () => {
-      const res = await this.magicBookAPI.fetcher.call({
-        path: "/designer/projects/autofill",
-        options: {
-          method: "POST",
-          body: this.magicBookAPI.bodyParse(body),
-        },
-        factory: async () => {
-          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
-            eventHandler([surfaceFactory()], "project.edited"),
-          );
-          return {};
-        },
-      });
-      return res;
+  async autofill(body: ProjectAutofillBody) {
+    const path = "/designer/projects/autofill";
+    const log = this.magicBookAPI.logger?.add(path);
+    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+      path,
+      options: {
+        method: "POST",
+        body: this.magicBookAPI.bodyParse(body),
+      },
+      factory: async () => {
+        Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
+          eventHandler([surfaceFactory()], "surfaces.designed"),
+        );
+        return simpleResponseFactory();
+      },
     });
+    if (log) {
+      log.id = res.requestId;
+      log.addSubProcess("fetch", path);
+    }
+    return res;
   }
 
-  autofillOptions(imageCount: number) {
-    return handleAsyncFunction(async () => {
-      const res = await this.magicBookAPI.fetcher.call({
-        path: `/designer/projects/autofill/options?image_count=${imageCount}`,
-        options: {
-          method: "GET",
-        },
-        factory: async () => {
-          return optionsFactory();
-        },
-      });
-      return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res));
+  async autofillOptions(imageCount: number) {
+    const path = `/designer/projects/autofill/options?image_count=${imageCount}`;
+    const log = this.magicBookAPI.logger?.add(path);
+    const res = await this.magicBookAPI.fetcher.call<ProjectAutofillResponse>({
+      path,
+      options: {
+        method: "GET",
+      },
+      factory: async () => {
+        return {
+          options: optionsFactory(),
+          requestId: faker.string.ulid(),
+        } as ProjectAutofillResponse;
+      },
     });
+    if (log) {
+      log.id = res.requestId;
+      log.addSubProcess("fetch", path);
+      log.finish();
+    }
+    return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res.options));
   }
 
-  restyle(body: Project) {
-    return handleAsyncFunction(async () => {
-      const res = await this.magicBookAPI.fetcher.call({
-        path: "/designer/projects/restyle",
-        options: {
-          method: "POST",
-          body: this.magicBookAPI.bodyParse(body),
-        },
-        factory: async () => {
-          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler([surfaceFactory()], "project.edited");
-          });
-          return {};
-        },
-      });
-      return res;
+  async restyle(body: Project) {
+    const path = "/designer/projects/restyle";
+    const log = this.magicBookAPI.logger?.add(path);
+    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+      path,
+      options: {
+        method: "POST",
+        body: this.magicBookAPI.bodyParse(body),
+      },
+      factory: async () => {
+        Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
+          eventHandler([surfaceFactory()], "surfaces.designed");
+        });
+        return simpleResponseFactory();
+      },
     });
+    if (log) {
+      log.id = res.requestId;
+      log.addSubProcess("fetch", path);
+    }
+    return res;
   }
 
-  resize(body: Project) {
-    return handleAsyncFunction(async () => {
-      const res = await this.magicBookAPI.fetcher.call({
-        path: "/designer/projects/resize",
-        options: {
-          method: "POST",
-          body: this.magicBookAPI.bodyParse(body),
-        },
-        factory: async () => {
-          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-            eventHandler([surfaceFactory()], "project.edited");
-          });
-          return {};
-        },
-      });
-      return res;
+  async resize(body: Project) {
+    const path = "/designer/projects/resize";
+    const log = this.magicBookAPI.logger?.add(path);
+    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+      path,
+      options: {
+        method: "POST",
+        body: this.magicBookAPI.bodyParse(body),
+      },
+      factory: async () => {
+        Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
+          eventHandler([surfaceFactory()], "surfaces.designed");
+        });
+        return simpleResponseFactory();
+      },
     });
+    if (log) {
+      log.id = res.requestId;
+      log.addSubProcess("fetch", path);
+    }
+    return res;
   }
 }

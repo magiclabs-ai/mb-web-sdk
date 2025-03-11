@@ -42,6 +42,25 @@ jobs:
           run_install: true
       - name: Run biome format
         run: pnpm run format
+  build:
+    name: Build Code Base
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install Node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: true
+      - name: "Build"
+        run: pnpm run turbo:build
   test:
     name: Test Code Base
     runs-on: ubuntu-latest
