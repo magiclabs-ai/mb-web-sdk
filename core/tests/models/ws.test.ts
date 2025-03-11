@@ -1,12 +1,15 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { WS } from "../../models/ws";
+import { finishMock } from "../mocks/logger";
+import { Logger } from "@/core/models/logger";
 
 describe("WS", () => {
   let ws: WS;
   const url = "ws://localhost:8080";
+  const logger = new Logger();
 
   beforeEach(() => {
-    ws = new WS(url, () => {});
+    ws = new WS(url, () => {}, false, logger);
   });
 
   test("should initialize with the correct URL", () => {
@@ -73,5 +76,17 @@ describe("WS", () => {
     expect(customEvent.detail.eventName).toBe(eventDetail.event_name);
     expect(customEvent.detail.result).toBe(eventDetail.result);
     expect(customEvent.detail.request).toEqual(eventDetail.request);
+  });
+
+  test("should trigger a log finish if the event is correct", () => {
+    const eventDetail = {
+      event_name: "photos.analyzed",
+      result: "test_result",
+    };
+    const messageEvent = new MessageEvent("message", {
+      data: JSON.stringify(eventDetail),
+    });
+    ws.connection?.onmessage?.(messageEvent);
+    expect(finishMock).toHaveBeenCalled();
   });
 });

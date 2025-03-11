@@ -10,7 +10,6 @@ jobs:
       WS_RECONNECT_INTERVAL: ${{vars.WS_RECONNECT_INTERVAL}}
       API_HOST: ${{vars.API_HOST}}
     steps:
-        
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
@@ -21,7 +20,6 @@ jobs:
         with:
           version: 8
           run_install: true
-      - run: pnpm run turbo:coverage
       - run: chmod +x ./scripts/publish.sh && pnpm run pub:${{github.event.release.prerelease && 'canary' || 'release'}}
         shell: bash
         env:

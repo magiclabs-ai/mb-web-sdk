@@ -1,6 +1,11 @@
-import { mergeNestedObject } from "../utils/toolbox";
+import { mergeNestedObject, snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
 
 export type FetchOptions = RequestInit & { headers: { Authorization?: string } };
+
+export type RequestResponse = {
+  requestId: string;
+  clientId?: string;
+};
 
 export type CallProps<T> = {
   path: string;
@@ -29,14 +34,16 @@ export class Fetcher {
     this.areWsOpen = areWsOpen;
   }
 
-  async call<T>(props: CallProps<T>) {
+  async call<T>(props: CallProps<T>): Promise<T> {
     if (this.mock) {
       if (!props.factory) throw Error("factory-not-found");
       return props.factory();
     }
+
     if (!this.areWsOpen()) {
       throw Error("ws-connection-not-open");
     }
+
     try {
       if (props.options?.body && typeof props.options.body !== "string") {
         props.options.body = JSON.stringify(props.options?.body);
@@ -46,9 +53,9 @@ export class Fetcher {
       const res = await fetch(this.cleanUrl(new URL(props.path, this.baseUrl).href), options);
       if (res.status >= 200 && res.status < 300) {
         try {
-          return await res.json();
+          return snakeCaseObjectKeysToCamelCase(await res.json()) as T;
         } catch (error) {
-          return {};
+          return {} as T;
         }
       } else {
         let detail = res.statusText;

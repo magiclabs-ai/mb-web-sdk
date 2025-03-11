@@ -7,9 +7,11 @@ import { faker } from "@faker-js/faker";
 import { eventHandler } from "@/core/utils/event-mock";
 import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
 import { camelCaseObjectKeysToSnakeCase, photoIdConverter } from "@/core/utils/toolbox";
+import { Logger } from "@/core/models/logger";
 
 type MagicBookAPIProps = {
   useIntAsPhotoId?: boolean;
+  debugMode?: boolean;
 } & (
   | {
       apiKey: string;
@@ -29,9 +31,12 @@ export class MagicBookAPI {
   designerWS?: WS;
   readonly fetcher: Fetcher;
   useIntAsPhotoId?: boolean;
+  logger?: Logger;
 
   constructor(props: MagicBookAPIProps) {
     const host = props.apiHost || defaultApiHost;
+    const isProd = host.includes(".prod.");
+    this.logger = (props.debugMode === undefined && !isProd) || props.debugMode ? new Logger() : undefined;
     const apiHost = `https://${host}`;
     const webSocketHost = `wss://${host}`;
     const mock = props.mock ?? false;
@@ -48,11 +53,13 @@ export class MagicBookAPI {
         `${webSocketHost}/ws/analyzer?clientId=${this.clientId}`,
         () => this.onConnectionOpened(),
         this.useIntAsPhotoId,
+        this.logger,
       );
       this.designerWS = new WS(
         `${webSocketHost}/ws/designer?clientId=${this.clientId}`,
         () => this.onConnectionOpened(),
         this.useIntAsPhotoId,
+        this.logger,
       );
     }
 
@@ -78,7 +85,7 @@ export class MagicBookAPI {
     return JSON.stringify(camelCaseObjectKeysToSnakeCase(deepCopy));
   }
 
-  readonly projects = new ProjectEndpoints(this);
   readonly photos = new PhotoEndpoints(this);
+  readonly projects = new ProjectEndpoints(this);
   readonly surfaces = new SurfaceEndpoints(this);
 }

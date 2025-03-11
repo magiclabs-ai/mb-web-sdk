@@ -6,10 +6,13 @@ import {
   photoIdConverter,
   snakeCaseToCamelCase,
   snakeCaseObjectKeysToCamelCase,
+  msFormat,
 } from "@/core/utils/toolbox";
 import { describe, expect, test } from "vitest";
 import { photoFactory, photoAnalyzeBodyFactory } from "@/core/factories/photo";
 import { projectFactory } from "@/core/factories/project";
+import type { ProjectAutofillBody } from "@/core/models/api/endpoints/projects";
+import type { Surface } from "@/core/models/surface";
 
 describe("Toolbox", () => {
   test("should merge two flat objects", () => {
@@ -123,7 +126,6 @@ describe("Toolbox", () => {
   });
   test("snakeCaseObjectKeysToCamelCase with exclude keys", () => {
     const snakeCaseObject = { hello_world: "helloWorld", hello_world_test: "helloWorldTest" };
-    const camelCaseObject = { helloWorld: "helloWorld", helloWorldTest: "helloWorldTest" };
     expect(snakeCaseObjectKeysToCamelCase(snakeCaseObject, ["hello_world"])).toStrictEqual({
       hello_world: "helloWorld",
       helloWorldTest: "helloWorldTest",
@@ -228,16 +230,14 @@ describe("Toolbox", () => {
     ).toBe(true);
   });
   test("photoIdConverter convert projectAutofillBody with type request", () => {
-    const projectAutofillBody = projectFactory();
-    // biome-ignore lint/performance/noDelete: <explanation>
-    delete projectAutofillBody.surfaces;
+    const projectAutofillBody = projectFactory() as ProjectAutofillBody & { surfaces?: Surface[] };
+    projectAutofillBody.surfaces = undefined;
     photoIdConverter(projectAutofillBody, "request");
     expect(projectAutofillBody.images.every((photo) => typeof photo.id === "string")).toBe(true);
   });
   test("photoIdConverter convert projectAutofillBody with type response", () => {
-    const projectAutofillBody = projectFactory();
-    // biome-ignore lint/performance/noDelete: <explanation>
-    delete projectAutofillBody.surfaces;
+    const projectAutofillBody = projectFactory() as ProjectAutofillBody & { surfaces?: Surface[] };
+    projectAutofillBody.surfaces = undefined;
     photoIdConverter(projectAutofillBody, "response");
     expect(projectAutofillBody.images.every((photo) => typeof photo.id === "number")).toBe(true);
   });
@@ -275,5 +275,11 @@ describe("Toolbox", () => {
     const obj = { test: "test" };
     photoIdConverter(obj, "response");
     expect(obj).toEqual({ test: "test" });
+  });
+  test("msFormat", () => {
+    expect(msFormat(100)).toBe("100ms");
+    expect(msFormat(1000)).toBe("1.00s");
+    expect(msFormat(1000 * 60)).toBe("1.00m");
+    expect(msFormat(1000 * 60 * 60)).toBe("1h");
   });
 });

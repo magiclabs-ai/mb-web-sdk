@@ -21,7 +21,7 @@ function App() {
     occasion: "birthday",
     style: "DG_36907",
     imageDensityLevel: "high",
-    embellishmentLevel: "high",
+    embellishmentLevel: "lots",
     bookFormat: {
       targetPageRange: [20, 40],
       page: {
@@ -67,6 +67,7 @@ function App() {
     setMbApi(
       new MagicBookAPI({
         apiKey: import.meta.env.VITE_MB_API_KEY,
+        apiHost: "api.dev.magiclabs-aurora.io",
         useIntAsPhotoId: false,
       }),
     );
@@ -88,7 +89,7 @@ function App() {
       console.log("Photo Analyzed", photo);
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
-    if (event.detail.eventName === "project.edited") {
+    if (event.detail.eventName === "surface.designed") {
       setSurfaces((prev) => [...prev, ...(event.detail.result as Array<Surface>)]);
     }
   }

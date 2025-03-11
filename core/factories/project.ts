@@ -1,9 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { photoFactory } from "@/core/factories/photo";
 import { surfaceFactory } from "@/core/factories/surface";
-import type { Project, ProjectAutofillBody } from "@/core/models/project";
+import type { Project } from "@/core/models/project";
+import type { ProjectAutofillBody } from "@/core/models/api/endpoints/projects";
 
-export function projectFactory(props?: (ProjectAutofillBody | Project) & { noSurfaces?: boolean }): Project {
+type ProjectFactoryProps = Partial<(ProjectAutofillBody | Project) & { noSurfaces?: boolean }>;
+export function projectFactory(props?: ProjectFactoryProps): Project {
   return {
     designMode: "automatic",
     occasion: "birthday",
