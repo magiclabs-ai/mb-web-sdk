@@ -48,6 +48,10 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    environment: "prod"
+    env:
+      WS_RECONNECT_INTERVAL: ${{vars.WS_RECONNECT_INTERVAL}}
+      API_HOST: ${{vars.API_HOST}}
     steps:
       - uses: actions/checkout@v3
       - name: "Install Node"
