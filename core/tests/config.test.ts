@@ -14,9 +14,9 @@ describe("config", () => {
     process.env.WS_RECONNECT_INTERVAL = "";
   });
 
-  test('should have defaultApiHost as "localhost:2812" if API_HOST is not set', async () => {
+  test('should have defaultApiHost as "api.prod.xyz.io" if API_HOST is not set', async () => {
     const { defaultApiHost } = await loadConfig();
-    expect(defaultApiHost).toBe("localhost:2812");
+    expect(defaultApiHost).toBe("api.prod.xyz.io");
   });
 
   test("should have wsReconnectInterval as 5000 if WS_RECONNECT_INTERVAL is not set", async () => {

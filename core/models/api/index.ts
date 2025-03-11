@@ -34,8 +34,9 @@ export class MagicBookAPI {
   logger?: Logger;
 
   constructor(props: MagicBookAPIProps) {
-    this.logger = props.debugMode ? new Logger() : undefined;
     const host = props.apiHost || defaultApiHost;
+    const isProd = host.includes(".prod.");
+    this.logger = (props.debugMode === undefined && !isProd) || props.debugMode ? new Logger() : undefined;
     const apiHost = `https://${host}`;
     const webSocketHost = `wss://${host}`;
     const mock = props.mock ?? false;

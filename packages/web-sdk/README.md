@@ -42,7 +42,7 @@ const api = new MagicBookAPI({
   apiKey: string,
   mock?: boolean, // Default to false
   useIntAsPhotoId?: boolean // Default to false
-  debugMode?: boolean //Default to false
+  debugMode?: boolean //Default to false for non production apiHosts
 });
 ```
 

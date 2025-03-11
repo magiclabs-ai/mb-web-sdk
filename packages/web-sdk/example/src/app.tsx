@@ -69,7 +69,6 @@ function App() {
         apiKey: import.meta.env.VITE_MB_API_KEY,
         apiHost: "api.dev.magiclabs-aurora.io",
         useIntAsPhotoId: false,
-        debugMode: true,
       }),
     );
     return () => {
