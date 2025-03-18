@@ -5,6 +5,7 @@ import {
   type Project,
   type Surface,
   type SurfaceShuffleBody,
+  photoAnalyzeBodySchema,
 } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
@@ -102,14 +103,17 @@ function App() {
 
   async function analyzePhotos() {
     await mb?.photos.analyze(
-      niceAndRome["00-nice-and-rome"].map((image, idx) => ({
-        id: `idx-${idx}`,
-        width: image.width,
-        height: image.height,
-        orientation: image.rotation,
-        url: image.url,
-        encryptId: "image.encryptId",
-      })),
+      photoAnalyzeBodySchema.parse(
+        niceAndRome["00-nice-and-rome"].map((image, idx) => ({
+          id: `idx-${idx}`,
+          // width: image.width,
+          // height: image.height,
+          orientation: image.rotation,
+          // url: image.url,
+          encryptId: "image.encryptId",
+          ...image,
+        })),
+      ),
     );
   }
 

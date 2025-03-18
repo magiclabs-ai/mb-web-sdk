@@ -67,7 +67,14 @@ await api.photos.analyze(
     height: photo.height, // number
     orientation: photo.orientation, // number
     url: photo.url, // string
-    encryptId // optional string
+    encryptId, // optional string
+    timestamp: photo.timestamp, // optional string
+    dateTimeDigitize: photo.dateTimeDigitize, // optional string
+    dateTimeOriginal: photo.dateTimeOriginal, // optional string
+    dateTime: photo.dateTime, // optional string
+    make: photo.make, // optional string
+    model: photo.model, // optional string
+    filename: photo.filename, // optional string
   }))
 );
 ```
