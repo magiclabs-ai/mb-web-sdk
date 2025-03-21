@@ -40,8 +40,9 @@ Create a MagicBook API instance
 ```ts
 const api = new MagicBookAPI({
   apiKey: string,
+  apiHost? string, // Default to api.prod.magiclabs-aurora.io
   mock?: boolean, // Default to false
-  useIntAsPhotoId?: boolean // Default to false
+  useIntAsPhotoId?: boolean, // Default to false
   debugMode?: boolean //Default to false for non production apiHosts
 });
 ```
