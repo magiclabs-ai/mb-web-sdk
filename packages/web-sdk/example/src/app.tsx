@@ -1,6 +1,6 @@
 import {
   MagicBookAPI,
-  type MBEvent,
+  type WSMessage,
   type AnalyzedPhoto,
   type Project,
   type Surface,
@@ -77,7 +77,7 @@ function App() {
     };
   }, []);
 
-  function handleEvent(event: CustomEvent<MBEvent<unknown>>) {
+  function handleEvent(event: CustomEvent<WSMessage<unknown>>) {
     console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result, event.detail.eventType);
     if (
       event.detail.eventName === "ws" &&
