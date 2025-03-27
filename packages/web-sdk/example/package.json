@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "tsc && vite build",
     "dev": "vite",
     "preview": "vite preview"
   },
