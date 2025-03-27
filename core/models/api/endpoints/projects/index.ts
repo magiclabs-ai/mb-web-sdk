@@ -22,7 +22,9 @@ export class ProjectEndpoints {
 
   async autofill(body: ProjectAutofillBody) {
     const path = "/designer/projects/autofill";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "surfaces.designed",
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -36,16 +38,16 @@ export class ProjectEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 
   async autofillOptions(imageCount: number) {
     const path = `/designer/projects/autofill/options?image_count=${imageCount}`;
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path);
     const res = await this.magicBookAPI.fetcher.call<ProjectAutofillResponse>({
       path,
       options: {
@@ -58,17 +60,18 @@ export class ProjectEndpoints {
         } as ProjectAutofillResponse;
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-      log.finish();
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res.options));
   }
 
   async restyle(body: Project) {
     const path = "/designer/projects/restyle";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "surfaces.designed",
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -82,16 +85,18 @@ export class ProjectEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 
   async resize(body: Project) {
     const path = "/designer/projects/resize";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "surfaces.designed",
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -105,10 +110,10 @@ export class ProjectEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 }

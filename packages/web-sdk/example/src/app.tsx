@@ -20,7 +20,7 @@ function App() {
   const [project, setProject] = useState<Project>({
     designMode: "automatic",
     occasion: "birthday",
-    style: "DG_36907",
+    style: "DG_39475",
     imageDensityLevel: "high",
     embellishmentLevel: "lots",
     bookFormat: {
@@ -91,6 +91,7 @@ function App() {
       setPhotos((prevPhotos) => [...prevPhotos, photo]);
     }
     if (event.detail.eventName === "surface.designed") {
+      console.log("Surface Designed", event.detail.result);
       setSurfaces((prev) => [...prev, ...(event.detail.result as Array<Surface>)]);
     }
   }

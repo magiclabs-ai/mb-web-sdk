@@ -6,7 +6,7 @@ import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import { projectFactory } from "@/core/factories/project";
 import { optionsFactory } from "@/core/factories/options";
-import { addSubProcessMock, finishMock } from "@/core/tests/mocks/logger";
+import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 
 describe("Project with debug mode", () => {
   const project = projectFactory();
@@ -25,7 +25,7 @@ describe("Project with debug mode", () => {
     const imageCount = 20;
 
     const res = await api.projects.autofillOptions(imageCount);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     expect(res).toStrictEqual(autofillOptions);
   });
@@ -36,7 +36,7 @@ describe("Project with debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.autofill(projectWithoutSurfaces);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.runAllTimers();
 
@@ -51,7 +51,7 @@ describe("Project with debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.restyle(project);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.runAllTimers();
 
@@ -66,7 +66,7 @@ describe("Project with debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.resize(project);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 
@@ -87,7 +87,7 @@ describe("Project without debug mode", () => {
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    addSubProcessMock.mockClear();
+    addEventMock.mockClear();
     finishMock.mockClear();
   });
 
@@ -96,7 +96,6 @@ describe("Project without debug mode", () => {
     const imageCount = 20;
 
     const res = await api.projects.autofillOptions(imageCount);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
 
     expect(res).toStrictEqual(autofillOptions);
   });
@@ -107,7 +106,6 @@ describe("Project without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.autofill(projectWithoutSurfaces);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
 
     vi.runAllTimers();
 
@@ -122,7 +120,6 @@ describe("Project without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.restyle(project);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
 
     vi.runAllTimers();
 
@@ -137,7 +134,6 @@ describe("Project without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.resize(project);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 

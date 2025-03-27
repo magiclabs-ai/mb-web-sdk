@@ -21,7 +21,9 @@ export class SurfaceEndpoints {
 
   async shuffle(body: SurfaceShuffleBody) {
     const path = "/designer/surfaces/shuffle";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "surfaces.designed",
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -33,16 +35,18 @@ export class SurfaceEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 
   async autoAdapt(body: SurfaceAutoAdaptBody) {
     const path = "/designer/surfaces/autoadapt";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "surfaces.designed",
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -54,16 +58,18 @@ export class SurfaceEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 
   async suggest(body: SurfaceSuggestBody) {
     const path = "/designer/surfaces/suggest";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "surfaces.designed",
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -77,10 +83,10 @@ export class SurfaceEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 }

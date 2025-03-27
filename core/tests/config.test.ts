@@ -12,6 +12,7 @@ describe("config", () => {
   beforeEach(() => {
     process.env.API_HOST = "";
     process.env.WS_RECONNECT_INTERVAL = "";
+    process.env.DEFAULT_TIMEOUT = "";
   });
 
   test('should have defaultApiHost as "api.prod.xyz.io" if API_HOST is not set', async () => {
@@ -34,5 +35,11 @@ describe("config", () => {
     process.env.API_HOST = "api.example.com";
     const { defaultApiHost } = await loadConfig();
     expect(defaultApiHost).toBe("api.example.com");
+  });
+
+  test("should parse DEFAULT_TIMEOUT from environment variable", async () => {
+    process.env.DEFAULT_TIMEOUT = "10000";
+    const { defaultTimeout } = await loadConfig();
+    expect(defaultTimeout).toBe(10000);
   });
 });
