@@ -255,6 +255,17 @@ await api.surfaces.suggest({
 
 ---
 
+### MMB
+
+#### Design options
+To retrieve the design options, call the `mmb.designOptions` function.
+
+```ts
+await api.mmb.designOptions(sku: string, imageCount: number, imageFilteringLevel: string);
+```
+
+---
+
 ## Usage as script
 
 For example using express convert to static route

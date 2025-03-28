@@ -8,7 +8,7 @@ import { eventHandler } from "@/core/utils/event-mock";
 import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
 import { camelCaseObjectKeysToSnakeCase, photoIdConverter } from "@/core/utils/toolbox";
 import { Dispatcher } from "../dispatcher";
-
+import { mmb } from "@/core/models/api/endpoints/mmb";
 type MagicBookAPIProps = {
   useIntAsPhotoId?: boolean;
   debugMode?: boolean;
@@ -89,4 +89,5 @@ export class MagicBookAPI {
   readonly photos = new PhotoEndpoints(this);
   readonly projects = new ProjectEndpoints(this);
   readonly surfaces = new SurfaceEndpoints(this);
+  readonly mmb = new mmb(this);
 }

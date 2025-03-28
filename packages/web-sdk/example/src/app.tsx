@@ -68,8 +68,9 @@ function App() {
     setMbApi(
       new MagicBookAPI({
         apiKey: import.meta.env.VITE_MB_API_KEY,
-        apiHost: "api.dev.magiclabs-aurora.io",
+        apiHost: "api.prod.magiclabs-aurora.io",
         useIntAsPhotoId: false,
+        debugMode: true,
       }),
     );
     return () => {
@@ -165,6 +166,11 @@ function App() {
     await mb?.surfaces.shuffle(surfaceEndpointProps);
   }
 
+  async function getDesignOptions() {
+    const res = await mb?.mmb.designOptions("CommerceProduct_867459", 50, "all");
+    console.log("Design Options", res);
+  }
+
   return (
     <>
       <div className="p-4">
@@ -175,6 +181,12 @@ function App() {
         </div>
       </div>
       <div className="flex gap-10">
+        <div className="flex flex-col gap-4 items-start p-4">
+          <h2 className="pb-1 w-full text-lg font-semibold border-b">MMB</h2>
+          <button type="button" onClick={getDesignOptions}>
+            Get Design Options
+          </button>
+        </div>
         <div className="flex flex-col gap-4 items-start p-4">
           <h2 className="pb-1 w-full text-lg font-semibold border-b">Photos</h2>
           <button type="button" onClick={analyzePhotos}>
