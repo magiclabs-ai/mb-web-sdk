@@ -11,7 +11,7 @@ export default defineConfig({
     ],
   },
   test: {
-    setupFiles: ["./core/tests/mocks/fetch.ts", "./core/tests/mocks/websocket.ts", "./core/tests/mocks/logger.ts"],
+    setupFiles: ["./core/tests/mocks/fetch.ts", "./core/tests/mocks/websocket.ts", "./core/tests/mocks/dispatcher.ts"],
     exclude: ["node_modules", "packages"],
     environment: "jsdom",
     coverage: {

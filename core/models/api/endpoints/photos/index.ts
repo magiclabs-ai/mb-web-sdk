@@ -10,7 +10,11 @@ export class PhotoEndpoints {
 
   async analyze(body: PhotoAnalyzeBody) {
     const path = "/analyzer/photos/analyze";
-    const log = this.magicBookAPI.logger?.add(path);
+    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+      finalEventName: "photos.analyzed",
+      timeoutEventName: "photos.analyzerTimeout",
+      expectedEvents: body.length,
+    });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
@@ -22,10 +26,10 @@ export class PhotoEndpoints {
         return simpleResponseFactory();
       },
     });
-    if (log) {
-      log.id = res.requestId as string;
-      log.addSubProcess("fetch", path);
-    }
+
+    dispatcher.id = res.requestId as string;
+    dispatcher.addEvent("fetch", path);
+
     return res;
   }
 }

@@ -1,9 +1,6 @@
 import { wsReconnectInterval } from "../config";
 import { photoIdConverter, snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
-import type { MBEvent } from "./event";
-import type { Logger } from "./logger";
-
-const endEvents = ["photos.analyzed", "surfaces.designed"];
+import type { Dispatcher } from "./dispatcher";
 
 type WSMessage = {
   eventType?: string;
@@ -22,14 +19,14 @@ export class WS {
   private url: string;
   private onConnectionOpened: () => void;
   private useIntAsPhotoId: boolean;
-  private logger?: Logger;
+  private dispatcher: Dispatcher;
 
-  constructor(url: string, onConnectionOpened: () => void, useIntAsPhotoId: boolean, logger?: Logger) {
+  constructor(url: string, onConnectionOpened: () => void, useIntAsPhotoId: boolean, dispatcher: Dispatcher) {
     this.url = url;
     this.connect();
     this.onConnectionOpened = onConnectionOpened;
     this.useIntAsPhotoId = useIntAsPhotoId;
-    this.logger = logger;
+    this.dispatcher = dispatcher;
   }
 
   private connect() {
@@ -42,21 +39,8 @@ export class WS {
     this.connection.onmessage = (event: MessageEvent) => {
       const { result, ...rest } = snakeCaseObjectKeysToCamelCase(JSON.parse(event.data)) as WSMessage;
       result && this.useIntAsPhotoId && photoIdConverter(result, "response");
-
-      const log = this.logger?.getById(rest.requestId);
-      log?.addSubProcess("ws", rest.eventName);
-
-      if (endEvents.includes(rest.eventName)) {
-        log?.finish();
-      }
-
-      const customEvent = new CustomEvent<MBEvent<unknown>>("MagicBook", {
-        detail: {
-          ...rest,
-          result,
-        },
-      });
-      window.dispatchEvent(customEvent);
+      const dispatcherEvent = this.dispatcher.getById(rest.requestId);
+      dispatcherEvent?.addEvent("ws", rest.eventName, { ...rest, result });
     };
 
     this.connection.onclose = () => {

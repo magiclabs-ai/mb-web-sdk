@@ -5,7 +5,7 @@ import { analyzedPhotoSchema } from "@/core/models/photo";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import type { MBEvent } from "@/core/models/event";
-import { addSubProcessMock, finishMock } from "@/core/tests/mocks/logger";
+import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 
 describe("Photo", () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe("Photo", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.photos.analyze(photoAnalyzeBodyFactory(true));
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 
@@ -43,7 +43,7 @@ describe("Photo", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.photos.analyze(photoAnalyzeBodyFactory());
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
@@ -55,7 +55,7 @@ describe("Photo", () => {
 describe("Photo without debug mode", () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    addSubProcessMock.mockClear();
+    addEventMock.mockClear();
     finishMock.mockClear();
   });
 
@@ -70,7 +70,6 @@ describe("Photo without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.photos.analyze(photoAnalyzeBodyFactory(true));
-    expect(addSubProcessMock).not.toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 
@@ -88,7 +87,6 @@ describe("Photo without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.photos.analyze(photoAnalyzeBodyFactory());
-    expect(addSubProcessMock).not.toHaveBeenCalled();
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;

@@ -5,7 +5,7 @@ import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import { z } from "zod";
 import type { MBEvent } from "@/core/models/event";
-import { addSubProcessMock, finishMock } from "@/core/tests/mocks/logger";
+import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 import { projectFactory } from "@/core/factories/project";
 
 const project = projectFactory();
@@ -25,7 +25,7 @@ describe("Surface", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.surfaces.shuffle(project);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 
@@ -38,7 +38,7 @@ describe("Surface", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.surfaces.autoAdapt(project);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 
@@ -51,7 +51,7 @@ describe("Surface", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.surfaces.suggest(project);
-    expect(addSubProcessMock).toHaveBeenCalled();
+    expect(addEventMock).toHaveBeenCalled();
 
     vi.advanceTimersToNextTimer();
 
@@ -69,7 +69,7 @@ describe("Surface without debug mode", () => {
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    addSubProcessMock.mockClear();
+    addEventMock.mockClear();
     finishMock.mockClear();
   });
 
@@ -77,8 +77,6 @@ describe("Surface without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.surfaces.shuffle(project);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
-
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
@@ -90,8 +88,6 @@ describe("Surface without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.surfaces.autoAdapt(project);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
-
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
@@ -103,8 +99,6 @@ describe("Surface without debug mode", () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.surfaces.suggest(project);
-    expect(addSubProcessMock).not.toHaveBeenCalled();
-
     vi.advanceTimersToNextTimer();
 
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;

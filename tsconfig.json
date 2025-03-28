@@ -20,5 +20,5 @@
       "@/core/*": ["./core/*"]
     }
   },
-  "exclude": ["node_modules", "packages/web-sdk/example"]
+  "exclude": ["node_modules", "packages/web-sdk/example", "**/tests"]
 }
