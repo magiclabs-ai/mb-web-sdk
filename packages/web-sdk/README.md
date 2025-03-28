@@ -255,13 +255,11 @@ await api.surfaces.suggest({
 
 ---
 
-### MMB
-
-#### Design options
-To retrieve the design options, call the `mmb.designOptions` function.
+#### Image Densities
+To retrieve the image densities, call the `imageDensities` function.
 
 ```ts
-await api.mmb.designOptions(sku: string, imageCount: number, imageFilteringLevel: string);
+await api.imageDensities(sku: string, imageCount: number, imageFilteringLevel: string);
 ```
 
 ---

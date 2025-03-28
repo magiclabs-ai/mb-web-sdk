@@ -1,6 +1,5 @@
 export * from "../../../core/models/api/index";
 export * from "../../../core/models/api/endpoints/surfaces";
-export * from "../../../core/models/api/endpoints/mmb";
 export * from "../../../core/models/dispatcher";
 export * from "../../../core/models/photo";
 export * from "../../../core/models/surface";

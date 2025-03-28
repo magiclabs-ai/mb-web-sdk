@@ -166,9 +166,9 @@ function App() {
     await mb?.surfaces.shuffle(surfaceEndpointProps);
   }
 
-  async function getDesignOptions() {
-    const res = await mb?.mmb.designOptions("CommerceProduct_867459", 50, "all");
-    console.log("Design Options", res);
+  async function getImageDensities() {
+    const res = await mb?.imageDensities("CommerceProduct_867459", 50, "all");
+    console.log("Image Densities", res);
   }
 
   return (
@@ -183,8 +183,8 @@ function App() {
       <div className="flex gap-10">
         <div className="flex flex-col gap-4 items-start p-4">
           <h2 className="pb-1 w-full text-lg font-semibold border-b">MMB</h2>
-          <button type="button" onClick={getDesignOptions}>
-            Get Design Options
+          <button type="button" onClick={getImageDensities}>
+            Get Image Densities
           </button>
         </div>
         <div className="flex flex-col gap-4 items-start p-4">
