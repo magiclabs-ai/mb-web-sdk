@@ -13,7 +13,7 @@ export class PhotoEndpoints {
     const dispatcher = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "photos.analyzed",
       timeoutEventName: "photos.analyzerTimeout",
-      expectedEvents: body.length,
+      expectedEvents: body.length + 1,
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
