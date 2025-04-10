@@ -220,6 +220,7 @@ await api.surfaces.shuffle({
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
+  imageFilteringLevel: "best",
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
