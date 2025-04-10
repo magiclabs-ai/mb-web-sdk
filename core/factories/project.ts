@@ -10,6 +10,7 @@ export function projectFactory(props?: ProjectFactoryProps): Project {
     designMode: "automatic",
     occasion: "birthday",
     style: "modern",
+    imageFilteringLevel: "best",
     imageDensityLevel: "high",
     embellishmentLevel: "high",
     bookFormat: {

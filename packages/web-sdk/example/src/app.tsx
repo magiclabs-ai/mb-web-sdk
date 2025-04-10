@@ -9,6 +9,8 @@ import {
 } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
+// import images from "../../../../core/data/image-sets/images.json";
+// import images from "../../../../core/data/image-sets/small-image-set.json";
 
 function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
@@ -21,6 +23,7 @@ function App() {
     designMode: "automatic",
     occasion: "birthday",
     style: "DG_39475",
+    imageFilteringLevel: "best",
     imageDensityLevel: "high",
     embellishmentLevel: "lots",
     bookFormat: {
@@ -33,6 +36,18 @@ function App() {
         width: 1920,
         height: 1080,
       },
+      coverWrap: {
+        top: 0.75,
+        right: 0.75,
+        bottom: 0.75,
+        left: 0.75,
+      }, // optional
+      bleed: {
+        top: 0.125,
+        right: 0.0625,
+        bottom: 0.125,
+        left: 0.0625,
+      }, // optional
     },
     images: photos,
     surfaces: surfaces,
@@ -68,9 +83,10 @@ function App() {
     setMbApi(
       new MagicBookAPI({
         apiKey: import.meta.env.VITE_MB_API_KEY,
-        apiHost: "api.prod.magiclabs-aurora.io",
+        apiHost: "api.dev.magiclabs-aurora.io",
         useIntAsPhotoId: false,
         debugMode: true,
+        // mock: true,
       }),
     );
     return () => {

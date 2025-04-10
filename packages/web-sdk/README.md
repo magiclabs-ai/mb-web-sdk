@@ -99,6 +99,7 @@ await api.projects.autofill({
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
+  imageFilteringLevel: "best",
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
@@ -111,6 +112,18 @@ await api.projects.autofill({
       width: 8,
       height: 11,
     },
+    coverWrap: {
+      top: 0.75,
+      right: 0.75,
+      bottom: 0.75,
+      left: 0.75
+    }, // optional
+    bleed: {
+      top: 0.125,
+      right: 0.0625,
+      bottom: 0.125,
+      left: 0.0625
+    } // optional
   },
   images: [...],
 });
@@ -125,6 +138,7 @@ await api.projects.restyle({
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
+  imageFilteringLevel: "best",
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
@@ -137,6 +151,18 @@ await api.projects.restyle({
       width: 8,
       height: 11,
     },
+    coverWrap: {
+      top: 0.75,
+      right: 0.75,
+      bottom: 0.75,
+      left: 0.75
+    }, // optional
+    bleed: {
+      top: 0.125,
+      right: 0.0625,
+      bottom: 0.125,
+      left: 0.0625
+    } // optional
   },
   images: [...],
   surfaces: [surface1, surface2, ...]
@@ -152,6 +178,7 @@ await api.projects.resize({
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
+  imageFilteringLevel: "best",
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
@@ -164,6 +191,18 @@ await api.projects.resize({
       width: 8,
       height: 11,
     },
+    coverWrap: {
+      top: 0.75,
+      right: 0.75,
+      bottom: 0.75,
+      left: 0.75
+    }, // optional
+    bleed: {
+      top: 0.125,
+      right: 0.0625,
+      bottom: 0.125,
+      left: 0.0625
+    } // optional
   },
   images: [...],
   surfaces: [surface1, surface2, ...]
@@ -193,6 +232,18 @@ await api.surfaces.shuffle({
       width: 8,
       height: 11,
     },
+    coverWrap: {
+      top: 0.75,
+      right: 0.75,
+      bottom: 0.75,
+      left: 0.75
+    }, // optional
+    bleed: {
+      top: 0.125,
+      right: 0.0625,
+      bottom: 0.125,
+      left: 0.0625
+    } // optional
   },
   images: [...],
   surfaces: [surface1, surface2] // array of surfaces max length 2
@@ -208,6 +259,7 @@ await api.surfaces.autoAdapt({
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
+  imageFilteringLevel: "best",
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
@@ -220,6 +272,18 @@ await api.surfaces.autoAdapt({
       width: 8,
       height: 11,
     },
+    coverWrap: {
+      top: 0.75,
+      right: 0.75,
+      bottom: 0.75,
+      left: 0.75
+    }, // optional
+    bleed: {
+      top: 0.125,
+      right: 0.0625,
+      bottom: 0.125,
+      left: 0.0625
+    } // optional
   },
   images: [...],
   surfaces: [surface1, surface2] // array of surfaces max length 2
@@ -235,6 +299,7 @@ await api.surfaces.suggest({
   designMode: "automatic",
   occasion: "birthday",
   style: "modern",
+  imageFilteringLevel: "best",
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
@@ -247,6 +312,18 @@ await api.surfaces.suggest({
       width: 8,
       height: 11,
     },
+    coverWrap: {
+      top: 0.75,
+      right: 0.75,
+      bottom: 0.75,
+      left: 0.75
+    }, // optional
+    bleed: {
+      top: 0.125,
+      right: 0.0625,
+      bottom: 0.125,
+      left: 0.0625
+    } // optional
   },
   images: [...],
   surfaces: [surface1, surface2] // array of surfaces max length 2
