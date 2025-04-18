@@ -27,7 +27,7 @@ function App() {
     imageDensityLevel: "high",
     embellishmentLevel: "lots",
     bookFormat: {
-      startFromLeft: false,
+      startFromLeftSide: false,
       targetPageRange: [20, 40],
       page: {
         width: 1920,
@@ -197,7 +197,7 @@ function App() {
           <span>{areConnectionsOpen ? "✅" : "🔴"}</span>
         </div>
         <div className="flex gap-2">
-          <label htmlFor="start-from-left">startFromLeft</label>
+          <label htmlFor="start-from-left">startFromLeftSide</label>
           <input
             type="checkbox"
             id="start-from-left"
@@ -206,7 +206,7 @@ function App() {
                 ...project,
                 bookFormat: {
                   ...project.bookFormat,
-                  startFromLeft: e.target.checked,
+                  startFromLeftSide: e.target.checked,
                 },
               })
             }
