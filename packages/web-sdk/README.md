@@ -103,6 +103,7 @@ await api.projects.autofill({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    startFromLeft: true // default to false
     targetPageRange: [20, 40],
     page: {
       width: 8,
@@ -142,6 +143,7 @@ await api.projects.restyle({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    startFromLeft: true // default to false
     targetPageRange: [20, 40],
     page: {
       width: 8,
@@ -182,6 +184,7 @@ await api.projects.resize({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    startFromLeft: true, // default to false
     targetPageRange: [20, 40],
     page: {
       width: 8,
@@ -224,6 +227,7 @@ await api.surfaces.shuffle({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    startFromLeft: true // default to false
     targetPageRange: [20, 40],
     page: {
       width: 8,
@@ -264,6 +268,7 @@ await api.surfaces.autoAdapt({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    startFromLeft: true // default to false
     targetPageRange: [20, 40],
     page: {
       width: 8,
@@ -304,6 +309,7 @@ await api.surfaces.suggest({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    startFromLeft: true // default to false
     targetPageRange: [20, 40],
     page: {
       width: 8,

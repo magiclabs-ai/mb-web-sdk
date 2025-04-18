@@ -27,6 +27,7 @@ function App() {
     imageDensityLevel: "high",
     embellishmentLevel: "lots",
     bookFormat: {
+      startFromLeft: false,
       targetPageRange: [20, 40],
       page: {
         width: 1920,
@@ -194,6 +195,22 @@ function App() {
         <div className="text-sm">
           <span>WS Connections Open: </span>
           <span>{areConnectionsOpen ? "✅" : "🔴"}</span>
+        </div>
+        <div className="flex gap-2">
+          <label htmlFor="start-from-left">startFromLeft</label>
+          <input
+            type="checkbox"
+            id="start-from-left"
+            onChange={(e) =>
+              setProject({
+                ...project,
+                bookFormat: {
+                  ...project.bookFormat,
+                  startFromLeft: e.target.checked,
+                },
+              })
+            }
+          />
         </div>
       </div>
       <div className="flex gap-10">
