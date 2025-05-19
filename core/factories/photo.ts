@@ -38,6 +38,10 @@ export function photoFactory(): AnalyzedPhoto {
       confidence: faker.number.float({ min: 0, max: 1 }),
     })),
     timestamp: faker.date.past().toISOString(),
+    droppingPoint: {
+      x: faker.number.float({ min: 0, max: 1 }),
+      y: faker.number.float({ min: 0, max: 1 }),
+    },
   };
   return photo;
 }
