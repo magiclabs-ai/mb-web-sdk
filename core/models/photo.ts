@@ -70,6 +70,12 @@ export const analyzedPhotoSchema = z.object({
   embedding: z.array(z.number()),
   faces: z.array(faceSchema),
   labels: z.array(labelSchema),
+  droppingPoint: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+    })
+    .optional(),
 });
 
 // Infer types from schemas
