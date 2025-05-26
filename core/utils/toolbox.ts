@@ -157,6 +157,22 @@ export function snakeCaseObjectKeysToCamelCase(
   return result;
 }
 
+export function removeNullValues<T>(obj: T): T {
+  if (!obj || typeof obj !== "object") {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => removeNullValues(item)).filter((item) => item !== null) as T;
+  }
+
+  return Object.fromEntries(
+    Object.entries(obj as Record<string, unknown>)
+      .filter(([_, value]) => value !== null)
+      .map(([key, value]) => [key, typeof value === "object" ? removeNullValues(value) : value]),
+  ) as T;
+}
+
 export function msFormat(ms: number) {
   if (ms < 1000) {
     return `${ms}ms`;
