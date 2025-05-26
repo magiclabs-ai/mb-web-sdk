@@ -6,7 +6,7 @@ import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
 import { eventHandler } from "@/core/utils/event-mock";
 import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
-import { camelCaseObjectKeysToSnakeCase, photoIdConverter } from "@/core/utils/toolbox";
+import { camelCaseObjectKeysToSnakeCase, photoIdConverter, removeNullValues } from "@/core/utils/toolbox";
 import { Dispatcher } from "../dispatcher";
 import { z } from "zod";
 
@@ -102,7 +102,7 @@ export class MagicBookAPI {
       photoIdConverter(deepCopy, "request");
     }
 
-    return JSON.stringify(camelCaseObjectKeysToSnakeCase(deepCopy));
+    return JSON.stringify(camelCaseObjectKeysToSnakeCase(removeNullValues(deepCopy)));
   }
 
   readonly photos = new PhotoEndpoints(this);

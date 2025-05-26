@@ -7,6 +7,7 @@ import {
   snakeCaseToCamelCase,
   snakeCaseObjectKeysToCamelCase,
   msFormat,
+  removeNullValues,
 } from "@/core/utils/toolbox";
 import { describe, expect, test } from "vitest";
 import { photoFactory, photoAnalyzeBodyFactory } from "@/core/factories/photo";
@@ -281,5 +282,15 @@ describe("Toolbox", () => {
     expect(msFormat(1000)).toBe("1.00s");
     expect(msFormat(1000 * 60)).toBe("1.00m");
     expect(msFormat(1000 * 60 * 60)).toBe("1h");
+  });
+  test("removeNullValues", () => {
+    const obj = { a: null, b: 2 };
+    const result = removeNullValues(obj);
+    expect(result).toEqual({ b: 2 });
+  });
+  test("removeNullValues should handle arrays", () => {
+    const obj = { a: null, b: 2, c: [{ a: null, b: 3 }] };
+    const result = removeNullValues(obj);
+    expect(result).toEqual({ b: 2, c: [{ b: 3 }] });
   });
 });
