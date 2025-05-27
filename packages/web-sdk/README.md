@@ -15,13 +15,12 @@ npm install @magiclabs.ai/mb-web-sdk
 First, set up a callback to handle the asynchronous responses from the request you will make.
 
 ```ts
-window.addEventListener(
-  "MagicBook",
-  ((event: CustomEvent<MBEvent<unknown>>) => {
-    // Handle the event
-    console.log(event.detail);
-  }) as EventListener
-);
+window.addEventListener("MagicBook", ((
+  event: CustomEvent<MBEvent<unknown>>
+) => {
+  // Handle the event
+  console.log(event.detail);
+}) as EventListener);
 ```
 
 the events you will receive will have three props
@@ -48,16 +47,19 @@ const api = new MagicBookAPI({
 ```
 
 Once you receive event `ws` with result
+
 ```json
 {
   "areConnectionsOpen": true
 }
 ```
+
 you are ready to go!
 
 ### Photos
 
 #### Analyze
+
 To analyze an array of photos, call the `photos.analyze` function. Once ready, an event will be sent to the listener you created earlier.
 
 ```ts
@@ -83,6 +85,7 @@ await api.photos.analyze(
 ### Projects
 
 ### Autofill Options
+
 To get the autofill options, call the `projects.autofillOptions` function with the image count of the project.
 
 ```ts
@@ -90,6 +93,7 @@ await api.projects.autofillOptions(imageCount);
 ```
 
 #### Autofill
+
 To create a project with autofill, call the `projects.autofill` function. Once ready, a project event will be sent, followed by surface events, to the listener you created earlier.
 
 ```ts
@@ -103,6 +107,7 @@ await api.projects.autofill({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
     page: {
@@ -143,6 +148,7 @@ await api.projects.restyle({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
     page: {
@@ -184,6 +190,7 @@ await api.projects.resize({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
     page: {
@@ -227,6 +234,7 @@ await api.surfaces.shuffle({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
     page: {
@@ -268,6 +276,7 @@ await api.surfaces.autoAdapt({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
     page: {
@@ -309,6 +318,7 @@ await api.surfaces.suggest({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
+    skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
     page: {
@@ -340,6 +350,7 @@ await api.surfaces.suggest({
 ---
 
 #### Image Densities
+
 To retrieve the image densities, call the `imageDensities` function.
 
 ```ts
