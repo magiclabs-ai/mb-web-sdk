@@ -1,4 +1,4 @@
-import type { LayeredItem, PhotoContent, Surface } from "@/core/models/surface";
+import type { BorderContent, LayeredItem, PhotoContent, Surface } from "@/core/models/surface";
 import { faker } from "@faker-js/faker";
 import { metadataFactory } from "./metadata";
 
@@ -31,6 +31,18 @@ function LayeredItemFactory(): LayeredItem {
     },
     type,
     content: photoContentFactory(),
+    border: borderContentFactory(),
+  };
+}
+
+function borderContentFactory(): BorderContent {
+  return {
+    contentType: "border",
+    userData: {
+      borderColor: faker.color.rgb(),
+      borderOverlap: faker.number.int({ min: 0, max: 100 }),
+      borderWidthPixels: faker.number.int({ min: 0, max: 100 }),
+    },
   };
 }
 

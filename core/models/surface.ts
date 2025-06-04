@@ -14,6 +14,15 @@ const photoContentSchema = z.object({
   }),
 });
 
+const borderContentSchema = z.object({
+  contentType: z.string(),
+  userData: z.object({
+    borderColor: z.string(),
+    borderOverlap: z.number(),
+    borderWidthPixels: z.number(),
+  }),
+});
+
 const layeredItemSchema = z.object({
   container: z.object({
     x: z.number(),
@@ -25,6 +34,7 @@ const layeredItemSchema = z.object({
   // type: z.enum(["photo"]),
   type: z.string(),
   content: photoContentSchema,
+  border: borderContentSchema.optional(),
   layerMetadata: z.array(metadataSchema),
 });
 
@@ -45,3 +55,4 @@ export const surfaceSchema = z.object({
 export type Surface = z.infer<typeof surfaceSchema>;
 export type LayeredItem = z.infer<typeof layeredItemSchema>;
 export type PhotoContent = z.infer<typeof photoContentSchema>;
+export type BorderContent = z.infer<typeof borderContentSchema>;
