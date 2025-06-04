@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { defaultTimeout } from "../config";
 import { msFormat } from "../utils/toolbox";
 
@@ -42,7 +43,7 @@ export class DispatcherEvent {
 }
 
 export class Request {
-  id?: string;
+  id: string;
   createdAt: number;
   finishedAt?: number;
   events?: DispatcherEvent[];
@@ -62,6 +63,8 @@ export class Request {
       debugMode: boolean;
     },
   ) {
+    // temporary id before receiving the real id from the server
+    this.id = faker.string.uuid();
     this.createdAt = Date.now();
     this.endpoint = endpoint;
     this.expectedEvents = config?.expectedEvents;
@@ -73,17 +76,24 @@ export class Request {
       const timeout = defaultTimeout;
 
       this.timeout = setTimeout(() => {
-        this.addEvent("ws", this.timeoutEventName as string);
+        this.addEvent("ws", this.timeoutEventName as string, this.finalEventMessage(this.timeoutEventName as string));
         this.addFinalEvent();
       }, timeout);
     }
+  }
+
+  finalEventMessage(eventName: string = this.finalEventName as string) {
+    return {
+      eventName,
+      requestId: this.id,
+    } as WSMessage<unknown>;
   }
 
   addFinalEvent() {
     if (!this.finalEventName) {
       return;
     }
-    this.addEvent("ws", this.finalEventName);
+    this.addEvent("ws", this.finalEventName, this.finalEventMessage());
   }
 
   addEvent(type: DispatcherEventType, name: string, message?: WSMessage<unknown>) {
