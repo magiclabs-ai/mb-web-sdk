@@ -134,19 +134,6 @@ describe("Dispatcher", () => {
     expect(dispatcher.requests.length).toBe(1);
     expect(dispatcher.requests[0]).toBe(request);
   });
-
-  it("should respect maxLogs limit", () => {
-    const dispatcher = new Dispatcher();
-
-    // Add more than maxLogs requests
-    for (let i = 0; i < maxLogs + 10; i++) {
-      dispatcher.add(`/test-${i}`);
-    }
-
-    expect(dispatcher.requests.length).toBe(maxLogs);
-    expect(dispatcher.requests[0].endpoint).toBe(`/test-${10}`); // First 10 should be removed
-  });
-
   it("should find request by id", () => {
     const dispatcher = new Dispatcher();
     const request = dispatcher.add("/test");

@@ -132,8 +132,6 @@ export class Request {
   }
 }
 
-export const maxLogs = 100;
-
 export class Dispatcher {
   requests: Array<Request> = [];
   debugMode: boolean;
@@ -150,10 +148,6 @@ export class Dispatcher {
       expectedEvents?: number;
     },
   ) {
-    if (this.requests.length >= maxLogs) {
-      this.requests.shift();
-    }
-
     const request = new Request(endpoint, { ...config, debugMode: this.debugMode });
     this.requests.push(request);
     return request;
