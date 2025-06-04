@@ -1,4 +1,4 @@
-import { wsReconnectInterval } from "../config";
+import { maxReconnectionAttempts, wsReconnectInterval } from "../config";
 import { photoIdConverter, snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
 import type { Dispatcher } from "./dispatcher";
 
@@ -20,6 +20,7 @@ export class WS {
   private onConnectionOpened: () => void;
   private useIntAsPhotoId: boolean;
   private dispatcher: Dispatcher;
+  private reconnectionAttempts = 0;
 
   constructor(url: string, onConnectionOpened: () => void, useIntAsPhotoId: boolean, dispatcher: Dispatcher) {
     this.url = url;
@@ -44,7 +45,14 @@ export class WS {
     };
 
     this.connection.onclose = () => {
-      setTimeout(() => this.connect(), wsReconnectInterval);
+      if (this.reconnectionAttempts < maxReconnectionAttempts) {
+        setTimeout(() => {
+          this.connect();
+          this.reconnectionAttempts++;
+        }, wsReconnectInterval * this.reconnectionAttempts);
+      } else {
+        throw new Error("ws-failed-to-reconnect");
+      }
     };
   }
 
