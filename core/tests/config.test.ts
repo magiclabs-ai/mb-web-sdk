@@ -13,6 +13,7 @@ describe("config", () => {
     process.env.API_HOST = "";
     process.env.WS_RECONNECT_INTERVAL = "";
     process.env.DEFAULT_TIMEOUT = "";
+    process.env.WS_MAX_RECONNECTION_ATTEMPTS = "";
   });
 
   test('should have defaultApiHost as "api.prod.xyz.io" if API_HOST is not set', async () => {
@@ -20,15 +21,26 @@ describe("config", () => {
     expect(defaultApiHost).toBe("api.prod.xyz.io");
   });
 
-  test("should have wsReconnectInterval as 5000 if WS_RECONNECT_INTERVAL is not set", async () => {
+  test("should have wsReconnectInterval as 500 if WS_RECONNECT_INTERVAL is not set", async () => {
     const { wsReconnectInterval } = await loadConfig();
-    expect(wsReconnectInterval).toBe(5000);
+    expect(wsReconnectInterval).toBe(500);
   });
 
   test("should parse WS_RECONNECT_INTERVAL from environment variable", async () => {
     process.env.WS_RECONNECT_INTERVAL = "10000";
     const { wsReconnectInterval } = await loadConfig();
     expect(wsReconnectInterval).toBe(10000);
+  });
+
+  test("should have maxReconnectionAttempts as 10 if WS_MAX_RECONNECTION_ATTEMPTS is not set", async () => {
+    const { maxReconnectionAttempts } = await loadConfig();
+    expect(maxReconnectionAttempts).toBe(10);
+  });
+
+  test("should parse WS_MAX_RECONNECTION_ATTEMPTS from environment variable", async () => {
+    process.env.WS_MAX_RECONNECTION_ATTEMPTS = "20";
+    const { maxReconnectionAttempts } = await loadConfig();
+    expect(maxReconnectionAttempts).toBe(20);
   });
 
   test("should use API_HOST from environment variable", async () => {

@@ -12,6 +12,7 @@ export default defineConfig({
   env: {
     API_HOST: process.env.API_HOST!,
     WS_RECONNECT_INTERVAL: process.env.WS_RECONNECT_INTERVAL!,
+    WS_MAX_RECONNECTION_ATTEMPTS: process.env.WS_MAX_RECONNECTION_ATTEMPTS!,
     DEFAULT_TIMEOUT: process.env.DEFAULT_TIMEOUT!,
   },
   target: "esnext",

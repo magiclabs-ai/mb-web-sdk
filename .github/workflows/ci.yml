@@ -50,6 +50,7 @@ jobs:
       pull-requests: write
     environment: "prod"
     env:
+      WS_MAX_RECONNECTION_ATTEMPTS: ${{vars.WS_MAX_RECONNECTION_ATTEMPTS}}
       WS_RECONNECT_INTERVAL: ${{vars.WS_RECONNECT_INTERVAL}}
       API_HOST: ${{vars.API_HOST}}
       DEFAULT_TIMEOUT: ${{vars.DEFAULT_TIMEOUT}}
