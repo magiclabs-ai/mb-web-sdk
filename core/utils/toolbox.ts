@@ -101,14 +101,11 @@ export function photoIdConverter<T>(obj: T, type: "response" | "request") {
   }
 
   if (projectAutofillBodySchema.safeParse(obj).success) {
-    console.log("projectAutofillBodySchema");
     const project = obj as ProjectAutofillBody;
     return { ...project, images: processPhotos(project.images) };
   }
 
   if (z.array(surfaceSchema).safeParse(obj).success) {
-    console.log("projectAutofillBodySchema");
-
     return (obj as Array<Surface>).map((surface) => processSurface(surface));
   }
 
