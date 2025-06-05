@@ -1,6 +1,6 @@
 import type { Project, projectAutofillBodySchema } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
-import type { z } from "zod";
+import type { z } from "zod/v4";
 import { snakeCaseObjectKeysToCamelCase } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";

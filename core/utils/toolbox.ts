@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 import {
   type AnalyzedPhoto,
   analyzedPhotoSchema,
@@ -36,8 +36,14 @@ export async function handleAsyncFunction<T>(fn: () => Promise<T>) {
   }
 }
 
+export function snakeCaseToCamelCase(str: string): string {
+  const regex = /([-_][a-z])/g;
+  return str.replace(regex, ($1) => $1.toUpperCase().replace("-", "").replace("_", ""));
+}
+
 export function camelCaseToSnakeCase(str: string) {
-  return str.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+  const regex = /([a-z])([A-Z])/g;
+  return str.replace(regex, "$1_$2").toLowerCase();
 }
 
 export function parseId(id: string | number, type: "response" | "request"): string | number {
@@ -45,40 +51,68 @@ export function parseId(id: string | number, type: "response" | "request"): stri
 }
 
 export function photoIdConverter<T>(obj: T, type: "response" | "request") {
+  const processPhoto = (photo: { id: string | number }) => {
+    return { ...photo, id: parseId(photo.id, type) };
+  };
+
   const processPhotos = (photos: Array<{ id: string | number }>) => {
-    for (const photo of photos) {
-      photo.id = parseId(photo.id, type);
-    }
+    return photos.map((photo) => processPhoto(photo));
   };
 
   const processLayeredItems = (
     layeredItems: Array<{ type: string; content: { userData: { assetId: string | number } } }>,
   ) => {
-    for (const layeredItem of layeredItems) {
+    return layeredItems.map((layeredItem) => {
       if (layeredItem.type === "photo") {
-        layeredItem.content.userData.assetId = parseId(layeredItem.content.userData.assetId, type);
+        return {
+          ...layeredItem,
+          content: {
+            ...layeredItem.content,
+            userData: { ...layeredItem.content.userData, assetId: parseId(layeredItem.content.userData.assetId, type) },
+          },
+        };
       }
-    }
+      return layeredItem;
+    });
   };
-  if (photoAnalyzeBodySchema.safeParse(obj).success) {
-    processPhotos(obj as PhotoAnalyzeBody);
-  } else if (analyzedPhotoSchema.safeParse(obj).success) {
-    (obj as AnalyzedPhoto).id = parseId((obj as AnalyzedPhoto).id, type);
-  } else if (projectSchema.safeParse(obj).success) {
+
+  const processSurface = (surface: Surface) => {
+    return {
+      ...surface,
+      surfaceData: { ...surface.surfaceData, layeredItems: processLayeredItems(surface.surfaceData.layeredItems) },
+    };
+  };
+
+  if (projectSchema.safeParse(obj).success) {
     const project = obj as Project;
-    processPhotos(project.images);
-    for (const surface of project.surfaces) {
-      processLayeredItems(surface.surfaceData.layeredItems);
-    }
-  } else if (projectAutofillBodySchema.safeParse(obj).success) {
-    const project = obj as ProjectAutofillBody;
-    processPhotos(project.images);
-  } else if (z.array(surfaceSchema).safeParse(obj).success) {
-    const surfaces = obj as Array<Surface>;
-    for (const surface of surfaces) {
-      processLayeredItems(surface.surfaceData.layeredItems);
-    }
+    return {
+      ...project,
+      images: processPhotos(project.images),
+      surfaces: project.surfaces.map((surface) => processSurface(surface)),
+    };
   }
+
+  if (photoAnalyzeBodySchema.safeParse(obj).success) {
+    return processPhotos(obj as PhotoAnalyzeBody);
+  }
+
+  if (analyzedPhotoSchema.safeParse(obj).success) {
+    return processPhoto(obj as AnalyzedPhoto);
+  }
+
+  if (projectAutofillBodySchema.safeParse(obj).success) {
+    console.log("projectAutofillBodySchema");
+    const project = obj as ProjectAutofillBody;
+    return { ...project, images: processPhotos(project.images) };
+  }
+
+  if (z.array(surfaceSchema).safeParse(obj).success) {
+    console.log("projectAutofillBodySchema");
+
+    return (obj as Array<Surface>).map((surface) => processSurface(surface));
+  }
+
+  return obj;
 }
 
 export function camelCaseObjectKeysToSnakeCase(
@@ -113,10 +147,6 @@ export function camelCaseObjectKeysToSnakeCase(
   }
 
   return result;
-}
-
-export function snakeCaseToCamelCase(str: string): string {
-  return str.replace(/([-_][a-z])/g, ($1) => $1.toUpperCase().replace("-", "").replace("_", ""));
 }
 
 export function snakeCaseObjectKeysToCamelCase(
@@ -184,4 +214,49 @@ export function msFormat(ms: number) {
     return `${(ms / 1000 / 60).toFixed(2)}m`;
   }
   return `${(ms / 1000 / 60 / 60).toFixed(0)}h`;
+}
+
+export function formatObject(
+  obj: unknown,
+  options: {
+    useIntAsPhotoId?: boolean;
+    toSnakeCase?: boolean;
+    toCamelCase?: boolean;
+    isChild?: boolean;
+  },
+): unknown {
+  if (obj === null || obj === undefined) return null;
+  if (typeof obj !== "object") return obj;
+
+  let objectToFormat = obj;
+
+  if (!options.isChild && options.useIntAsPhotoId) {
+    objectToFormat = photoIdConverter(obj, "request");
+  }
+
+  if (Array.isArray(objectToFormat)) {
+    return objectToFormat.map((item) => formatObject(item, { ...options, isChild: true })) as unknown[];
+  }
+
+  const fObject: Record<string, unknown> = {};
+
+  for (const key in objectToFormat) {
+    const value = (objectToFormat as Record<string, unknown>)[key];
+
+    if (value === null) continue;
+
+    let fKey = key;
+
+    if (options.toCamelCase) {
+      fKey = camelCaseToSnakeCase(key);
+    } else if (options.toSnakeCase) {
+      fKey = snakeCaseToCamelCase(key);
+    }
+
+    const fValue = formatObject(value, { ...options, isChild: true });
+
+    fObject[fKey] = fValue;
+  }
+
+  return fObject;
 }

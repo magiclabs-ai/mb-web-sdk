@@ -3,7 +3,7 @@ import { MagicBookAPI } from "@/core/models/api";
 import { surfaceSchema } from "@/core/models/surface";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
-import { z } from "zod";
+import { z } from "zod/v4";
 import type { MBEvent } from "@/core/models/event";
 import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 import { projectFactory } from "@/core/factories/project";

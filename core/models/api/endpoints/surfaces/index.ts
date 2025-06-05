@@ -3,7 +3,7 @@ import { surfaceFactory } from "@/core/factories/surface";
 import { eventHandler } from "@/core/utils/event-mock";
 import { faker } from "@faker-js/faker";
 import { projectSchema } from "@/core/models/project";
-import type { z } from "zod";
+import type { z } from "zod/v4";
 import type { RequestResponse } from "@/core/models/fetcher";
 import { simpleResponseFactory } from "@/core/factories/response";
 

@@ -1,5 +1,5 @@
 import { analyzedPhotoSchema } from "@/core/models/photo";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { surfaceSchema } from "./surface";
 
 export const projectSchema = z.object({
