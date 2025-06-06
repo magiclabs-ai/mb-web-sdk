@@ -38,7 +38,7 @@ export class WS {
     };
 
     this.connection.onmessage = (event: MessageEvent) => {
-      const { result, ...rest } = formatObject(JSON.parse(event.data), { toCamelCase: true }) as WSMessage;
+      const { result, ...rest } = formatObject(JSON.parse(event.data), { snakeToCamelCase: true }) as WSMessage;
       result && this.useIntAsPhotoId && photoIdConverter(result, "response");
       const dispatcherEvent = this.dispatcher.getById(rest.requestId);
       dispatcherEvent?.addEvent("ws", rest.eventName, { ...rest, result });

@@ -99,7 +99,7 @@ export class MagicBookAPI {
     return JSON.stringify(
       formatObject(obj, {
         useIntAsPhotoId: this.useIntAsPhotoId,
-        toSnakeCase: true,
+        snakeToCamelCase: true,
       }),
     );
   }

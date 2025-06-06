@@ -217,8 +217,8 @@ export function formatObject(
   obj: unknown,
   options: {
     useIntAsPhotoId?: boolean;
-    toSnakeCase?: boolean;
-    toCamelCase?: boolean;
+    camelToSnakeCase?: boolean;
+    snakeToCamelCase?: boolean;
     isChild?: boolean;
   },
 ): unknown {
@@ -244,9 +244,9 @@ export function formatObject(
 
     let fKey = key;
 
-    if (options.toCamelCase) {
+    if (options.camelToSnakeCase) {
       fKey = camelCaseToSnakeCase(key);
-    } else if (options.toSnakeCase) {
+    } else if (options.snakeToCamelCase) {
       fKey = snakeCaseToCamelCase(key);
     }
 
