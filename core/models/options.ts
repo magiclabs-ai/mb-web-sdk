@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 import { embellishmentLevels, imageDensities, imageFilteringLevels, textStickerLevels } from "@/core/data";
 
 export const optionsSchema = z.object({

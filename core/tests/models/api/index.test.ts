@@ -2,6 +2,7 @@ import { describe, expect, test, vi } from "vitest";
 import { MagicBookAPI } from "@/core/models/api";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
 import type { FetchOptions } from "@/core/models/fetcher";
+import { projectFactory } from "@/core/factories/project";
 
 describe("API", () => {
   test("apiKey is used properly", async () => {
@@ -47,5 +48,15 @@ describe("API", () => {
     });
 
     expect(test).toBeCalled();
+  });
+  test("bodyParse function", async () => {
+    console.time("bodyParse");
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+      useIntAsPhotoId: true,
+    });
+    const body = projectFactory();
+    api.bodyParse(body);
+    console.timeEnd("bodyParse");
   });
 });

@@ -24,7 +24,9 @@ export function projectFactory(props?: ProjectFactoryProps): Project {
         height: 11,
       },
     },
-    surfaces: props?.noSurfaces ? [] : Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, surfaceFactory),
-    images: props?.images || Array.from({ length: faker.number.int({ min: 10, max: 100 }) }, photoFactory),
+    surfaces: props?.noSurfaces
+      ? []
+      : Array.from({ length: faker.number.int({ min: 1000, max: 1000 }) }, surfaceFactory),
+    images: props?.images || Array.from({ length: faker.number.int({ min: 1000, max: 1000 }) }, photoFactory),
   };
 }

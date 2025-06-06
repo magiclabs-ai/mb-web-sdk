@@ -6,9 +6,9 @@ import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
 import { eventHandler } from "@/core/utils/event-mock";
 import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
-import { camelCaseObjectKeysToSnakeCase, photoIdConverter, removeNullValues } from "@/core/utils/toolbox";
+import { formatObject } from "@/core/utils/toolbox";
 import { Dispatcher } from "../dispatcher";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const densitySchema = z.object({
   minImageCount: z.number(),
@@ -95,14 +95,13 @@ export class MagicBookAPI {
     eventHandler({ areConnectionsOpen: this.areWSOpen() }, "ws", true);
   }
 
-  bodyParse(body: unknown) {
-    const deepCopy = JSON.parse(JSON.stringify(body));
-
-    if (this.useIntAsPhotoId) {
-      photoIdConverter(deepCopy, "request");
-    }
-
-    return JSON.stringify(camelCaseObjectKeysToSnakeCase(removeNullValues(deepCopy)));
+  bodyParse(obj: unknown) {
+    return JSON.stringify(
+      formatObject(obj, {
+        useIntAsPhotoId: this.useIntAsPhotoId,
+        camelToSnakeCase: true,
+      }),
+    );
   }
 
   readonly photos = new PhotoEndpoints(this);
@@ -145,6 +144,8 @@ export class MagicBookAPI {
         } as DesignOptionsResponse;
       },
     });
+
+    dispatcher.id = faker.string.uuid();
     dispatcher.addEvent("fetch", path);
 
     return densitiesSchema.parse(res.densities);
