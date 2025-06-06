@@ -33,12 +33,14 @@ export const faceSchema = z.object({
     width: z.number(),
     height: z.number(),
   }),
-  scoring: z.object({
-    smile: z.number(),
-    confidence: z.number(),
-    eyesOpen: z.number(),
-    facingCamera: z.number(),
-  }),
+  scoring: z
+    .object({
+      smile: z.number(),
+      confidence: z.number(),
+      eyesOpen: z.number(),
+      facingCamera: z.number(),
+    })
+    .optional(),
 });
 
 const roiSchema = z.object({
@@ -56,7 +58,7 @@ export const analyzedPhotoSchema = z.object({
   width: z.number(),
   height: z.number(),
   orientation: z.number(),
-  sequence: z.number(),
+  sequence: z.number().optional(),
   encryptId: z.string().optional(),
   timestamp: z.string(),
   dateTimeDigitize: z.string().optional(),
