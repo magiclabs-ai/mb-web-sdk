@@ -240,7 +240,7 @@ export function formatObject(
   for (const key in objectToFormat) {
     const value = (objectToFormat as Record<string, unknown>)[key];
 
-    if (value === null) continue;
+    if (value === null || value === undefined) continue;
 
     let fKey = key;
 
