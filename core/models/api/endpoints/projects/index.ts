@@ -22,13 +22,16 @@ export class ProjectEndpoints {
 
   async autofill(body: ProjectAutofillBody) {
     const path = "/designer/projects/autofill";
-    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+    const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": request.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -39,19 +42,21 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return res;
   }
 
   async autofillOptions(imageCount: number) {
     const path = `/designer/projects/autofill/options?image_count=${imageCount}`;
-    const dispatcher = this.magicBookAPI.dispatcher.add(path);
+    const request = this.magicBookAPI.dispatcher.add(path);
     const res = await this.magicBookAPI.fetcher.call<ProjectAutofillResponse>({
       path,
       options: {
         method: "GET",
+        headers: {
+          "magic-request-id": request.id,
+        },
       },
       factory: async () => {
         return {
@@ -61,21 +66,23 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res.options));
   }
 
   async restyle(body: Project) {
     const path = "/designer/projects/restyle";
-    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+    const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": request.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -86,21 +93,23 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return res;
   }
 
   async resize(body: Project) {
     const path = "/designer/projects/resize";
-    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+    const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": request.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -111,8 +120,7 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return res;
   }

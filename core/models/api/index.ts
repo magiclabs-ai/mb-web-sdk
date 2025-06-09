@@ -110,7 +110,7 @@ export class MagicBookAPI {
 
   async imageDensities(sku: string, imageCount: number, imageFilteringLevel: string) {
     const path = `mmb/v1/designoptions/sku/${sku}/imagecount/${imageCount}/imagefilteringlevel/${imageFilteringLevel}/`;
-    const dispatcher = this.dispatcher.add(path);
+    const request = this.dispatcher.add(path);
     const res = await this.fetcher.call<DesignOptionsResponse>({
       path,
       options: {
@@ -145,8 +145,7 @@ export class MagicBookAPI {
       },
     });
 
-    dispatcher.id = faker.string.uuid();
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return densitiesSchema.parse(res.densities);
   }
