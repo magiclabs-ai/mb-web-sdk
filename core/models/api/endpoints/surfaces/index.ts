@@ -21,7 +21,7 @@ export class SurfaceEndpoints {
 
   async shuffle(body: SurfaceShuffleBody) {
     const path = "/designer/surfaces/shuffle";
-    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+    const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
@@ -29,7 +29,7 @@ export class SurfaceEndpoints {
       options: {
         method: "POST",
         headers: {
-          "magic-request-id": dispatcher.id,
+          "magic-request-id": request.id,
         },
         body: this.magicBookAPI.bodyParse(body),
       },
@@ -39,14 +39,14 @@ export class SurfaceEndpoints {
       },
     });
 
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return res;
   }
 
   async autoAdapt(body: SurfaceAutoAdaptBody) {
     const path = "/designer/surfaces/autoadapt";
-    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+    const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
@@ -54,7 +54,7 @@ export class SurfaceEndpoints {
       options: {
         method: "POST",
         headers: {
-          "magic-request-id": dispatcher.id,
+          "magic-request-id": request.id,
         },
         body: this.magicBookAPI.bodyParse(body),
       },
@@ -64,14 +64,14 @@ export class SurfaceEndpoints {
       },
     });
 
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return res;
   }
 
   async suggest(body: SurfaceSuggestBody) {
     const path = "/designer/surfaces/suggest";
-    const dispatcher = this.magicBookAPI.dispatcher.add(path, {
+    const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
@@ -79,7 +79,7 @@ export class SurfaceEndpoints {
       options: {
         method: "POST",
         headers: {
-          "magic-request-id": dispatcher.id,
+          "magic-request-id": request.id,
         },
         body: this.magicBookAPI.bodyParse(body),
       },
@@ -91,7 +91,7 @@ export class SurfaceEndpoints {
       },
     });
 
-    dispatcher.addEvent("fetch", path);
+    request.addEvent("fetch", path);
 
     return res;
   }
