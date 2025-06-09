@@ -145,7 +145,6 @@ export class MagicBookAPI {
       },
     });
 
-    dispatcher.id = faker.string.uuid();
     dispatcher.addEvent("fetch", path);
 
     return densitiesSchema.parse(res.densities);
