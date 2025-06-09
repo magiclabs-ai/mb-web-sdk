@@ -29,6 +29,9 @@ export class ProjectEndpoints {
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -39,7 +42,6 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return res;
@@ -52,6 +54,9 @@ export class ProjectEndpoints {
       path,
       options: {
         method: "GET",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
       },
       factory: async () => {
         return {
@@ -61,7 +66,6 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res.options));
@@ -76,6 +80,9 @@ export class ProjectEndpoints {
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -86,7 +93,6 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return res;
@@ -101,6 +107,9 @@ export class ProjectEndpoints {
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -111,7 +120,6 @@ export class ProjectEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return res;

@@ -28,6 +28,9 @@ export class SurfaceEndpoints {
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -36,7 +39,6 @@ export class SurfaceEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return res;
@@ -51,6 +53,9 @@ export class SurfaceEndpoints {
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -59,7 +64,6 @@ export class SurfaceEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return res;
@@ -74,6 +78,9 @@ export class SurfaceEndpoints {
       path,
       options: {
         method: "POST",
+        headers: {
+          "magic-request-id": dispatcher.id,
+        },
         body: this.magicBookAPI.bodyParse(body),
       },
       factory: async () => {
@@ -84,7 +91,6 @@ export class SurfaceEndpoints {
       },
     });
 
-    dispatcher.id = res.requestId;
     dispatcher.addEvent("fetch", path);
 
     return res;
