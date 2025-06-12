@@ -9,6 +9,7 @@ import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
 import { formatObject } from "@/core/utils/toolbox";
 import { Dispatcher } from "../dispatcher";
 import { z } from "zod/v4";
+import { densitiesFactory } from "@/core/factories/design-options";
 
 const densitySchema = z.object({
   minImageCount: z.number(),
@@ -18,13 +19,13 @@ const densitySchema = z.object({
   maxPageCount: z.number(),
 });
 
-const densitiesSchema = z.object({
+export const densitiesSchema = z.object({
   low: densitySchema,
   medium: densitySchema,
   high: densitySchema,
 });
 
-type DesignOptionsResponse = {
+export type DesignOptionsDensitiesResponse = {
   densities: z.infer<typeof densitiesSchema>;
 };
 
@@ -105,37 +106,13 @@ export class MagicBookAPI {
   async imageDensities(sku: string, imageCount: number, imageFilteringLevel: string) {
     const path = `mmb/v1/designoptions/sku/${sku}/imagecount/${imageCount}/imagefilteringlevel/${imageFilteringLevel}/`;
     const request = this.dispatcher.add(path);
-    const res = await this.fetcher.call<DesignOptionsResponse>({
+    const res = await this.fetcher.call<DesignOptionsDensitiesResponse>({
       path,
       options: {
         method: "GET",
       },
       factory: async () => {
-        return {
-          densities: {
-            low: {
-              minImageCount: 1,
-              avgImageCount: 2,
-              maxImageCount: 3,
-              minPageCount: 4,
-              maxPageCount: 5,
-            },
-            medium: {
-              minImageCount: 1,
-              avgImageCount: 2,
-              maxImageCount: 3,
-              minPageCount: 4,
-              maxPageCount: 5,
-            },
-            high: {
-              minImageCount: 1,
-              avgImageCount: 2,
-              maxImageCount: 3,
-              minPageCount: 4,
-              maxPageCount: 5,
-            },
-          },
-        } as DesignOptionsResponse;
+        return densitiesFactory();
       },
     });
 

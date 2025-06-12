@@ -44,6 +44,7 @@ export class WS {
     };
 
     this.connection.onclose = () => {
+      console.log("🙄", this.reconnectionAttempts, maxReconnectionAttempts);
       if (this.reconnectionAttempts < maxReconnectionAttempts) {
         setTimeout(() => {
           this.connect();

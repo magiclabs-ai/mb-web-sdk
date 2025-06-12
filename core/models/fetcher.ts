@@ -1,4 +1,4 @@
-import { mergeNestedObject, snakeCaseObjectKeysToCamelCase } from "../utils/toolbox";
+import { formatObject, mergeNestedObject } from "../utils/toolbox";
 
 export type FetchOptions = RequestInit & { headers: { Authorization?: string } };
 
@@ -53,7 +53,7 @@ export class Fetcher {
       const res = await fetch(this.cleanUrl(new URL(props.path, this.baseUrl).href), options);
       if (res.status >= 200 && res.status < 300) {
         try {
-          return snakeCaseObjectKeysToCamelCase(await res.json()) as T;
+          return formatObject(await res.json(), { snakeToCamelCase: true }) as T;
         } catch (error) {
           return {} as T;
         }

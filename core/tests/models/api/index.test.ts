@@ -3,6 +3,7 @@ import { MagicBookAPI } from "@/core/models/api";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
 import type { FetchOptions } from "@/core/models/fetcher";
 import { projectFactory } from "@/core/factories/project";
+import { densitiesSchema } from "@/core/models/api";
 
 describe("API", () => {
   test("apiKey is used properly", async () => {
@@ -57,5 +58,17 @@ describe("API", () => {
     const body = projectFactory();
     api.bodyParse(body);
     console.timeEnd("bodyParse");
+  });
+});
+
+describe("Image densities", () => {
+  test("imageDensities", async () => {
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+      mock: true,
+    });
+
+    const res = await api.imageDensities("sku", 10, "low");
+    expect(densitiesSchema.parse(res)).toStrictEqual(res);
   });
 });

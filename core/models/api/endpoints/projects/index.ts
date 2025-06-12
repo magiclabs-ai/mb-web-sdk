@@ -1,7 +1,7 @@
 import type { Project, projectAutofillBodySchema } from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import type { z } from "zod/v4";
-import { snakeCaseObjectKeysToCamelCase } from "@/core/utils/toolbox";
+import { formatObject } from "@/core/utils/toolbox";
 import { eventHandler } from "@/core/utils/event-mock";
 import { surfaceFactory } from "@/core/factories/surface";
 import { faker } from "@faker-js/faker";
@@ -68,7 +68,7 @@ export class ProjectEndpoints {
 
     request.addEvent("fetch", path);
 
-    return optionsSchema.parse(snakeCaseObjectKeysToCamelCase(res.options));
+    return optionsSchema.parse(formatObject(res.options, { snakeToCamelCase: true }));
   }
 
   async restyle(body: Project) {
