@@ -63,6 +63,13 @@ describe("Request", () => {
     expect(request.events?.[0].name).toBe("test-event");
   });
 
+  it("should not add events if they are the same", () => {
+    const request = new Request("/test", { debugMode: false });
+    request.addEvent("fetch", "test-event", { eventName: "test-event" });
+    request.addEvent("fetch", "test-event", { eventName: "test-event" });
+    expect(request.events?.length).toBe(1);
+  });
+
   it("should handle timeout events", () => {
     const request = new Request("/test", {
       debugMode: false,

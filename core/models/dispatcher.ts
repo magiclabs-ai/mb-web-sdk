@@ -97,7 +97,12 @@ export class Request {
   }
 
   addEvent(type: DispatcherEventType, name: string, message?: WSMessage<unknown>) {
-    if (this.finishedAt) {
+    const isDupe = this.events
+      ?.filter((e) => e.name === name)
+      .map((e) => JSON.stringify(e.message))
+      .includes(JSON.stringify(message));
+
+    if (this.finishedAt || isDupe) {
       return;
     }
 
