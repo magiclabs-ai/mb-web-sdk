@@ -53,7 +53,6 @@ describe("API", () => {
     console.time("bodyParse");
     const api = new MagicBookAPI({
       apiKey: "fake key",
-      useIntAsPhotoId: true,
     });
     const body = projectFactory();
     api.bodyParse(body);

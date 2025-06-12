@@ -41,7 +41,6 @@ const api = new MagicBookAPI({
   apiKey: string,
   apiHost? string, // Default to api.prod.magiclabs-aurora.io
   mock?: boolean, // Default to false
-  useIntAsPhotoId?: boolean, // Default to false
   debugMode?: boolean //Default to false for non production apiHosts
 });
 ```
@@ -65,7 +64,7 @@ To analyze an array of photos, call the `photos.analyze` function. Once ready, a
 ```ts
 await api.photos.analyze(
   photos.map((photo) => ({
-    id: photo.handle, // string | number if useIntAsPhotoId is set to `true`
+    id: photo.handle, // string
     width: photo.width, // number
     height: photo.height, // number
     orientation: photo.orientation, // number

@@ -18,15 +18,13 @@ export class WS {
   connection?: WebSocket;
   private url: string;
   private onConnectionOpened: () => void;
-  private useIntAsPhotoId: boolean;
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
 
-  constructor(url: string, onConnectionOpened: () => void, useIntAsPhotoId: boolean, dispatcher: Dispatcher) {
+  constructor(url: string, onConnectionOpened: () => void, dispatcher: Dispatcher) {
     this.url = url;
     this.connect();
     this.onConnectionOpened = onConnectionOpened;
-    this.useIntAsPhotoId = useIntAsPhotoId;
     this.dispatcher = dispatcher;
   }
 
@@ -38,14 +36,11 @@ export class WS {
     };
 
     this.connection.onmessage = (event: MessageEvent) => {
-      let { result, ...rest } = formatObject(JSON.parse(event.data), {
+      const res = formatObject(JSON.parse(event.data), {
         snakeToCamelCase: true,
       }) as WSMessage;
-      if (result && this.useIntAsPhotoId) {
-        result = photoIdConverter(result, "response");
-      }
-      const dispatcherEvent = this.dispatcher.getById(rest.requestId);
-      dispatcherEvent?.addEvent("ws", rest.eventName, { ...rest, result });
+      const dispatcherEvent = this.dispatcher.getById(res.requestId);
+      dispatcherEvent?.addEvent("ws", res.eventName, res);
     };
 
     this.connection.onclose = () => {

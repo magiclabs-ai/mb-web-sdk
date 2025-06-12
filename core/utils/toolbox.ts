@@ -216,7 +216,6 @@ export function msFormat(ms: number) {
 export function formatObject(
   obj: unknown,
   options: {
-    useIntAsPhotoId?: boolean;
     camelToSnakeCase?: boolean;
     snakeToCamelCase?: boolean;
     isChild?: boolean;
@@ -225,11 +224,7 @@ export function formatObject(
   if (obj === null || obj === undefined) return null;
   if (typeof obj !== "object") return obj;
 
-  let objectToFormat = obj;
-
-  if (!options.isChild && options.useIntAsPhotoId) {
-    objectToFormat = photoIdConverter(obj, "request");
-  }
+  const objectToFormat = obj;
 
   if (Array.isArray(objectToFormat)) {
     return objectToFormat.map((item) => formatObject(item, { ...options, isChild: true })) as unknown[];
