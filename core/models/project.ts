@@ -5,6 +5,7 @@ import { surfaceSchema } from "./surface";
 export const projectSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
+  paperType: z.string().optional(),
   designMode: z.string(),
   occasion: z.string(),
   style: z.string(),
