@@ -19,8 +19,8 @@ export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
 export class SurfaceEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
 
-  async shuffle(body: SurfaceShuffleBody) {
-    const path = "/designer/surfaces/shuffle";
+  async shuffle(body: SurfaceShuffleBody, sequenceImage = false) {
+    const path = `/designer/surfaces/shuffle${sequenceImage ? "?sequence-image=true" : ""}`;
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });
