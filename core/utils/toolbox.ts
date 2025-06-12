@@ -1,14 +1,3 @@
-import { z } from "zod/v4";
-import {
-  type AnalyzedPhoto,
-  analyzedPhotoSchema,
-  type PhotoAnalyzeBody,
-  photoAnalyzeBodySchema,
-} from "../models/photo";
-import { type Project, projectAutofillBodySchema, projectSchema } from "../models/project";
-import { type Surface, surfaceSchema } from "../models/surface";
-import type { ProjectAutofillBody } from "../models/api/endpoints/projects";
-
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function mergeNestedObject(obj: Record<string, any>, objToMerge: Record<string, any>): Record<string, any> {
   const result = { ...obj };

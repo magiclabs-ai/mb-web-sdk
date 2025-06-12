@@ -1,5 +1,5 @@
 import { maxReconnectionAttempts, wsReconnectInterval } from "../config";
-import { formatObject, photoIdConverter } from "../utils/toolbox";
+import { formatObject } from "../utils/toolbox";
 import type { Dispatcher } from "./dispatcher";
 
 type WSMessage = {
@@ -44,7 +44,6 @@ export class WS {
     };
 
     this.connection.onclose = () => {
-      console.log("🙄", this.reconnectionAttempts, maxReconnectionAttempts);
       if (this.reconnectionAttempts < maxReconnectionAttempts) {
         setTimeout(() => {
           this.connect();
