@@ -52,8 +52,8 @@ const roiSchema = z.object({
 
 // AnalyzedPhoto schema
 export const analyzedPhotoSchema = z.object({
-  roi: roiSchema,
   id: z.string().or(z.number()),
+  roi: roiSchema.optional(),
   filename: z.string().or(z.number()),
   width: z.number(),
   height: z.number(),
@@ -67,11 +67,11 @@ export const analyzedPhotoSchema = z.object({
   make: z.string().optional(),
   model: z.string().optional(),
   selected: z.boolean(),
-  aestheticScore: z.number(),
-  categoryWeight: z.number(),
-  embedding: z.array(z.number()),
-  faces: z.array(faceSchema),
-  labels: z.array(labelSchema),
+  aestheticScore: z.number().optional(),
+  categoryWeight: z.number().optional(),
+  embedding: z.array(z.number()).optional(),
+  faces: z.array(faceSchema).optional(),
+  labels: z.array(labelSchema).optional(),
   droppingPoint: z
     .object({
       x: z.number(),
