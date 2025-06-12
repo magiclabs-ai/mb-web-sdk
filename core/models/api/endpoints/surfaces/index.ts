@@ -16,11 +16,16 @@ export type SurfaceShuffleBody = z.infer<typeof surfaceShuffleBodySchema>;
 export type SurfaceAutoAdaptBody = z.infer<typeof surfaceAutoAdaptBodySchema>;
 export type SurfaceSuggestBody = z.infer<typeof surfaceSuggestBodySchema>;
 
+type SurfaceShuffleOptions = {
+  keepImageSequence?: boolean;
+};
+
 export class SurfaceEndpoints {
   constructor(private readonly magicBookAPI: MagicBookAPI) {}
 
-  async shuffle(body: SurfaceShuffleBody, sequenceImage = false) {
-    const path = `/designer/surfaces/shuffle${sequenceImage ? "?sequence-image=true" : ""}`;
+  async shuffle(body: SurfaceShuffleBody, options?: SurfaceShuffleOptions) {
+    const qs = options?.keepImageSequence ? "?keep-image-sequence=true" : "";
+    const path = `/designer/surfaces/shuffle${qs}`;
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
     });

@@ -264,6 +264,8 @@ await api.surfaces.shuffle({
   },
   images: [...],
   surfaces: [surface1, surface2] // array of surfaces max length 2
+}, {
+  keepImageSequence?: boolean // default to false
 });
 ```
 
