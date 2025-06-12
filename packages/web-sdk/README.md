@@ -107,7 +107,7 @@ await api.projects.autofill({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
-    paperType: "Standard Pages", // optional
+    pageType: "Standard Pages", // optional
     skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
@@ -149,7 +149,7 @@ await api.projects.restyle({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
-    paperType: "Standard Pages", // optional
+    pageType: "Standard Pages", // optional
     skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
@@ -192,7 +192,7 @@ await api.projects.resize({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
-    paperType: "Standard Pages", // optional
+    pageType: "Standard Pages", // optional
     skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
@@ -237,7 +237,7 @@ await api.surfaces.shuffle({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
-    paperType: "Standard Pages", // optional
+    pageType: "Standard Pages", // optional
     skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
@@ -280,7 +280,7 @@ await api.surfaces.autoAdapt({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
-    paperType: "Standard Pages", // optional
+    pageType: "Standard Pages", // optional
     skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],
@@ -323,7 +323,7 @@ await api.surfaces.suggest({
   imageDensityLevel: "high",
   embellishmentLevel: "high",
   bookFormat: {
-    paperType: "Standard Pages", // optional
+    pageType: "Standard Pages", // optional
     skuPageRange: [min, max], // optional
     startFromLeftSide: true, // default to false
     targetPageRange: [20, 40],

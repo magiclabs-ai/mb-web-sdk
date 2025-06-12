@@ -12,8 +12,8 @@ export const projectSchema = z.object({
   imageDensityLevel: z.string(),
   embellishmentLevel: z.string(),
   bookFormat: z.object({
+    pageType: z.string().optional(),
     skuPageRange: z.array(z.number()).optional(),
-    paperType: z.string().optional(),
     startFromLeftSide: z.boolean().optional(),
     targetPageRange: z.array(z.number()),
     page: z.object({
