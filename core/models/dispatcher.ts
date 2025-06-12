@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { defaultTimeout } from "../config";
 import { msFormat } from "../utils/toolbox";
+import _ from "lodash";
 
 type DispatcherEventType = "fetch" | "ws";
 
@@ -97,10 +98,7 @@ export class Request {
   }
 
   addEvent(type: DispatcherEventType, name: string, message?: WSMessage<unknown>) {
-    const isDupe = this.events
-      ?.filter((e) => e.name === name)
-      .map((e) => JSON.stringify(e.message))
-      .includes(JSON.stringify(message));
+    const isDupe = this.events?.some((e) => e.name === name && _.isEqual(e.message, message));
 
     if (this.finishedAt || isDupe) {
       return;
