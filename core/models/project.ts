@@ -5,7 +5,6 @@ import { surfaceSchema } from "./surface";
 export const projectSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
-  paperType: z.string().optional(),
   designMode: z.string(),
   occasion: z.string(),
   style: z.string(),
@@ -14,6 +13,7 @@ export const projectSchema = z.object({
   embellishmentLevel: z.string(),
   bookFormat: z.object({
     skuPageRange: z.array(z.number()).optional(),
+    paperType: z.string().optional(),
     startFromLeftSide: z.boolean().optional(),
     targetPageRange: z.array(z.number()),
     page: z.object({
