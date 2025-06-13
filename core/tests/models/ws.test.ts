@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { WS } from "../../models/ws";
-import { addEventMock, finishMock } from "../mocks/dispatcher";
+import { addEventMock } from "../mocks/dispatcher";
 import { Dispatcher } from "../../models/dispatcher";
+import { maxReconnectionAttempts } from "../../config";
 
 describe("WS", () => {
   let ws: WS;
@@ -9,7 +10,7 @@ describe("WS", () => {
   const dispatcher = new Dispatcher();
 
   beforeEach(() => {
-    ws = new WS(url, () => {}, false, dispatcher);
+    ws = new WS(url, () => {}, dispatcher);
   });
 
   test("should initialize with the correct URL", () => {
@@ -52,27 +53,21 @@ describe("WS", () => {
       request: eventDetail.request,
     });
   });
+  test("should throw error if max reconnection attempts is reached", () => {
+    vi.useFakeTimers();
 
-  test("should add event in dispatcher request with useIntAsPhotoId", () => {
-    const wsWithIntAsPhotoId = new WS(url, () => {}, true, dispatcher);
-    const eventDetail = {
-      event_name: "test_event",
-      result: "test_result",
-      request: {
-        clientId: "test_client",
-        url: "test_url",
-      },
-    };
-    const messageEvent = new MessageEvent("message", {
-      data: JSON.stringify(eventDetail),
-    });
-
-    wsWithIntAsPhotoId.connection?.onmessage?.(messageEvent);
-
-    expect(addEventMock).toHaveBeenCalledWith("ws", eventDetail.event_name, {
-      eventName: eventDetail.event_name,
-      result: eventDetail.result,
-      request: eventDetail.request,
-    });
+    vi.advanceTimersToNextTimer();
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const connectSpy = vi.spyOn(ws as any, "connect");
+    for (let i = 0; i <= maxReconnectionAttempts; i++) {
+      if (i === maxReconnectionAttempts) {
+        expect(() => ws.connection?.close()).toThrowError("ws-failed-to-reconnect");
+      } else {
+        ws?.connection?.close();
+      }
+      vi.advanceTimersToNextTimer();
+      vi.advanceTimersToNextTimer();
+    }
+    expect(connectSpy).toHaveBeenCalledTimes(maxReconnectionAttempts);
   });
 });

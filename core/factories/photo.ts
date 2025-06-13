@@ -3,7 +3,7 @@ import { faker } from "@faker-js/faker";
 
 export function photoFactory(): AnalyzedPhoto {
   const photo: AnalyzedPhoto = {
-    id: faker.number.int({ min: 1, max: 100 }),
+    id: faker.number.int({ min: 1, max: 100 }).toString(),
     roi: {
       x: faker.number.float({ min: 0, max: 1 }),
       y: faker.number.float({ min: 0, max: 1 }),
@@ -46,9 +46,9 @@ export function photoFactory(): AnalyzedPhoto {
   return photo;
 }
 
-export function photoAnalyzeBodyFactory(isIntId?: boolean): PhotoAnalyzeBody {
+export function photoAnalyzeBodyFactory(): PhotoAnalyzeBody {
   return Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => ({
-    id: isIntId ? faker.number.int({ min: 1, max: 5 }) : faker.number.int({ min: 1, max: 5 }).toString(),
+    id: faker.number.int({ min: 1, max: 5 }).toString(),
     width: faker.number.int({ min: 100, max: 4000 }),
     height: faker.number.int({ min: 100, max: 4000 }),
     orientation: faker.number.int({ min: 0, max: 3 }),
