@@ -7,6 +7,7 @@ import { z } from "zod/v4";
 import type { MBEvent } from "@/core/models/event";
 import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 import { projectFactory } from "@/core/factories/project";
+import { fetchMocker } from "@/core/tests/mocks/fetch";
 
 const project = projectFactory();
 
@@ -32,6 +33,12 @@ describe("Surface", () => {
     const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
+  });
+
+  test("shuffle with keepImageSequence", async () => {
+    const callSpy = vi.spyOn(api.fetcher, "call");
+    await api.surfaces.shuffle(project, { keepImageSequence: true });
+    expect(callSpy.mock.calls[0][0].path).toBe("/designer/surfaces/shuffle?keep-image-sequence=true");
   });
 
   test("autoAdapt", async () => {
