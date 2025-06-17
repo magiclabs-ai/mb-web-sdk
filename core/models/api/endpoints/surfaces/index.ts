@@ -28,6 +28,7 @@ export class SurfaceEndpoints {
     const path = `/designer/surfaces/shuffle${qs}`;
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
+      timeoutEventName: "surfaces.designedTimeout",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -53,6 +54,7 @@ export class SurfaceEndpoints {
     const path = "/designer/surfaces/autoadapt";
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
+      timeoutEventName: "surfaces.designedTimeout",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -78,6 +80,7 @@ export class SurfaceEndpoints {
     const path = "/designer/surfaces/suggest";
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
+      timeoutEventName: "surfaces.designedTimeout",
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
