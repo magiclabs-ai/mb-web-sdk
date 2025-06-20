@@ -214,6 +214,17 @@ function App() {
       </div>
       <div className="flex gap-10">
         <div className="flex flex-col gap-4 items-start p-4">
+          <h2 className="pb-1 w-full text-lg font-semibold border-b">WS</h2>
+          <button
+            type="button"
+            onClick={() => {
+              mb?.reconnectWS();
+            }}
+          >
+            Reconnect WS
+          </button>
+        </div>
+        <div className="flex flex-col gap-4 items-start p-4">
           <h2 className="pb-1 w-full text-lg font-semibold border-b">MMB</h2>
           <button type="button" onClick={getImageDensities}>
             Get Image Densities

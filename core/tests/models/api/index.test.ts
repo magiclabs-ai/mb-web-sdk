@@ -13,12 +13,14 @@ describe("API", () => {
     });
     expect((api.fetcher.options as FetchOptions).headers.Authorization).toEqual(`API-Key ${apiKey}`);
   });
+
   test("without apiKey", async () => {
     const api2 = new MagicBookAPI({
       mock: true,
     });
     expect((api2.fetcher.options as FetchOptions).headers.Authorization).toBeUndefined();
   });
+
   test.fails("With fake WS Endpoint", async () => {
     fetchMocker.mockResponse(JSON.stringify({}));
 
@@ -28,19 +30,20 @@ describe("API", () => {
 
     expect(await api.photos.analyze([])).toStrictEqual("ws-connection-not-open");
   });
-  test("onConnectionOpened function in mock mode", async () => {
+
+  test("onConnectionStateChange function in mock mode", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
       mock: true,
     });
-    api.onConnectionOpened();
+    api.onConnectionStateChange();
   });
 
-  test("onConnectionOpened function", async () => {
+  test("onConnectionStateChange function", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
     });
-    const test = vi.spyOn(api, "onConnectionOpened");
+    const test = vi.spyOn(api, "onConnectionStateChange");
 
     await new Promise((resolve) => {
       setTimeout(() => {
@@ -50,6 +53,18 @@ describe("API", () => {
 
     expect(test).toBeCalled();
   });
+
+  test("reconnectWS function", async () => {
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+    const designerSpy = vi.spyOn(api.designerWS, "connect");
+    const analyzerSpy = vi.spyOn(api.analyzerWS, "connect");
+    api.reconnectWS();
+    expect(designerSpy).toHaveBeenCalled();
+    expect(analyzerSpy).toHaveBeenCalled();
+  });
+
   test("bodyParse function", async () => {
     console.time("bodyParse");
     const api = new MagicBookAPI({

@@ -69,12 +69,12 @@ export class MagicBookAPI {
       options.headers.Authorization = `API-Key ${props.apiKey}`;
       this.analyzerWS = new WS(
         `${webSocketHost}/ws/analyzer?clientId=${this.clientId}`,
-        () => this.onConnectionOpened(),
+        () => this.onConnectionStateChange(),
         this.dispatcher,
       );
       this.designerWS = new WS(
         `${webSocketHost}/ws/designer?clientId=${this.clientId}`,
-        () => this.onConnectionOpened(),
+        () => this.onConnectionStateChange(),
         this.dispatcher,
       );
     }
@@ -83,11 +83,15 @@ export class MagicBookAPI {
   }
 
   areWSOpen() {
-    const isConnectionOpen = (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
-    return isConnectionOpen;
+    return (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
   }
 
-  onConnectionOpened() {
+  reconnectWS() {
+    this.analyzerWS?.connect();
+    this.designerWS?.connect();
+  }
+
+  onConnectionStateChange() {
     eventHandler({ areConnectionsOpen: this.areWSOpen() }, "ws", true);
   }
 
