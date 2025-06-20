@@ -23,6 +23,16 @@ describe("WS", () => {
     expect(ws.isConnectionOpen()).toBe(true);
   });
 
+  test("should throw error if connection is already connecting", () => {
+    ws.connection = { readyState: 0 } as WebSocket;
+    expect(() => ws.connect()).toThrowError("ws-is-already-connecting");
+  });
+
+  test("should throw error if connection is already open", () => {
+    ws.connection = { readyState: 1 } as WebSocket;
+    expect(() => ws.connect()).toThrowError("ws-already-connected");
+  });
+
   test("should reconnect on close", () => {
     vi.useFakeTimers();
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>

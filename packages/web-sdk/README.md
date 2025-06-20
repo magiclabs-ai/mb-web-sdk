@@ -53,7 +53,13 @@ Once you receive event `ws` with result
 }
 ```
 
-you are ready to go!
+You are ready to go!
+
+If the WS connection fails to reconnect, you can manually reconnect it with
+
+```ts
+api.reconnectWS();
+```
 
 ### Photos
 

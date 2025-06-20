@@ -17,22 +17,30 @@ type WSMessage = {
 export class WS {
   connection?: WebSocket;
   private url: string;
-  private onConnectionOpened: () => void;
+  private onConnectionStateChange: () => void;
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
 
-  constructor(url: string, onConnectionOpened: () => void, dispatcher: Dispatcher) {
+  constructor(url: string, onConnectionStateChange: () => void, dispatcher: Dispatcher) {
     this.url = url;
     this.connect();
-    this.onConnectionOpened = onConnectionOpened;
+    this.onConnectionStateChange = onConnectionStateChange;
     this.dispatcher = dispatcher;
   }
 
-  private connect() {
+  connect() {
+    if (this.connection?.readyState === WebSocket.CONNECTING) {
+      throw new Error("ws-is-already-connecting");
+    }
+
+    if (this.connection?.readyState === WebSocket.OPEN) {
+      throw new Error("ws-already-connected");
+    }
+
     this.connection = new WebSocket(this.url);
 
     this.connection.onopen = () => {
-      this.onConnectionOpened();
+      this.onConnectionStateChange();
     };
 
     this.connection.onmessage = (event: MessageEvent) => {
@@ -44,6 +52,7 @@ export class WS {
     };
 
     this.connection.onclose = () => {
+      this.onConnectionStateChange();
       if (this.reconnectionAttempts < maxReconnectionAttempts) {
         setTimeout(() => {
           this.connect();
@@ -56,6 +65,6 @@ export class WS {
   }
 
   isConnectionOpen() {
-    return this.connection?.readyState === 1;
+    return this.connection?.readyState === WebSocket.OPEN;
   }
 }
