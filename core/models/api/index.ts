@@ -86,9 +86,9 @@ export class MagicBookAPI {
     return (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
   }
 
-  reconnectWS() {
-    this.analyzerWS?.connect();
-    this.designerWS?.connect();
+  async reconnectWS() {
+    await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
+    return { areConnectionsOpen: this.areWSOpen() };
   }
 
   onConnectionStateChange() {

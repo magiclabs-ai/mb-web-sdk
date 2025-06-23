@@ -13,14 +13,7 @@ export class WebSocketMock {
 
   readyState?: number;
 
-  // @ts-ignore
-  constructor(url: string | URL) {
-    setTimeout(() => {
-      this.test();
-    }, 100);
-  }
-
-  async test() {
+  open() {
     this.readyState = WebSocket.OPEN;
     if (this.onopen) this.onopen();
   }

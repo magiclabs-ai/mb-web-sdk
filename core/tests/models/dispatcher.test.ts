@@ -3,7 +3,7 @@ import type { WSMessage } from "@/core/models/dispatcher";
 
 vi.doUnmock("@/core/models/dispatcher");
 
-const { Dispatcher, DispatcherEvent, Request, maxLogs } = await import("@/core/models/dispatcher");
+const { Dispatcher, DispatcherEvent, Request } = await import("@/core/models/dispatcher");
 
 describe("DispatcherEvent", () => {
   beforeEach(() => {

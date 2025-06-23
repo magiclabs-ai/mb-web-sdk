@@ -4,7 +4,7 @@ import { photoAnalyzeBodyFactory } from "@/core/factories/photo";
 import { analyzedPhotoSchema } from "@/core/models/photo";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
-import type { MBEvent } from "@/core/models/event";
+import type { WSMessage } from "@/core/models/dispatcher";
 import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 
 describe("Photo", () => {
@@ -25,7 +25,7 @@ describe("Photo", () => {
     expect(addEventMock).toHaveBeenCalled();
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("photo.analyze");
     expect(analyzedPhotoSchema.parse(event.result)).toStrictEqual(event.result);
   });
@@ -49,7 +49,7 @@ describe("Photo without debug mode", () => {
     await api.photos.analyze(photoAnalyzeBodyFactory());
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("photo.analyze");
     expect(analyzedPhotoSchema.parse(event.result)).toStrictEqual(event.result);
   });

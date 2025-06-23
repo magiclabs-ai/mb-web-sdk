@@ -4,10 +4,9 @@ import { surfaceSchema } from "@/core/models/surface";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
 import { z } from "zod/v4";
-import type { MBEvent } from "@/core/models/event";
+import type { WSMessage } from "@/core/models/dispatcher";
 import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 import { projectFactory } from "@/core/factories/project";
-import { fetchMocker } from "@/core/tests/mocks/fetch";
 
 const project = projectFactory();
 
@@ -30,7 +29,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
@@ -49,7 +48,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
@@ -62,7 +61,7 @@ describe("Surface", () => {
 
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(z.array(surfaceSchema).parse(event.result)).toStrictEqual(event.result);
   });
@@ -86,7 +85,7 @@ describe("Surface without debug mode", () => {
     await api.surfaces.shuffle(project);
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
@@ -97,7 +96,7 @@ describe("Surface without debug mode", () => {
     await api.surfaces.autoAdapt(project);
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(surfaceSchema.parse(event.result)).toStrictEqual(event.result);
   });
@@ -108,7 +107,7 @@ describe("Surface without debug mode", () => {
     await api.surfaces.suggest(project);
     vi.advanceTimersToNextTimer();
 
-    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<MBEvent<unknown>>).detail;
+    const event = (dispatchEventSpy.mock.calls[0][0] as CustomEvent<WSMessage<unknown>>).detail;
     expect(event.eventName).toBe("surfaces.designed");
     expect(z.array(surfaceSchema).parse(event.result)).toStrictEqual(event.result);
   });

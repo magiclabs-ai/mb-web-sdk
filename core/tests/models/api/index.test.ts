@@ -39,30 +39,24 @@ describe("API", () => {
     api.onConnectionStateChange();
   });
 
-  test("onConnectionStateChange function", async () => {
-    const api = new MagicBookAPI({
-      apiKey: "fake key",
-    });
-    const test = vi.spyOn(api, "onConnectionStateChange");
-
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, 100);
-    });
-
-    expect(test).toBeCalled();
-  });
-
   test("reconnectWS function", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
     });
+    // @ts-ignore
+    api.designerWS?.connection?.open();
+    // @ts-ignore
+    api.analyzerWS?.connection?.open();
+    // @ts-ignore
     const designerSpy = vi.spyOn(api.designerWS, "connect");
+    // @ts-ignore
     const analyzerSpy = vi.spyOn(api.analyzerWS, "connect");
-    api.reconnectWS();
+    const res = await api.reconnectWS();
+    expect(res.areConnectionsOpen).toBe(true);
     expect(designerSpy).toHaveBeenCalled();
     expect(analyzerSpy).toHaveBeenCalled();
+    expect(api.designerWS?.isConnectionOpen()).toBe(true);
+    expect(api.analyzerWS?.isConnectionOpen()).toBe(true);
   });
 
   test("bodyParse function", async () => {

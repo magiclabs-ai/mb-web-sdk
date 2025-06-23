@@ -84,7 +84,7 @@ function App() {
     setMbApi(
       new MagicBookAPI({
         apiKey: import.meta.env.VITE_MB_API_KEY,
-        apiHost: "api.dev.magiclabs-aurora.io",
+        apiHost: "api.dev.magiclabs-aurora.xyz",
         debugMode: true,
         // mock: true,
       }),
@@ -217,8 +217,9 @@ function App() {
           <h2 className="pb-1 w-full text-lg font-semibold border-b">WS</h2>
           <button
             type="button"
-            onClick={() => {
-              mb?.reconnectWS();
+            onClick={async () => {
+              const res = await mb?.reconnectWS();
+              console.log("Reconnect WS", res);
             }}
           >
             Reconnect WS

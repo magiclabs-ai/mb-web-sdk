@@ -25,12 +25,13 @@ describe("WS", () => {
 
   test("should throw error if connection is already connecting", () => {
     ws.connection = { readyState: 0 } as WebSocket;
-    expect(() => ws.connect()).toThrowError("ws-is-already-connecting");
+    expect(ws.connect()).rejects.toThrowError("ws-is-already-connecting");
   });
 
-  test("should throw error if connection is already open", () => {
+  test("should return true if connection is already open", async () => {
     ws.connection = { readyState: 1 } as WebSocket;
-    expect(() => ws.connect()).toThrowError("ws-already-connected");
+    const res = await ws.connect();
+    expect(res).toBe(true);
   });
 
   test("should reconnect on close", () => {
@@ -63,21 +64,21 @@ describe("WS", () => {
       request: eventDetail.request,
     });
   });
-  test("should throw error if max reconnection attempts is reached", () => {
+  test("should return false if max reconnection attempts is reached", () => {
     vi.useFakeTimers();
-
     vi.advanceTimersToNextTimer();
+
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const connectSpy = vi.spyOn(ws as any, "connect");
-    for (let i = 0; i <= maxReconnectionAttempts; i++) {
-      if (i === maxReconnectionAttempts) {
-        expect(() => ws.connection?.close()).toThrowError("ws-failed-to-reconnect");
-      } else {
+
+    for (let i = 0; i <= maxReconnectionAttempts + 1; i++) {
+      if (i !== maxReconnectionAttempts) {
         ws?.connection?.close();
       }
       vi.advanceTimersToNextTimer();
       vi.advanceTimersToNextTimer();
     }
     expect(connectSpy).toHaveBeenCalledTimes(maxReconnectionAttempts);
+    expect(connectSpy.mock.results[connectSpy.mock.results.length - 1].value).resolves.toBe(false);
   });
 });
