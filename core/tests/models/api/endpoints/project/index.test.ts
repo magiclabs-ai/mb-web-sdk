@@ -41,13 +41,14 @@ describe("Project with debug mode", () => {
     vi.runAllTimers();
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
-      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>).detail;
+      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>)
+        .detail;
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }
   });
 
-  test("restyle", async () => { 
+  test("restyle", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
     await api.projects.restyle(project);
@@ -56,7 +57,8 @@ describe("Project with debug mode", () => {
     vi.runAllTimers();
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
-      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>).detail;
+      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>)
+        .detail;
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }
@@ -71,7 +73,8 @@ describe("Project with debug mode", () => {
     vi.advanceTimersToNextTimer();
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
-      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>).detail;
+      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>)
+        .detail;
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }
@@ -110,7 +113,8 @@ describe("Project without debug mode", () => {
     vi.runAllTimers();
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
-      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>).detail;
+      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>)
+        .detail;
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }
@@ -124,7 +128,8 @@ describe("Project without debug mode", () => {
     vi.runAllTimers();
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
-      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>).detail;
+      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>)
+        .detail;
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }
@@ -138,7 +143,8 @@ describe("Project without debug mode", () => {
     vi.advanceTimersToNextTimer();
 
     for (let i = 1; i < dispatchEventSpy.mock.calls.length; i++) {
-      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>).detail;
+      const surfaceEvent = (dispatchEventSpy.mock.calls[i][0] as CustomEvent<WSMessage<Record<string, unknown>>>)
+        .detail;
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }

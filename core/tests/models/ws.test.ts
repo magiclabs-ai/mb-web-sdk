@@ -74,7 +74,7 @@ describe("WS", () => {
     for (let i = 0; i <= maxReconnectionAttempts + 1; i++) {
       if (i !== maxReconnectionAttempts) {
         ws?.connection?.close();
-      } 
+      }
       vi.advanceTimersToNextTimer();
       vi.advanceTimersToNextTimer();
     }

@@ -37,7 +37,7 @@ export class WS {
       if (this.connection?.readyState === WebSocket.OPEN) {
         return resolve(true);
       }
-      
+
       this.connection = new WebSocket(this.url);
 
       this.connection.onopen = () => {
