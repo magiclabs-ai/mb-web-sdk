@@ -45,7 +45,7 @@ const api = new MagicBookAPI({
 });
 ```
 
-Once you receive event `ws` with result
+Once you receive the `ws` event with result
 
 ```json
 {
@@ -58,8 +58,10 @@ You are ready to go!
 If the WS connection fails to reconnect, you can manually reconnect it with
 
 ```ts
-api.reconnectWS();
+await api.reconnectWS();
 ```
+
+This promise will return the same response as the `ws` event above
 
 ### Photos
 
