@@ -29,10 +29,6 @@ export class WS {
   }
 
   async connect(): Promise<boolean> {
-    if (this.connection?.readyState === WebSocket.CONNECTING) {
-      throw new Error("ws-is-already-connecting");
-    }
-
     return new Promise((resolve) => {
       if (this.connection?.readyState === WebSocket.OPEN) {
         return resolve(true);

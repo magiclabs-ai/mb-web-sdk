@@ -23,11 +23,6 @@ describe("WS", () => {
     expect(ws.isConnectionOpen()).toBe(true);
   });
 
-  test("should throw error if connection is already connecting", () => {
-    ws.connection = { readyState: 0 } as WebSocket;
-    expect(ws.connect()).rejects.toThrowError("ws-is-already-connecting");
-  });
-
   test("should return true if connection is already open", async () => {
     ws.connection = { readyState: 1 } as WebSocket;
     const res = await ws.connect();
