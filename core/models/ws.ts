@@ -30,6 +30,9 @@ export class WS {
 
   async connect(): Promise<boolean> {
     return new Promise((resolve) => {
+      if (this.connection?.readyState === WebSocket.CONNECTING) {
+        return resolve(false);
+      }
       if (this.connection?.readyState === WebSocket.OPEN) {
         return resolve(true);
       }
