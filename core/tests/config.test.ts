@@ -14,6 +14,7 @@ describe("config", () => {
     process.env.WS_RECONNECT_INTERVAL = "";
     process.env.DEFAULT_TIMEOUT = "";
     process.env.WS_MAX_RECONNECTION_ATTEMPTS = "";
+    process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD = "";
   });
 
   test('should have defaultApiHost as "api.prod.xyz.io" if API_HOST is not set', async () => {
@@ -53,5 +54,11 @@ describe("config", () => {
     process.env.DEFAULT_TIMEOUT = "10000";
     const { defaultTimeout } = await loadConfig();
     expect(defaultTimeout).toBe(10000);
+  });
+
+  test("should have photoDeprecationWarningThreshold as 5 if PHOTO_DEPRECATION_WARNING_THRESHOLD is not set", async () => {
+    process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD = "5";
+    const { photoDeprecationWarningThreshold } = await loadConfig();
+    expect(photoDeprecationWarningThreshold).toBe(5);
   });
 });

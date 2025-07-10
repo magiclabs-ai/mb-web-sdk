@@ -98,6 +98,24 @@ describe("Request", () => {
     expect(request.events?.[2].name).toBe("final");
   });
 
+  it("should handle beforeFinalEvent", () => {
+    const request = new Request("/test", {
+      debugMode: false,
+      expectedEvents: 2,
+      finalEventName: "final",
+      beforeFinalEvent: (_, addEvent) => {
+        addEvent("ws", "before-final");
+      },
+    });
+
+    request.addEvent("ws", "event1");
+    request.addEvent("ws", "event2");
+
+    expect(request.events?.length).toBe(4);
+    expect(request.events?.[2].name).toBe("before-final");
+    expect(request.events?.[3].name).toBe("final");
+  });
+
   it("should not add events after request is finished", () => {
     const request = new Request("/test", {
       debugMode: false,

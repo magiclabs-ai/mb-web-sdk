@@ -1,7 +1,7 @@
 import type { AnalyzedPhoto, PhotoAnalyzeBody } from "@/core/models/photo";
 import { faker } from "@faker-js/faker";
 
-export function photoFactory(): AnalyzedPhoto {
+export function photoFactory(props: Partial<AnalyzedPhoto> = {}): AnalyzedPhoto {
   const photo: AnalyzedPhoto = {
     id: faker.number.int({ min: 1, max: 100 }).toString(),
     roi: {
@@ -42,6 +42,7 @@ export function photoFactory(): AnalyzedPhoto {
       x: faker.number.float({ min: 0, max: 1 }),
       y: faker.number.float({ min: 0, max: 1 }),
     },
+    ...props,
   };
   return photo;
 }
