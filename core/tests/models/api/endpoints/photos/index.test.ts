@@ -4,7 +4,7 @@ import { photoAnalyzeBodyFactory, photoFactory } from "@/core/factories/photo";
 import { analyzedPhotoSchema } from "@/core/models/photo";
 import { vi } from "vitest";
 import { beforeEach } from "vitest";
-import type { DispatcherEvent, DispatcherEventType, WSMessage } from "@/core/models/dispatcher";
+import type { DispatcherEvent, WSMessage } from "@/core/models/dispatcher";
 import { addEventMock, finishMock } from "@/core/tests/mocks/dispatcher";
 import { photoDeprecationCheck } from "@/core/models/api/endpoints/photos";
 
@@ -68,7 +68,7 @@ describe("Photo with photoDeprecationWarningThreshold", () => {
 
     const addEvent = vi.fn();
 
-    photoDeprecationCheck(events, addEvent);
+    photoDeprecationCheck(events, addEvent, "requestId");
     expect(addEvent).not.toHaveBeenCalled();
   });
 
@@ -88,7 +88,7 @@ describe("Photo with photoDeprecationWarningThreshold", () => {
 
     const addEvent = vi.fn();
 
-    photoDeprecationCheck(events, addEvent);
+    photoDeprecationCheck(events, addEvent, "requestId");
     expect(addEvent).not.toHaveBeenCalled();
   });
 
@@ -107,7 +107,7 @@ describe("Photo with photoDeprecationWarningThreshold", () => {
 
     const addEvent = vi.fn();
 
-    photoDeprecationCheck(events, addEvent);
+    photoDeprecationCheck(events, addEvent, "requestId");
     expect(addEvent).toHaveBeenCalled();
   });
 });
