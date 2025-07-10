@@ -92,7 +92,7 @@ export class MagicBookAPI {
   }
 
   onConnectionStateChange() {
-    eventHandler({ areConnectionsOpen: this.areWSOpen() }, "ws", true);
+    eventHandler({ areConnectionsOpen: this.areWSOpen() }, "ws");
   }
 
   bodyParse(obj: unknown) {

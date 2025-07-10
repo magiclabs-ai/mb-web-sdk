@@ -14,6 +14,7 @@ export default defineConfig({
     WS_RECONNECT_INTERVAL: process.env.WS_RECONNECT_INTERVAL!,
     WS_MAX_RECONNECTION_ATTEMPTS: process.env.WS_MAX_RECONNECTION_ATTEMPTS!,
     DEFAULT_TIMEOUT: process.env.DEFAULT_TIMEOUT!,
+    PHOTO_DEPRECATION_WARNING_THRESHOLD: process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD!,
   },
   target: "esnext",
   outDir: "dist",

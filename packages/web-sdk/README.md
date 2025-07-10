@@ -89,6 +89,8 @@ await api.photos.analyze(
 );
 ```
 
+_⚠️ If more than 5% of the returned images are not selected, you will receive a `warning.photo-access-deprecated` event before the final event._
+
 ### Projects
 
 ### Autofill Options

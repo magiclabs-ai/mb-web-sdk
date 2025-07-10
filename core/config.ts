@@ -8,3 +8,6 @@ export const maxReconnectionAttempts: number = process.env.WS_MAX_RECONNECTION_A
 export const defaultTimeout: number = process.env.DEFAULT_TIMEOUT
   ? Number.parseInt(process.env.DEFAULT_TIMEOUT)
   : 30000;
+export const photoDeprecationWarningThreshold: number = process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD
+  ? Number.parseInt(process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD)
+  : 5;

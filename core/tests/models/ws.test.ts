@@ -23,6 +23,12 @@ describe("WS", () => {
     expect(ws.isConnectionOpen()).toBe(true);
   });
 
+  test("should return false if connection is connecting", async () => {
+    ws.connection = { readyState: 0 } as WebSocket;
+    const res = await ws.connect();
+    expect(res).toBe(false);
+  });
+
   test("should return true if connection is already open", async () => {
     ws.connection = { readyState: 1 } as WebSocket;
     const res = await ws.connect();

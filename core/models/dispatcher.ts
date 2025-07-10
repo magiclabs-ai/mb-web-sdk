@@ -3,12 +3,12 @@ import { defaultTimeout } from "../config";
 import { msFormat } from "../utils/toolbox";
 import _ from "lodash";
 
-type DispatcherEventType = "fetch" | "ws";
+export type DispatcherEventType = "fetch" | "ws";
 
 export type WSMessage<T> = {
   eventType?: string;
   eventName: string;
-  request?: unknown;
+  requestId?: unknown;
   result?: T;
 };
 
@@ -43,6 +43,9 @@ export class DispatcherEvent {
   }
 }
 
+export type AddEvent = (type: DispatcherEventType, name: string, message?: WSMessage<unknown>) => void;
+export type BeforeFinalEvent = (events: Array<DispatcherEvent>, addEvent: AddEvent, requestId: string) => void;
+
 export class Request {
   id: string;
   createdAt: number;
@@ -52,6 +55,7 @@ export class Request {
   expectedEvents?: number;
   finalEventName?: string;
   timeoutEventName?: string;
+  beforeFinalEvent?: BeforeFinalEvent;
   timeout?: NodeJS.Timeout;
   debugMode: boolean;
 
@@ -61,16 +65,17 @@ export class Request {
       finalEventName?: string;
       expectedEvents?: number;
       timeoutEventName?: string;
+      beforeFinalEvent?: BeforeFinalEvent;
       debugMode: boolean;
     },
   ) {
-    // temporary id before receiving the real id from the server
     this.id = faker.string.uuid();
     this.createdAt = Date.now();
     this.endpoint = endpoint;
     this.expectedEvents = config?.expectedEvents;
     this.finalEventName = config?.finalEventName;
     this.timeoutEventName = config?.timeoutEventName;
+    this.beforeFinalEvent = config?.beforeFinalEvent;
     this.debugMode = config.debugMode;
 
     if (this.timeoutEventName) {
@@ -87,7 +92,7 @@ export class Request {
     return {
       eventName,
       requestId: this.id,
-    } as WSMessage<unknown>;
+    };
   }
 
   addFinalEvent() {
@@ -113,6 +118,9 @@ export class Request {
     }
 
     if (this.expectedEvents === this.events.length && this.finalEventName) {
+      if (this.beforeFinalEvent) {
+        this.beforeFinalEvent(this.events, this.addEvent.bind(this), this.id);
+      }
       this.addFinalEvent();
     }
 
@@ -149,6 +157,7 @@ export class Dispatcher {
       finalEventName: string;
       timeoutEventName?: string;
       expectedEvents?: number;
+      beforeFinalEvent?: BeforeFinalEvent;
     },
   ) {
     const request = new Request(endpoint, { ...config, debugMode: this.debugMode });
