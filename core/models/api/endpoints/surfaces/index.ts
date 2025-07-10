@@ -6,6 +6,11 @@ import { projectSchema } from "@/core/models/project";
 import type { z } from "zod/v4";
 import type { RequestResponse } from "@/core/models/fetcher";
 import { simpleResponseFactory } from "@/core/factories/response";
+import {
+  surfaceAutoAdaptTimeoutDelay,
+  surfaceShuffleTimeoutDelay,
+  surfaceSuggestTimeoutDelay,
+} from "@/core/models/surface";
 
 export const surfaceShuffleBodySchema = projectSchema;
 const surfaceAutoAdaptBodySchema = surfaceShuffleBodySchema;
@@ -29,6 +34,7 @@ export class SurfaceEndpoints {
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designedTimeout",
+      timeoutDelay: surfaceShuffleTimeoutDelay(""),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -55,6 +61,7 @@ export class SurfaceEndpoints {
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designedTimeout",
+      timeoutDelay: surfaceAutoAdaptTimeoutDelay(""),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -81,6 +88,7 @@ export class SurfaceEndpoints {
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designedTimeout",
+      timeoutDelay: surfaceSuggestTimeoutDelay(""),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,

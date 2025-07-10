@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { defaultTimeout } from "../config";
+import { defaultTimeoutDelay } from "../config";
 import { msFormat } from "../utils/toolbox";
 import _ from "lodash";
 
@@ -67,6 +67,7 @@ export class Request {
       timeoutEventName?: string;
       beforeFinalEvent?: BeforeFinalEvent;
       debugMode: boolean;
+      timeoutDelay?: number;
     },
   ) {
     this.id = faker.string.uuid();
@@ -79,12 +80,12 @@ export class Request {
     this.debugMode = config.debugMode;
 
     if (this.timeoutEventName) {
-      const timeout = defaultTimeout;
-
+      const timeoutDelay = config?.timeoutDelay || defaultTimeoutDelay;
+      console.log(`the timeout for ${this.timeoutEventName} is ${timeoutDelay}`);
       this.timeout = setTimeout(() => {
         this.addEvent("ws", this.timeoutEventName as string, this.finalEventMessage(this.timeoutEventName as string));
         this.addFinalEvent();
-      }, timeout);
+      }, timeoutDelay);
     }
   }
 
@@ -156,6 +157,7 @@ export class Dispatcher {
     config?: {
       finalEventName: string;
       timeoutEventName?: string;
+      timeoutDelay?: number;
       expectedEvents?: number;
       beforeFinalEvent?: BeforeFinalEvent;
     },

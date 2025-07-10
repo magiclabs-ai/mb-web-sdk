@@ -1,4 +1,10 @@
-import type { Project, projectAutofillBodySchema } from "@/core/models/project";
+import {
+  projectResizeTimeoutDelay,
+  projectRestyleTimeoutDelay,
+  type Project,
+  type projectAutofillBodySchema,
+  projectAutofillTimeoutDelay,
+} from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import type { z } from "zod/v4";
 import { formatObject } from "@/core/utils/toolbox";
@@ -25,6 +31,7 @@ export class ProjectEndpoints {
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designedTimeout",
+      timeoutDelay: projectAutofillTimeoutDelay(body.images.length),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -77,6 +84,7 @@ export class ProjectEndpoints {
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designedTimeout",
+      timeoutDelay: projectRestyleTimeoutDelay(body.images.length),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -105,6 +113,7 @@ export class ProjectEndpoints {
     const request = this.magicBookAPI.dispatcher.add(path, {
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designedTimeout",
+      timeoutDelay: projectResizeTimeoutDelay(body.images.length),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,

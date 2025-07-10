@@ -56,3 +56,21 @@ export type Surface = z.infer<typeof surfaceSchema>;
 export type LayeredItem = z.infer<typeof layeredItemSchema>;
 export type PhotoContent = z.infer<typeof photoContentSchema>;
 export type BorderContent = z.infer<typeof borderContentSchema>;
+
+export function surfaceSuggestTimeoutDelay(surfaceType: string) {
+  if (surfaceType === "photo") {
+    return 4000; // 4 seconds
+  }
+  return 8000; // 8 seconds
+}
+
+export function surfaceShuffleTimeoutDelay(surfaceType: string) {
+  if (surfaceType === "photo") {
+    return 2000; // 2 seconds
+  }
+  return 3000; // 3 seconds
+}
+
+export function surfaceAutoAdaptTimeoutDelay(surfaceType: string) {
+  return surfaceShuffleTimeoutDelay(surfaceType);
+}
