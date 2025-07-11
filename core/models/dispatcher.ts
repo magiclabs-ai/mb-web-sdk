@@ -49,6 +49,7 @@ export type BeforeFinalEvent = (events: Array<DispatcherEvent>, addEvent: AddEve
 export class Request {
   id: string;
   createdAt: number;
+  eventType?: string;
   finishedAt?: number;
   events?: DispatcherEvent[];
   endpoint: string;
@@ -62,6 +63,7 @@ export class Request {
   constructor(
     endpoint: string,
     config: {
+      eventType?: string;
       finalEventName?: string;
       expectedEvents?: number;
       timeoutEventName?: string;
@@ -73,6 +75,7 @@ export class Request {
     this.id = faker.string.uuid();
     this.createdAt = Date.now();
     this.endpoint = endpoint;
+    this.eventType = config?.eventType;
     this.expectedEvents = config?.expectedEvents;
     this.finalEventName = config?.finalEventName;
     this.timeoutEventName = config?.timeoutEventName;
@@ -91,6 +94,7 @@ export class Request {
 
   finalEventMessage(eventName: string = this.finalEventName as string) {
     return {
+      eventType: this.eventType,
       eventName,
       requestId: this.id,
     };
@@ -155,6 +159,7 @@ export class Dispatcher {
   add(
     endpoint: string,
     config?: {
+      eventType: string;
       finalEventName: string;
       timeoutEventName?: string;
       timeoutDelay?: number;

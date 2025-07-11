@@ -57,20 +57,28 @@ export type LayeredItem = z.infer<typeof layeredItemSchema>;
 export type PhotoContent = z.infer<typeof photoContentSchema>;
 export type BorderContent = z.infer<typeof borderContentSchema>;
 
-export function surfaceSuggestTimeoutDelay(surfaceType: string) {
-  if (surfaceType === "photo") {
-    return 4000; // 4 seconds
+export function surfaceSuggestTimeoutDelay(surface: Surface) {
+  if (isSpread(surface)) {
+    return 8000; // 8 seconds
   }
-  return 8000; // 8 seconds
+  return 4000; // 4 seconds
 }
 
-export function surfaceShuffleTimeoutDelay(surfaceType: string) {
-  if (surfaceType === "photo") {
-    return 2000; // 2 seconds
+export function surfaceShuffleTimeoutDelay(surface: Surface) {
+  if (isSpread(surface)) {
+    return 3000; // 3 seconds
   }
-  return 3000; // 3 seconds
+  return 2000; // 2 seconds
 }
 
-export function surfaceAutoAdaptTimeoutDelay(surfaceType: string) {
-  return surfaceShuffleTimeoutDelay(surfaceType);
+export function surfaceAutoAdaptTimeoutDelay(surface: Surface) {
+  return surfaceShuffleTimeoutDelay(surface);
+}
+
+export function getSurfaceType(surface: Surface) {
+  return surface.surfaceNumber === -2 || surface.surfaceNumber === -4 ? "cover" : "inside";
+}
+
+export function isSpread(surface: Surface) {
+  return surface.surfaceMetadata.some((m) => m.name === "renderingSurfaceType" && m.value === "spread");
 }

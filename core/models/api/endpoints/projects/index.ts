@@ -29,8 +29,9 @@ export class ProjectEndpoints {
   async autofill(body: ProjectAutofillBody) {
     const path = "/designer/projects/autofill";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "project.autofill",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
+      timeoutEventName: "surfaces.designed-timeout",
       timeoutDelay: projectAutofillTimeoutDelay(body.images.length),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
@@ -82,9 +83,10 @@ export class ProjectEndpoints {
   async restyle(body: Project) {
     const path = "/designer/projects/restyle";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "project.restyle",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
-      timeoutDelay: projectRestyleTimeoutDelay(body.images.length),
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: projectRestyleTimeoutDelay(body.surfaces),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -111,9 +113,10 @@ export class ProjectEndpoints {
   async resize(body: Project) {
     const path = "/designer/projects/resize";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "project.resize",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
-      timeoutDelay: projectResizeTimeoutDelay(body.images.length),
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: projectResizeTimeoutDelay(body.surfaces),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,

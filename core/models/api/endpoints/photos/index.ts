@@ -11,10 +11,11 @@ export class PhotoEndpoints {
   async analyze(body: PhotoAnalyzeBody) {
     const path = "/analyzer/photos/analyze";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "photo.analyze",
       finalEventName: "photos.analyzed",
       expectedEvents: body.length + 1,
       beforeFinalEvent: photoDeprecationCheck,
-      timeoutEventName: "photos.analyzerTimeout",
+      timeoutEventName: "photos.analyze-timeout",
       timeoutDelay: photoAnalyzeTimeoutDelay(body.length),
     });
 

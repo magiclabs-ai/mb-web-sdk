@@ -1,3 +1,4 @@
+import { surfacesFactory } from "@/core/factories/surface";
 import {
   projectAutofillTimeoutDelay,
   projectRestyleTimeoutDelay,
@@ -16,13 +17,13 @@ describe("Project", () => {
     expect(projectAutofillTimeoutDelay(801)).toBe(30000);
   });
   test("projectRestyleTimeoutDelay", async () => {
-    expect(projectRestyleTimeoutDelay(1)).toBe(10000);
-    expect(projectRestyleTimeoutDelay(50)).toBe(10000);
-    expect(projectRestyleTimeoutDelay(51)).toBe(20000);
+    expect(projectRestyleTimeoutDelay(surfacesFactory(1))).toBe(10000);
+    expect(projectRestyleTimeoutDelay(surfacesFactory(50))).toBe(10000);
+    expect(projectRestyleTimeoutDelay(surfacesFactory(51))).toBe(20000);
   });
   test("projectResizeTimeoutDelay", async () => {
-    expect(projectResizeTimeoutDelay(1)).toBe(10000);
-    expect(projectResizeTimeoutDelay(50)).toBe(10000);
-    expect(projectResizeTimeoutDelay(51)).toBe(20000);
+    expect(projectResizeTimeoutDelay(surfacesFactory(1))).toBe(10000);
+    expect(projectResizeTimeoutDelay(surfacesFactory(50))).toBe(10000);
+    expect(projectResizeTimeoutDelay(surfacesFactory(51))).toBe(20000);
   });
 });

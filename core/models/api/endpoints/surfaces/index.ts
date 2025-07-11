@@ -32,9 +32,10 @@ export class SurfaceEndpoints {
     const qs = options?.keepImageSequence ? "?keep-image-sequence=true" : "";
     const path = `/designer/surfaces/shuffle${qs}`;
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "surface.shuffle",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
-      timeoutDelay: surfaceShuffleTimeoutDelay(""),
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: surfaceShuffleTimeoutDelay(body.surfaces[0]),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -59,9 +60,10 @@ export class SurfaceEndpoints {
   async autoAdapt(body: SurfaceAutoAdaptBody) {
     const path = "/designer/surfaces/autoadapt";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "surface.autoadapt",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
-      timeoutDelay: surfaceAutoAdaptTimeoutDelay(""),
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: surfaceAutoAdaptTimeoutDelay(body.surfaces[0]),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -86,9 +88,10 @@ export class SurfaceEndpoints {
   async suggest(body: SurfaceSuggestBody) {
     const path = "/designer/surfaces/suggest";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "surface.suggest",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
-      timeoutDelay: surfaceSuggestTimeoutDelay(""),
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: surfaceSuggestTimeoutDelay(body.surfaces[0]),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,

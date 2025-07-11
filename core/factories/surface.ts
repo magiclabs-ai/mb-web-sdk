@@ -2,7 +2,7 @@ import type { BorderContent, LayeredItem, PhotoContent, Surface } from "@/core/m
 import { faker } from "@faker-js/faker";
 import { metadataFactory } from "./metadata";
 
-export function surfaceFactory(): Surface {
+export function surfaceFactory(props: Partial<Surface> = {}): Surface {
   return {
     surfaceNumber: faker.number.int(),
     surfaceData: {
@@ -15,6 +15,7 @@ export function surfaceFactory(): Surface {
     },
     surfaceMetadata: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, metadataFactory),
     version: "4.0",
+    ...props,
   };
 }
 
@@ -59,4 +60,8 @@ function photoContentFactory(): PhotoContent {
       journalCore: faker.lorem.word(),
     },
   };
+}
+
+export function surfacesFactory(surfaceCount: number): Surface[] {
+  return Array.from({ length: surfaceCount }).map((_, index) => surfaceFactory({ surfaceNumber: index }));
 }
