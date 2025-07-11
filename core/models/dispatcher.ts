@@ -84,7 +84,6 @@ export class Request {
 
     if (this.timeoutEventName) {
       const timeoutDelay = config?.timeoutDelay || defaultTimeoutDelay;
-      console.log(`the timeout for ${this.timeoutEventName} is ${timeoutDelay}`);
       this.timeout = setTimeout(() => {
         this.addEvent("ws", this.timeoutEventName as string, this.finalEventMessage(this.timeoutEventName as string));
         this.addFinalEvent();
