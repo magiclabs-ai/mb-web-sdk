@@ -51,17 +51,15 @@ export const projectAutofillBodySchema = projectSchema.omit({
 
 export type Project = z.infer<typeof projectSchema>;
 
-export function projectAutofillTimeoutDelay(photoCount: number) {
-  if (photoCount <= 100) {
-    return 10000; // 10 seconds
-  }
-  if (photoCount <= 400) {
+export function projectAutofillTimeoutDelay(maxTargetPageRange: number) {
+  if (maxTargetPageRange <= 40) {
     return 15000; // 15 seconds
   }
-  if (photoCount <= 800) {
+  if (maxTargetPageRange <= 80) {
     return 20000; // 20 seconds
   }
-  return 30000; // 30 seconds
+
+  return 25000; // 25 seconds
 }
 
 export function projectRestyleTimeoutDelay(surfaces: Surface[]) {

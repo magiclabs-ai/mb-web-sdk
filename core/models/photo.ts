@@ -109,13 +109,13 @@ export function photoDeprecationCheck(events: DispatcherEvent[], addEvent: AddEv
 
 export function photoAnalyzeTimeoutDelay(photoCount: number) {
   if (photoCount <= 100) {
-    return 10000; // 10 seconds
-  }
-  if (photoCount <= 400) {
     return 15000; // 15 seconds
   }
-  if (photoCount <= 800) {
+  if (photoCount <= 400) {
     return 20000; // 20 seconds
   }
-  return 30000; // 30 seconds
+  if (photoCount <= 800) {
+    return 25000; // 25 seconds
+  }
+  return 45000; // 45 seconds
 }

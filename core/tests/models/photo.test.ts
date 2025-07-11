@@ -6,13 +6,13 @@ import type { DispatcherEvent } from "@/core/models/dispatcher";
 
 describe("Photo", () => {
   test("photoAnalyzeTimeoutDelay", async () => {
-    expect(photoAnalyzeTimeoutDelay(1)).toBe(10000);
-    expect(photoAnalyzeTimeoutDelay(100)).toBe(10000);
-    expect(photoAnalyzeTimeoutDelay(101)).toBe(15000);
-    expect(photoAnalyzeTimeoutDelay(400)).toBe(15000);
-    expect(photoAnalyzeTimeoutDelay(401)).toBe(20000);
-    expect(photoAnalyzeTimeoutDelay(800)).toBe(20000);
-    expect(photoAnalyzeTimeoutDelay(801)).toBe(30000);
+    expect(photoAnalyzeTimeoutDelay(1)).toBe(15000);
+    expect(photoAnalyzeTimeoutDelay(100)).toBe(15000);
+    expect(photoAnalyzeTimeoutDelay(101)).toBe(20000);
+    expect(photoAnalyzeTimeoutDelay(400)).toBe(20000);
+    expect(photoAnalyzeTimeoutDelay(401)).toBe(25000);
+    expect(photoAnalyzeTimeoutDelay(800)).toBe(25000);
+    expect(photoAnalyzeTimeoutDelay(801)).toBe(45000);
   });
 });
 
