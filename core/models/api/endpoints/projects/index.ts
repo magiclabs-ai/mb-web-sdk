@@ -32,7 +32,7 @@ export class ProjectEndpoints {
       eventType: "project.autofill",
       finalEventName: "surfaces.designed",
       timeoutEventName: "surfaces.designed-timeout",
-      timeoutDelay: projectAutofillTimeoutDelay(body.images.length),
+      timeoutDelay: projectAutofillTimeoutDelay(body.bookFormat.targetPageRange[1]),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,

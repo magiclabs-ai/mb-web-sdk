@@ -8,6 +8,8 @@ import { describe, expect, test } from "vitest";
 
 describe("Project", () => {
   test("projectAutofillTimeoutDelay", async () => {
+    // @ts-expect-error - undefined is not a number
+    expect(projectAutofillTimeoutDelay(undefined)).toBe(25000);
     expect(projectAutofillTimeoutDelay(1)).toBe(15000);
     expect(projectAutofillTimeoutDelay(40)).toBe(15000);
     expect(projectAutofillTimeoutDelay(41)).toBe(20000);
