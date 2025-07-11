@@ -12,7 +12,7 @@ describe("config", () => {
   beforeEach(() => {
     process.env.API_HOST = "";
     process.env.WS_RECONNECT_INTERVAL = "";
-    process.env.DEFAULT_TIMEOUT = "";
+    process.env.DEFAULT_TIMEOUT_DELAY = "";
     process.env.WS_MAX_RECONNECTION_ATTEMPTS = "";
     process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD = "";
   });
@@ -50,10 +50,10 @@ describe("config", () => {
     expect(defaultApiHost).toBe("api.example.com");
   });
 
-  test("should parse DEFAULT_TIMEOUT from environment variable", async () => {
-    process.env.DEFAULT_TIMEOUT = "10000";
-    const { defaultTimeout } = await loadConfig();
-    expect(defaultTimeout).toBe(10000);
+  test("should parse DEFAULT_TIMEOUT_DELAY from environment variable", async () => {
+    process.env.DEFAULT_TIMEOUT_DELAY = "10000";
+    const { defaultTimeoutDelay } = await loadConfig();
+    expect(defaultTimeoutDelay).toBe(10000);
   });
 
   test("should have photoDeprecationWarningThreshold as 5 if PHOTO_DEPRECATION_WARNING_THRESHOLD is not set", async () => {

@@ -1,4 +1,10 @@
-import type { Project, projectAutofillBodySchema } from "@/core/models/project";
+import {
+  projectResizeTimeoutDelay,
+  projectRestyleTimeoutDelay,
+  type Project,
+  type projectAutofillBodySchema,
+  projectAutofillTimeoutDelay,
+} from "@/core/models/project";
 import type { MagicBookAPI } from "../..";
 import type { z } from "zod/v4";
 import { formatObject } from "@/core/utils/toolbox";
@@ -23,8 +29,10 @@ export class ProjectEndpoints {
   async autofill(body: ProjectAutofillBody) {
     const path = "/designer/projects/autofill";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "project.autofill",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: projectAutofillTimeoutDelay(body.bookFormat.targetPageRange[1]),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -75,8 +83,10 @@ export class ProjectEndpoints {
   async restyle(body: Project) {
     const path = "/designer/projects/restyle";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "project.restyle",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: projectRestyleTimeoutDelay(body.surfaces),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,
@@ -103,8 +113,10 @@ export class ProjectEndpoints {
   async resize(body: Project) {
     const path = "/designer/projects/resize";
     const request = this.magicBookAPI.dispatcher.add(path, {
+      eventType: "project.resize",
       finalEventName: "surfaces.designed",
-      timeoutEventName: "surfaces.designedTimeout",
+      timeoutEventName: "surfaces.designed-timeout",
+      timeoutDelay: projectResizeTimeoutDelay(body.surfaces),
     });
     const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
       path,

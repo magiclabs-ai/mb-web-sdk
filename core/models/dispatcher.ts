@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { defaultTimeout } from "../config";
+import { defaultTimeoutDelay } from "../config";
 import { msFormat } from "../utils/toolbox";
 import _ from "lodash";
 
@@ -49,6 +49,7 @@ export type BeforeFinalEvent = (events: Array<DispatcherEvent>, addEvent: AddEve
 export class Request {
   id: string;
   createdAt: number;
+  eventType?: string;
   finishedAt?: number;
   events?: DispatcherEvent[];
   endpoint: string;
@@ -62,16 +63,19 @@ export class Request {
   constructor(
     endpoint: string,
     config: {
+      eventType?: string;
       finalEventName?: string;
       expectedEvents?: number;
       timeoutEventName?: string;
       beforeFinalEvent?: BeforeFinalEvent;
       debugMode: boolean;
+      timeoutDelay?: number;
     },
   ) {
     this.id = faker.string.uuid();
     this.createdAt = Date.now();
     this.endpoint = endpoint;
+    this.eventType = config?.eventType;
     this.expectedEvents = config?.expectedEvents;
     this.finalEventName = config?.finalEventName;
     this.timeoutEventName = config?.timeoutEventName;
@@ -79,17 +83,17 @@ export class Request {
     this.debugMode = config.debugMode;
 
     if (this.timeoutEventName) {
-      const timeout = defaultTimeout;
-
+      const timeoutDelay = config?.timeoutDelay || defaultTimeoutDelay;
       this.timeout = setTimeout(() => {
         this.addEvent("ws", this.timeoutEventName as string, this.finalEventMessage(this.timeoutEventName as string));
         this.addFinalEvent();
-      }, timeout);
+      }, timeoutDelay);
     }
   }
 
   finalEventMessage(eventName: string = this.finalEventName as string) {
     return {
+      eventType: this.eventType,
       eventName,
       requestId: this.id,
     };
@@ -154,8 +158,10 @@ export class Dispatcher {
   add(
     endpoint: string,
     config?: {
+      eventType: string;
       finalEventName: string;
       timeoutEventName?: string;
+      timeoutDelay?: number;
       expectedEvents?: number;
       beforeFinalEvent?: BeforeFinalEvent;
     },

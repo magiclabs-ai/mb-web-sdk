@@ -1,4 +1,6 @@
 import { z } from "zod/v4";
+import { photoDeprecationWarningThreshold } from "../config";
+import type { AddEvent, DispatcherEvent } from "./dispatcher";
 
 // PhotoAnalyzeBody schema
 export const photoAnalyzeBodySchema = z.array(
@@ -85,3 +87,35 @@ export type PhotoAnalyzeBody = z.infer<typeof photoAnalyzeBodySchema>;
 export type AnalyzedPhoto = z.infer<typeof analyzedPhotoSchema>;
 export type Label = z.infer<typeof labelSchema>;
 export type Face = z.infer<typeof faceSchema>;
+
+export function photoDeprecationCheck(events: DispatcherEvent[], addEvent: AddEvent, requestId: string) {
+  const analyzedPhotos = events
+    .filter((event) => event.name === "photo.analyzed" && event.message?.result)
+    .map((event) => event.message!.result as AnalyzedPhoto);
+
+  if (!analyzedPhotos.length) return;
+
+  const unselectedCount = analyzedPhotos.filter((photo) => !photo.selected).length;
+  const unselectedPercentage = (unselectedCount * 100) / analyzedPhotos.length;
+
+  if (unselectedPercentage > photoDeprecationWarningThreshold) {
+    const eventName = "warning.photo-access-deprecated";
+    addEvent("ws", eventName, {
+      eventName,
+      requestId,
+    });
+  }
+}
+
+export function photoAnalyzeTimeoutDelay(photoCount: number) {
+  if (photoCount <= 100) {
+    return 15000; // 15 seconds
+  }
+  if (photoCount <= 400) {
+    return 20000; // 20 seconds
+  }
+  if (photoCount <= 800) {
+    return 25000; // 25 seconds
+  }
+  return 45000; // 45 seconds
+}
