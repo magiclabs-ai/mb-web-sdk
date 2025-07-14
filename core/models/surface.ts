@@ -59,16 +59,16 @@ export type BorderContent = z.infer<typeof borderContentSchema>;
 
 export function surfaceSuggestTimeoutDelay(surface: Surface) {
   if (isSpread(surface)) {
-    return 12000; // 12 seconds
+    return 22000; // 22 seconds
   }
-  return 6000; // 6 seconds
+  return 16000; // 16 seconds
 }
 
 export function surfaceShuffleTimeoutDelay(surface: Surface) {
   if (isSpread(surface)) {
-    return 8000; // 8 seconds
+    return 18000; // 18 seconds
   }
-  return 5000; // 5 seconds
+  return 15000; // 15 seconds
 }
 
 export function surfaceAutoAdaptTimeoutDelay(surface: Surface) {

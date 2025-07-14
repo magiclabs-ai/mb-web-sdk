@@ -53,13 +53,13 @@ export type Project = z.infer<typeof projectSchema>;
 
 export function projectAutofillTimeoutDelay(maxTargetPageRange: number) {
   if (maxTargetPageRange <= 40) {
-    return 15000; // 15 seconds
+    return 30000; // 30 seconds
   }
   if (maxTargetPageRange <= 80) {
-    return 20000; // 20 seconds
+    return 35000; // 35 seconds
   }
 
-  return 25000; // 25 seconds
+  return 40000; // 40 seconds
 }
 
 export function projectRestyleTimeoutDelay(surfaces: Surface[]) {
@@ -67,9 +67,9 @@ export function projectRestyleTimeoutDelay(surfaces: Surface[]) {
   const pages = lastSurface.surfaceNumber + (isSpread(lastSurface) ? 2 : 1);
 
   if (pages <= 50) {
-    return 10000; // 10 seconds
+    return 20000; // 10 seconds
   }
-  return 20000; // 20 seconds
+  return 30000; // 30 seconds
 }
 
 export function projectResizeTimeoutDelay(surfaces: Surface[]) {

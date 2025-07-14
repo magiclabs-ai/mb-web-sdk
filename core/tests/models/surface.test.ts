@@ -15,16 +15,16 @@ describe("Surface", () => {
   });
 
   test("surfaceShuffleTimeoutDelay", async () => {
-    expect(surfaceShuffleTimeoutDelay(SinglePageSurface)).toBe(5000);
-    expect(surfaceShuffleTimeoutDelay(SpreadPageSurface)).toBe(8000);
+    expect(surfaceShuffleTimeoutDelay(SinglePageSurface)).toBe(15000);
+    expect(surfaceShuffleTimeoutDelay(SpreadPageSurface)).toBe(18000);
   });
   test("surfaceAutoAdaptTimeoutDelay", async () => {
-    expect(surfaceAutoAdaptTimeoutDelay(SinglePageSurface)).toBe(5000);
-    expect(surfaceAutoAdaptTimeoutDelay(SpreadPageSurface)).toBe(8000);
+    expect(surfaceAutoAdaptTimeoutDelay(SinglePageSurface)).toBe(15000);
+    expect(surfaceAutoAdaptTimeoutDelay(SpreadPageSurface)).toBe(18000);
   });
   test("surfaceSuggestTimeoutDelay", async () => {
-    expect(surfaceSuggestTimeoutDelay(SinglePageSurface)).toBe(6000);
-    expect(surfaceSuggestTimeoutDelay(SpreadPageSurface)).toBe(12000);
+    expect(surfaceSuggestTimeoutDelay(SinglePageSurface)).toBe(16000);
+    expect(surfaceSuggestTimeoutDelay(SpreadPageSurface)).toBe(22000);
   });
   test("isSpread", async () => {
     expect(isSpread(SinglePageSurface)).toBe(false);
