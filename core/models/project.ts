@@ -67,7 +67,7 @@ export function projectRestyleTimeoutDelay(surfaces: Surface[]) {
   const pages = lastSurface.surfaceNumber + (isSpread(lastSurface) ? 2 : 1);
 
   if (pages <= 50) {
-    return 20000; // 10 seconds
+    return 20000; // 20 seconds
   }
   return 30000; // 30 seconds
 }
