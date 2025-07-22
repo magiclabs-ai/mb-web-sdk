@@ -110,18 +110,22 @@ export class MagicBookAPI {
   async imageDensities(sku: string, imageCount: number, imageFilteringLevel: string) {
     const path = `mmb/v1/designoptions/sku/${sku}/imagecount/${imageCount}/imagefilteringlevel/${imageFilteringLevel}/`;
     const request = this.dispatcher.add(path);
-    const res = await this.fetcher.call<DesignOptionsDensitiesResponse>({
-      path,
-      options: {
-        method: "GET",
-      },
-      factory: async () => {
-        return densitiesFactory();
-      },
-    });
 
-    request.addEvent("fetch", path);
-
-    return densitiesSchema.parse(res.densities);
+    try {
+      const res = await this.fetcher.call<DesignOptionsDensitiesResponse>({
+        path,
+        options: {
+          method: "GET",
+        },
+        factory: async () => {
+          return densitiesFactory();
+        },
+      });
+      request.addEvent("fetch", path);
+      return densitiesSchema.parse(res.densities);
+    } catch (error) {
+      request.addEvent("fetch", path);
+      throw error;
+    }
   }
 }

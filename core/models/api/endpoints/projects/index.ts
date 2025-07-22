@@ -34,50 +34,59 @@ export class ProjectEndpoints {
       timeoutEventName: "surfaces.designed-timeout",
       timeoutDelay: projectAutofillTimeoutDelay(body.bookFormat.targetPageRange[1]),
     });
-    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
-      path,
-      options: {
-        method: "POST",
-        headers: {
-          "magic-request-id": request.id,
+
+    try {
+      const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+        path,
+        options: {
+          method: "POST",
+          headers: {
+            "magic-request-id": request.id,
+          },
+          body: this.magicBookAPI.bodyParse(body),
         },
-        body: this.magicBookAPI.bodyParse(body),
-      },
-      factory: async () => {
-        Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
-          eventHandler([surfaceFactory()], "surfaces.designed"),
-        );
-        return simpleResponseFactory();
-      },
-    });
-
-    request.addEvent("fetch", path);
-
-    return res;
+        factory: async () => {
+          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
+            eventHandler([surfaceFactory()], "surfaces.designed"),
+          );
+          return simpleResponseFactory();
+        },
+      });
+      request.addEvent("fetch", path);
+      return res;
+    } catch (error) {
+      request.addEvent("fetch", path);
+      request.finish();
+      throw error;
+    }
   }
 
   async autofillOptions(imageCount: number) {
     const path = `/designer/projects/autofill/options?image_count=${imageCount}`;
     const request = this.magicBookAPI.dispatcher.add(path);
-    const res = await this.magicBookAPI.fetcher.call<ProjectAutofillResponse>({
-      path,
-      options: {
-        method: "GET",
-        headers: {
-          "magic-request-id": request.id,
+
+    try {
+      const res = await this.magicBookAPI.fetcher.call<ProjectAutofillResponse>({
+        path,
+        options: {
+          method: "GET",
+          headers: {
+            "magic-request-id": request.id,
+          },
         },
-      },
-      factory: async () => {
-        return {
-          options: optionsFactory(),
-          requestId: faker.string.ulid(),
-        } as ProjectAutofillResponse;
-      },
-    });
-
-    request.addEvent("fetch", path);
-
-    return optionsSchema.parse(formatObject(res.options, { snakeToCamelCase: true }));
+        factory: async () => {
+          return {
+            options: optionsFactory(),
+            requestId: faker.string.ulid(),
+          } as ProjectAutofillResponse;
+        },
+      });
+      request.addEvent("fetch", path);
+      return optionsSchema.parse(formatObject(res.options, { snakeToCamelCase: true }));
+    } catch (error) {
+      request.addEvent("fetch", path);
+      throw error;
+    }
   }
 
   async restyle(body: Project) {
@@ -88,26 +97,31 @@ export class ProjectEndpoints {
       timeoutEventName: "surfaces.designed-timeout",
       timeoutDelay: projectRestyleTimeoutDelay(body.surfaces),
     });
-    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
-      path,
-      options: {
-        method: "POST",
-        headers: {
-          "magic-request-id": request.id,
+
+    try {
+      const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+        path,
+        options: {
+          method: "POST",
+          headers: {
+            "magic-request-id": request.id,
+          },
+          body: this.magicBookAPI.bodyParse(body),
         },
-        body: this.magicBookAPI.bodyParse(body),
-      },
-      factory: async () => {
-        Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-          eventHandler([surfaceFactory()], "surfaces.designed");
-        });
-        return simpleResponseFactory();
-      },
-    });
-
-    request.addEvent("fetch", path);
-
-    return res;
+        factory: async () => {
+          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
+            eventHandler([surfaceFactory()], "surfaces.designed");
+          });
+          return simpleResponseFactory();
+        },
+      });
+      request.addEvent("fetch", path);
+      return res;
+    } catch (error) {
+      request.addEvent("fetch", path);
+      request.finish();
+      throw error;
+    }
   }
 
   async resize(body: Project) {
@@ -118,25 +132,30 @@ export class ProjectEndpoints {
       timeoutEventName: "surfaces.designed-timeout",
       timeoutDelay: projectResizeTimeoutDelay(body.surfaces),
     });
-    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
-      path,
-      options: {
-        method: "POST",
-        headers: {
-          "magic-request-id": request.id,
+
+    try {
+      const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+        path,
+        options: {
+          method: "POST",
+          headers: {
+            "magic-request-id": request.id,
+          },
+          body: this.magicBookAPI.bodyParse(body),
         },
-        body: this.magicBookAPI.bodyParse(body),
-      },
-      factory: async () => {
-        Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
-          eventHandler([surfaceFactory()], "surfaces.designed");
-        });
-        return simpleResponseFactory();
-      },
-    });
-
-    request.addEvent("fetch", path);
-
-    return res;
+        factory: async () => {
+          Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, async () => {
+            eventHandler([surfaceFactory()], "surfaces.designed");
+          });
+          return simpleResponseFactory();
+        },
+      });
+      request.addEvent("fetch", path);
+      return res;
+    } catch (error) {
+      request.addEvent("fetch", path);
+      request.finish();
+      throw error;
+    }
   }
 }

@@ -18,6 +18,8 @@ describe("Project with debug mode", () => {
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
+    addEventMock.mockClear();
+    finishMock.mockClear();
   });
 
   test("autofillOptions", async () => {
@@ -28,6 +30,16 @@ describe("Project with debug mode", () => {
     expect(addEventMock).toHaveBeenCalled();
 
     expect(res).toStrictEqual(autofillOptions);
+  });
+
+  test("autofillOptions with error", async () => {
+    const imageCount = 20;
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+
+    await expect(api.projects.autofillOptions(imageCount)).rejects.toThrow();
+    expect(addEventMock).toHaveBeenCalled();
   });
 
   test("autofill", async () => {
@@ -48,6 +60,17 @@ describe("Project with debug mode", () => {
     }
   });
 
+  test("autofill with error", async () => {
+    const projectWithoutSurfaces = projectFactory({ noSurfaces: true });
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+
+    await expect(api.projects.autofill(projectWithoutSurfaces)).rejects.toThrow();
+    expect(addEventMock).toHaveBeenCalled();
+    expect(finishMock).toHaveBeenCalled();
+  });
+
   test("restyle", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
@@ -64,6 +87,17 @@ describe("Project with debug mode", () => {
     }
   });
 
+  test("restyle with error", async () => {
+    const projectWithoutSurfaces = projectFactory({ noSurfaces: true });
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+
+    await expect(api.projects.restyle(projectWithoutSurfaces)).rejects.toThrow();
+    expect(addEventMock).toHaveBeenCalled();
+    expect(finishMock).toHaveBeenCalled();
+  });
+
   test("resize", async () => {
     const dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
 
@@ -78,6 +112,17 @@ describe("Project with debug mode", () => {
       expect(surfaceEvent.eventName).toBe("surfaces.designed");
       expect(surfaceSchema.parse(surfaceEvent.result?.[0])).toStrictEqual(surfaceEvent.result?.[0]);
     }
+  });
+
+  test("resize with error", async () => {
+    const projectWithoutSurfaces = projectFactory({ noSurfaces: true });
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+
+    await expect(api.projects.resize(projectWithoutSurfaces)).rejects.toThrow();
+    expect(addEventMock).toHaveBeenCalled();
+    expect(finishMock).toHaveBeenCalled();
   });
 });
 

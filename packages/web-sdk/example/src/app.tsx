@@ -22,33 +22,32 @@ function App() {
   const [project, setProject] = useState<Project>({
     designMode: "automatic",
     occasion: "birthday",
-    style: "DG_39475",
+    style: "DG_39651",
     imageFilteringLevel: "best",
     imageDensityLevel: "high",
     embellishmentLevel: "lots",
     bookFormat: {
-      startFromLeftSide: false,
-      targetPageRange: [20, 40],
+      targetPageRange: [20, 111],
       page: {
-        width: 1920,
-        height: 1080,
+        width: 2385,
+        height: 2385,
+      },
+      bleed: {
+        top: 0.1,
+        right: 0.1,
+        bottom: 0.1,
+        left: 0.1,
       },
       cover: {
-        width: 1920,
-        height: 1080,
+        width: 2505,
+        height: 2910,
       },
       coverWrap: {
-        top: 0.75,
-        right: 0.75,
-        bottom: 0.75,
-        left: 0.75,
-      }, // optional
-      bleed: {
-        top: 0.125,
-        right: 0.0625,
-        bottom: 0.125,
-        left: 0.0625,
-      }, // optional
+        top: 0.85,
+        right: 0.85,
+        bottom: 0.85,
+        left: 0.85,
+      },
     },
     images: photos,
     surfaces: surfaces,
@@ -84,7 +83,7 @@ function App() {
     setMbApi(
       new MagicBookAPI({
         apiKey: import.meta.env.VITE_MB_API_KEY,
-        apiHost: "api.dev.magiclabs-aurora.xyz",
+        apiHost: "api.dev.magiclabs-aurora.io",
         debugMode: true,
         // mock: true,
       }),
@@ -242,25 +241,25 @@ function App() {
           <button type="button" onClick={autofillOptions}>
             Get Autofill Options
           </button>
-          <button type="button" onClick={createProjectWithAutofill} disabled={!hasPhotos}>
+          <button type="button" onClick={createProjectWithAutofill}>
             Create Project with Autofill
           </button>
-          <button type="button" onClick={restyleProject} disabled={!(hasPhotos && hasSurface)}>
+          <button type="button" onClick={restyleProject}>
             Restyle Project
           </button>
-          <button type="button" onClick={resizeProject} disabled={!(hasPhotos && hasSurface)}>
+          <button type="button" onClick={resizeProject}>
             Resize Project
           </button>
         </div>
         <div className="flex flex-col gap-4 items-start p-4">
           <h2 className="pb-1 w-full text-lg font-semibold border-b">Surfaces</h2>
-          <button type="button" onClick={autoAdaptSurface} disabled={!(hasPhotos && hasSurface)}>
+          <button type="button" onClick={autoAdaptSurface}>
             Auto Adapt Surface
           </button>
-          <button type="button" onClick={suggestSurface} disabled={!(hasPhotos && hasSurface)}>
+          <button type="button" onClick={suggestSurface}>
             Suggest Surface
           </button>
-          <button type="button" onClick={shuffleSurface} disabled={!(hasPhotos && hasSurface)}>
+          <button type="button" onClick={shuffleSurface}>
             Shuffle Surface
           </button>
         </div>

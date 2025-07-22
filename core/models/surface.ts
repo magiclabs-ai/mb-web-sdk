@@ -80,5 +80,5 @@ export function getSurfaceType(surface: Surface) {
 }
 
 export function isSpread(surface: Surface) {
-  return surface.surfaceMetadata.some((m) => m.name === "renderingSurfaceType" && m.value === "spread");
+  return surface?.surfaceMetadata?.some((m) => m.name === "renderingSurfaceType" && m.value === "spread");
 }
