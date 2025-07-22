@@ -63,11 +63,13 @@ export function projectAutofillTimeoutDelay(maxTargetPageRange: number) {
 }
 
 export function projectRestyleTimeoutDelay(surfaces: Surface[]) {
-  const lastSurface = surfaces.sort((a, b) => a.surfaceNumber - b.surfaceNumber)[surfaces.length - 1];
-  const pages = lastSurface.surfaceNumber + (isSpread(lastSurface) ? 2 : 1);
+  if (surfaces.length > 0) {
+    const lastSurface = surfaces.sort((a, b) => a.surfaceNumber - b.surfaceNumber)[surfaces.length - 1];
+    const pages = lastSurface.surfaceNumber + (isSpread(lastSurface) ? 2 : 1);
 
-  if (pages <= 50) {
-    return 20000; // 20 seconds
+    if (pages <= 50) {
+      return 20000; // 20 seconds
+    }
   }
   return 30000; // 30 seconds
 }

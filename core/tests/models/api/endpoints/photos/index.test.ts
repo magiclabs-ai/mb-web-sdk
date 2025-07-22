@@ -53,4 +53,13 @@ describe("Photo without debug mode", () => {
     expect(event.eventName).toBe("photo.analyze");
     expect(analyzedPhotoSchema.parse(event.result)).toStrictEqual(event.result);
   });
+
+  test("analyze with error", async () => {
+    const api = new MagicBookAPI({
+      apiKey: "fake key",
+    });
+    await expect(api.photos.analyze(photoAnalyzeBodyFactory())).rejects.toThrow();
+    expect(addEventMock).toHaveBeenCalled();
+    expect(finishMock).toHaveBeenCalled();
+  });
 });

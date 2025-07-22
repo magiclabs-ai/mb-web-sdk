@@ -19,23 +19,27 @@ export class PhotoEndpoints {
       timeoutDelay: photoAnalyzeTimeoutDelay(body.length),
     });
 
-    const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
-      path,
-      options: {
-        method: "POST",
-        headers: {
-          "magic-request-id": request.id,
+    try {
+      const res = await this.magicBookAPI.fetcher.call<RequestResponse>({
+        path,
+        options: {
+          method: "POST",
+          headers: {
+            "magic-request-id": request.id,
+          },
+          body: this.magicBookAPI.bodyParse(body),
         },
-        body: this.magicBookAPI.bodyParse(body),
-      },
-      factory: async () => {
-        Array.from({ length: body.length }, () => eventHandler(photoFactory(), "photo.analyze"));
-        return simpleResponseFactory();
-      },
-    });
-
-    request.addEvent("fetch", path);
-
-    return res;
+        factory: async () => {
+          Array.from({ length: body.length }, () => eventHandler(photoFactory(), "photo.analyze"));
+          return simpleResponseFactory();
+        },
+      });
+      request.addEvent("fetch", path);
+      return res;
+    } catch (error) {
+      request.addEvent("fetch", path);
+      request.finish();
+      throw error;
+    }
   }
 }
