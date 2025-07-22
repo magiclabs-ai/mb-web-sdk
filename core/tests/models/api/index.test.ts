@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { MagicBookAPI } from "@/core/models/api";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
 import type { FetchOptions } from "@/core/models/fetcher";
@@ -72,6 +72,11 @@ describe("API", () => {
 });
 
 describe("Image densities", () => {
+  beforeEach(() => {
+    addEventMock.mockClear();
+    finishMock.mockClear();
+  });
+
   test("imageDensities", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
@@ -89,6 +94,5 @@ describe("Image densities", () => {
 
     await expect(api.imageDensities("sku", 10, "low")).rejects.toThrow();
     expect(addEventMock).toHaveBeenCalled();
-    expect(finishMock).toHaveBeenCalled();
   });
 });

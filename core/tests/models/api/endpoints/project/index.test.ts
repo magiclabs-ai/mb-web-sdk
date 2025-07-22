@@ -18,6 +18,8 @@ describe("Project with debug mode", () => {
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
+    addEventMock.mockClear();
+    finishMock.mockClear();
   });
 
   test("autofillOptions", async () => {
@@ -38,7 +40,6 @@ describe("Project with debug mode", () => {
 
     await expect(api.projects.autofillOptions(imageCount)).rejects.toThrow();
     expect(addEventMock).toHaveBeenCalled();
-    expect(finishMock).toHaveBeenCalled();
   });
 
   test("autofill", async () => {

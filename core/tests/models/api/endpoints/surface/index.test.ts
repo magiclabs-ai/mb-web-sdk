@@ -19,6 +19,8 @@ describe("Surface", () => {
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
+    addEventMock.mockClear();
+    finishMock.mockClear();
   });
 
   test("shuffle", async () => {
