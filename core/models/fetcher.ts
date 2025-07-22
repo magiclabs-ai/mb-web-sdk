@@ -60,7 +60,7 @@ export class Fetcher {
       } else {
         let detail = res.statusText;
         try {
-          detail = JSON.stringify((await res.json())?.detail);
+          detail = JSON.stringify((await res.json())?.message);
         } catch (error) {
           /* empty */
         }
