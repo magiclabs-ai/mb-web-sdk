@@ -4,12 +4,15 @@ import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
 import { faker } from "@faker-js/faker";
-import { eventHandler } from "@/core/utils/event-mock";
 import { SurfaceEndpoints } from "@/core/models/api/endpoints/surfaces";
 import { formatObject } from "@/core/utils/toolbox";
-import { Dispatcher } from "../dispatcher";
+import { Dispatcher, type WSMessage } from "../dispatcher";
 import { z } from "zod/v4";
 import { densitiesFactory } from "@/core/factories/design-options";
+
+export type WSConnectionState = {
+  areConnectionsOpen: boolean;
+};
 
 const densitySchema = z.object({
   minImageCount: z.number(),
@@ -86,13 +89,16 @@ export class MagicBookAPI {
     return (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
   }
 
-  async reconnectWS() {
+  async reconnectWS(): Promise<WSConnectionState> {
     await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
     return { areConnectionsOpen: this.areWSOpen() };
   }
 
   onConnectionStateChange() {
-    eventHandler({ areConnectionsOpen: this.areWSOpen() }, "ws");
+    const onConnectionStateChangeEvent = new CustomEvent<WSMessage<WSConnectionState>>("MagicBook", {
+      detail: { eventName: "ws", result: { areConnectionsOpen: this.areWSOpen() } },
+    });
+    window.dispatchEvent(onConnectionStateChangeEvent);
   }
 
   bodyParse(obj: unknown) {
