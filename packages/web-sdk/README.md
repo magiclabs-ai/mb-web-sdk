@@ -23,6 +23,8 @@ window.addEventListener("MagicBook", ((
 }) as EventListener);
 ```
 
+_⚠️ If the server takes an unexpectedly long time to respond, the SDK will send a timeout **and** a final event._
+
 the events you will receive will have three props
 
 ```json
@@ -372,6 +374,24 @@ To retrieve the image densities, call the `imageDensities` function.
 
 ```ts
 await api.imageDensities(sku: string, imageCount: number, imageFilteringLevel: string);
+```
+
+---
+
+---
+
+#### Styles
+
+To list the active style in the library, call the `styles.list` function.
+
+```ts
+await api.styles.list(); //default qs: ?active=false
+```
+
+To retrieve a specific style by DG_XXXX, call the `styles.retrieve` function.
+
+```ts
+await api.styles.retrieve("DG_XXXX");
 ```
 
 ---
