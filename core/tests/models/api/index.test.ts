@@ -12,7 +12,7 @@ describe("API", () => {
     const api = new MagicBookAPI({
       apiKey,
     });
-    expect((api.fetcher.options as FetchOptions).headers.Authorization).toEqual(`API-Key ${apiKey}`);
+    expect((api.fetcher.options as FetchOptions).headers.Authorization).toEqual(`Api-key ${apiKey}`);
   });
 
   test("without apiKey", async () => {

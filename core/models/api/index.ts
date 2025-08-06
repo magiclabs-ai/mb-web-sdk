@@ -9,6 +9,7 @@ import { formatObject } from "@/core/utils/toolbox";
 import { Dispatcher, type WSMessage } from "../dispatcher";
 import { z } from "zod/v4";
 import { densitiesFactory } from "@/core/factories/design-options";
+import { StyleEndpoints } from "@/core/models/api/endpoints/styles";
 
 export type WSConnectionState = {
   areConnectionsOpen: boolean;
@@ -69,7 +70,7 @@ export class MagicBookAPI {
     } as FetchOptions;
 
     if (!mock) {
-      options.headers.Authorization = `API-Key ${props.apiKey}`;
+      options.headers.Authorization = `Api-key ${props.apiKey}`;
       this.analyzerWS = new WS(
         `${webSocketHost}/ws/analyzer?clientId=${this.clientId}`,
         () => this.onConnectionStateChange(),
@@ -112,6 +113,7 @@ export class MagicBookAPI {
   readonly photos = new PhotoEndpoints(this);
   readonly projects = new ProjectEndpoints(this);
   readonly surfaces = new SurfaceEndpoints(this);
+  readonly styles = new StyleEndpoints(this);
 
   async imageDensities(sku: string, imageCount: number, imageFilteringLevel: string) {
     const path = `mmb/v1/designoptions/sku/${sku}/imagecount/${imageCount}/imagefilteringlevel/${imageFilteringLevel}/`;

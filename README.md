@@ -4,6 +4,10 @@
 
 TypeScript repo that contains `@magiclabs.ai/mb-web-sdk`
 
+## Env setup
+
+Copy the `.env.example` file, rename it to `.env`, and fill in all the values.
+
 ## Usage
 
 You can run the coverage for all the packages at once using the following command
