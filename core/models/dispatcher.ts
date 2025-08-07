@@ -1,7 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { defaultTimeoutDelay } from "../config";
-import { msFormat } from "../utils/toolbox";
+import { msFormat, msToSeconds } from "../utils/toolbox";
 import _ from "lodash";
+import type { MonitoringEventsBody } from "./api/endpoints/monitoring";
 
 export type DispatcherEventType = "fetch" | "ws";
 
@@ -57,8 +58,10 @@ export class Request {
   finalEventName?: string;
   timeoutEventName?: string;
   beforeFinalEvent?: BeforeFinalEvent;
-  timeout?: NodeJS.Timeout;
   debugMode: boolean;
+  timeout?: NodeJS.Timeout;
+  logTimeoutFn: (body: MonitoringEventsBody) => void;
+  hasTimedOut: boolean;
 
   constructor(
     endpoint: string,
@@ -70,6 +73,7 @@ export class Request {
       beforeFinalEvent?: BeforeFinalEvent;
       debugMode: boolean;
       timeoutDelay?: number;
+      logTimeoutFn?: (body: MonitoringEventsBody) => void;
     },
   ) {
     this.id = faker.string.uuid();
@@ -81,10 +85,13 @@ export class Request {
     this.timeoutEventName = config?.timeoutEventName;
     this.beforeFinalEvent = config?.beforeFinalEvent;
     this.debugMode = config.debugMode;
+    this.logTimeoutFn = config.logTimeoutFn || (() => {});
+    this.hasTimedOut = false;
 
     if (this.timeoutEventName) {
       const timeoutDelay = config?.timeoutDelay || defaultTimeoutDelay;
       this.timeout = setTimeout(() => {
+        this.hasTimedOut = true;
         this.addEvent("ws", this.timeoutEventName as string, this.finalEventMessage(this.timeoutEventName as string));
         this.addFinalEvent();
       }, timeoutDelay);
@@ -137,12 +144,21 @@ export class Request {
 
   finish() {
     this.finishedAt = Date.now();
+    const duration = this.finishedAt - this.createdAt;
     if (this.debugMode) {
       console.groupCollapsed(
-        `MB-WEB-SDK::LOG::${this.id} - '${this.endpoint}' - Total duration: ${msFormat(this.finishedAt - this.createdAt)}`,
+        `MB-WEB-SDK::LOG::${this.id} - '${this.endpoint}' - Total duration: ${msFormat(duration)}`,
       );
       console.table(this.events, ["type", "name", "duration"]);
       console.groupEnd();
+    }
+    if (this.hasTimedOut) {
+      this.logTimeoutFn({
+        eventName: this.timeoutEventName || "",
+        eventType: this.eventType || "",
+        requestId: this.id,
+        data: { timeoutDuration: msToSeconds(duration) },
+      });
     }
   }
 }
@@ -150,9 +166,11 @@ export class Request {
 export class Dispatcher {
   requests: Array<Request> = [];
   debugMode: boolean;
+  logTimeoutFn?: (body: MonitoringEventsBody) => void;
 
-  constructor(debugMode?: boolean) {
+  constructor(debugMode?: boolean, logTimeoutFn?: (body: MonitoringEventsBody) => void) {
     this.debugMode = debugMode || false;
+    this.logTimeoutFn = logTimeoutFn;
   }
 
   add(
@@ -166,7 +184,7 @@ export class Dispatcher {
       beforeFinalEvent?: BeforeFinalEvent;
     },
   ) {
-    const request = new Request(endpoint, { ...config, debugMode: this.debugMode });
+    const request = new Request(endpoint, { ...config, debugMode: this.debugMode, logTimeoutFn: this.logTimeoutFn });
     this.requests.push(request);
     return request;
   }

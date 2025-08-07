@@ -48,6 +48,10 @@ export function msFormat(ms: number) {
   return `${(ms / 1000 / 60 / 60).toFixed(0)}h`;
 }
 
+export function msToSeconds(ms: number) {
+  return Number((ms / 1000).toFixed(0));
+}
+
 export function formatObject(
   obj: unknown,
   options?: {
