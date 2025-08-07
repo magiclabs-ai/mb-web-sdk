@@ -10,6 +10,7 @@ import { Dispatcher, type WSMessage } from "../dispatcher";
 import { z } from "zod/v4";
 import { densitiesFactory } from "@/core/factories/design-options";
 import { StyleEndpoints } from "@/core/models/api/endpoints/styles";
+import { MonitoringEndpoints } from "./endpoints/monitoring";
 
 export type WSConnectionState = {
   areConnectionsOpen: boolean;
@@ -54,12 +55,17 @@ export class MagicBookAPI {
   designerWS?: WS;
   readonly fetcher: Fetcher;
   dispatcher: Dispatcher;
+  readonly photos = new PhotoEndpoints(this);
+  readonly projects = new ProjectEndpoints(this);
+  readonly surfaces = new SurfaceEndpoints(this);
+  readonly styles = new StyleEndpoints(this);
+  readonly monitoring = new MonitoringEndpoints(this);
 
   constructor(props: MagicBookAPIProps) {
     const host = props.apiHost || defaultApiHost;
     const isProd = host.includes(".prod.");
     const debugMode = props.debugMode || (props.debugMode === undefined && !isProd);
-    this.dispatcher = new Dispatcher(debugMode);
+    this.dispatcher = new Dispatcher(debugMode, this.monitoring.events.bind(this.monitoring));
     const apiHost = `https://${host}`;
     const webSocketHost = `wss://${host}`;
     const mock = props.mock ?? false;
@@ -109,11 +115,6 @@ export class MagicBookAPI {
       }),
     );
   }
-
-  readonly photos = new PhotoEndpoints(this);
-  readonly projects = new ProjectEndpoints(this);
-  readonly surfaces = new SurfaceEndpoints(this);
-  readonly styles = new StyleEndpoints(this);
 
   async imageDensities(sku: string, imageCount: number, imageFilteringLevel: string) {
     const path = `mmb/v1/designoptions/sku/${sku}/imagecount/${imageCount}/imagefilteringlevel/${imageFilteringLevel}/`;
