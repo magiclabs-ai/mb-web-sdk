@@ -9,8 +9,6 @@ import {
 } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
 import niceAndRome from "../../../../core/data/image-sets/00-nice-and-rome-client.json";
-// import images from "../../../../core/data/image-sets/images.json";
-// import images from "../../../../core/data/image-sets/small-image-set.json";
 
 function App() {
   const [photos, setPhotos] = useState<Array<AnalyzedPhoto>>([]);
@@ -83,9 +81,7 @@ function App() {
     setMbApi(
       new MagicBookAPI({
         apiKey: import.meta.env.VITE_MB_API_KEY,
-        apiHost: "api.dev.magiclabs-aurora.io",
         debugMode: true,
-        // mock: true,
       }),
     );
     return () => {
@@ -186,6 +182,16 @@ function App() {
     console.log("Image Densities", res);
   }
 
+  async function listStyles() {
+    const res = await mb?.styles.list();
+    console.log("Styles", res);
+  }
+
+  async function getStyle() {
+    const res = await mb?.styles.retrieve("DG_39651");
+    console.log("Style", res);
+  }
+
   return (
     <>
       <div className="p-4">
@@ -222,6 +228,15 @@ function App() {
             }}
           >
             Reconnect WS
+          </button>
+        </div>
+        <div className="flex flex-col gap-4 items-start p-4">
+          <h2 className="pb-1 w-full text-lg font-semibold border-b">Library</h2>
+          <button type="button" onClick={listStyles}>
+            List Styles
+          </button>
+          <button type="button" onClick={getStyle}>
+            Get Style
           </button>
         </div>
         <div className="flex flex-col gap-4 items-start p-4">
