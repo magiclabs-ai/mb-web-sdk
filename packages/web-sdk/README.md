@@ -228,6 +228,7 @@ await api.projects.resize({
       left: 0.0625
     } // optional
   },
+  targetBookFormat: {...}, // optional - same schema as bookFormat
   images: [...],
   surfaces: [surface1, surface2, ...]
 });
