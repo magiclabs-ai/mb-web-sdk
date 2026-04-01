@@ -2,6 +2,37 @@ import { analyzedPhotoSchema } from "@/core/models/photo";
 import { type Surface, isSpread, surfaceSchema } from "@/core/models/surface";
 import { z } from "zod/v4";
 
+const bookFormatSchema = z.object({
+  pageType: z.string().optional(),
+  skuPageRange: z.array(z.number()).optional(),
+  startFromLeftSide: z.boolean().optional(),
+  targetPageRange: z.array(z.number()),
+  page: z.object({
+    width: z.number(),
+    height: z.number(),
+  }),
+  cover: z.object({
+    width: z.number(),
+    height: z.number(),
+  }),
+  coverWrap: z
+    .object({
+      top: z.number(),
+      right: z.number(),
+      bottom: z.number(),
+      left: z.number(),
+    })
+    .optional(),
+  bleed: z
+    .object({
+      top: z.number(),
+      right: z.number(),
+      bottom: z.number(),
+      left: z.number(),
+    })
+    .optional(),
+});
+
 export const projectSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
@@ -11,36 +42,8 @@ export const projectSchema = z.object({
   imageFilteringLevel: z.string(),
   imageDensityLevel: z.string(),
   embellishmentLevel: z.string(),
-  bookFormat: z.object({
-    pageType: z.string().optional(),
-    skuPageRange: z.array(z.number()).optional(),
-    startFromLeftSide: z.boolean().optional(),
-    targetPageRange: z.array(z.number()),
-    page: z.object({
-      width: z.number(),
-      height: z.number(),
-    }),
-    cover: z.object({
-      width: z.number(),
-      height: z.number(),
-    }),
-    coverWrap: z
-      .object({
-        top: z.number(),
-        right: z.number(),
-        bottom: z.number(),
-        left: z.number(),
-      })
-      .optional(),
-    bleed: z
-      .object({
-        top: z.number(),
-        right: z.number(),
-        bottom: z.number(),
-        left: z.number(),
-      })
-      .optional(),
-  }),
+  bookFormat: bookFormatSchema,
+  targetBookFormat: bookFormatSchema.optional(),
   images: z.array(analyzedPhotoSchema),
   surfaces: z.array(surfaceSchema),
 });
