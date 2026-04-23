@@ -88,6 +88,15 @@ export type AnalyzedPhoto = z.infer<typeof analyzedPhotoSchema>;
 export type Label = z.infer<typeof labelSchema>;
 export type Face = z.infer<typeof faceSchema>;
 
+export function encodeEmbedding(floats: number[]): string {
+  const bytes = new Uint8Array(new Float32Array(floats).buffer);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 export function photoDeprecationCheck(events: DispatcherEvent[], addEvent: AddEvent, requestId: string) {
   const analyzedPhotos = events
     .filter((event) => event.name === "photo.analyzed" && event.message?.result)
