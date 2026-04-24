@@ -1,9 +1,4 @@
-import {
-  maxReconnectionAttempts,
-  wsHeartbeatInterval,
-  wsReconnectInterval,
-  wsTtlRefreshInterval,
-} from "../config";
+import { maxReconnectionAttempts, wsHeartbeatInterval, wsReconnectInterval, wsTtlRefreshInterval } from "../config";
 import { formatObject } from "../utils/toolbox";
 import type { Dispatcher } from "./dispatcher";
 
