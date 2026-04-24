@@ -1,4 +1,4 @@
-import { maxReconnectionAttempts, wsReconnectInterval } from "../config";
+import { maxReconnectionAttempts, wsHeartbeatInterval, wsReconnectInterval, wsTtlRefreshInterval } from "../config";
 import { formatObject } from "../utils/toolbox";
 import type { Dispatcher } from "./dispatcher";
 
@@ -20,6 +20,8 @@ export class WS {
   private onConnectionStateChange: () => void;
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
+  private heartbeatTimer?: ReturnType<typeof setInterval>;
+  private ttlTimer?: ReturnType<typeof setTimeout>;
 
   constructor(url: string, onConnectionStateChange: () => void, dispatcher: Dispatcher) {
     this.url = url;
@@ -40,12 +42,19 @@ export class WS {
       this.connection = new WebSocket(this.url);
 
       this.connection.onopen = () => {
+        this.reconnectionAttempts = 0;
+        this.startHeartbeat();
+        this.startTtlTimer();
         this.onConnectionStateChange();
         resolve(true);
       };
 
       this.connection.onmessage = (event: MessageEvent) => {
-        const res = formatObject(JSON.parse(event.data), {
+        const data = JSON.parse(event.data);
+        if (data?.result === "pong") {
+          return;
+        }
+        const res = formatObject(data, {
           snakeToCamelCase: true,
         }) as WSMessage;
         const dispatcherEvent = this.dispatcher.getById(res.requestId);
@@ -53,6 +62,8 @@ export class WS {
       };
 
       this.connection.onclose = () => {
+        this.stopHeartbeat();
+        this.stopTtlTimer();
         this.onConnectionStateChange();
         if (this.reconnectionAttempts < maxReconnectionAttempts) {
           setTimeout(() => {
@@ -68,5 +79,35 @@ export class WS {
 
   isConnectionOpen() {
     return this.connection?.readyState === WebSocket.OPEN;
+  }
+
+  private startHeartbeat() {
+    this.stopHeartbeat();
+    this.heartbeatTimer = setInterval(() => {
+      if (this.connection?.readyState === WebSocket.OPEN) {
+        this.connection.send(JSON.stringify({ action: "ping" }));
+      }
+    }, wsHeartbeatInterval);
+  }
+
+  private stopHeartbeat() {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = undefined;
+    }
+  }
+
+  private startTtlTimer() {
+    this.stopTtlTimer();
+    this.ttlTimer = setTimeout(() => {
+      this.connection?.close();
+    }, wsTtlRefreshInterval);
+  }
+
+  private stopTtlTimer() {
+    if (this.ttlTimer) {
+      clearTimeout(this.ttlTimer);
+      this.ttlTimer = undefined;
+    }
   }
 }

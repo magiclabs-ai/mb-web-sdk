@@ -1,7 +1,7 @@
 name: Publish Package to npmjs
 on:
   release:
-    types: [released, prereleased]
+    types: [ released, prereleased ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,6 +9,8 @@ jobs:
     env:
       WS_MAX_RECONNECTION_ATTEMPTS: ${{vars.WS_MAX_RECONNECTION_ATTEMPTS}}
       WS_RECONNECT_INTERVAL: ${{vars.WS_RECONNECT_INTERVAL}}
+      WS_HEARTBEAT_INTERVAL: ${{vars.WS_HEARTBEAT_INTERVAL}}
+      WS_TTL_REFRESH_INTERVAL: ${{vars.WS_TTL_REFRESH_INTERVAL}}
       API_HOST: ${{vars.API_HOST}}
       DEFAULT_TIMEOUT_DELAY: ${{vars.DEFAULT_TIMEOUT_DELAY}}
       PHOTO_DEPRECATION_WARNING_THRESHOLD: ${{vars.PHOTO_DEPRECATION_WARNING_THRESHOLD}}
@@ -24,7 +26,8 @@ jobs:
         with:
           version: 8
           run_install: true
-      - run: chmod +x ./scripts/publish.sh && pnpm run pub:${{github.event.release.prerelease && 'canary' || 'release'}}
+      - run: chmod +x ./scripts/publish.sh && pnpm run
+          pub:${{github.event.release.prerelease && 'canary' || 'release'}}
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
