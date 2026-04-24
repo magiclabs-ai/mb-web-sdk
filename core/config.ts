@@ -10,7 +10,7 @@ export const wsHeartbeatInterval: number = process.env.WS_HEARTBEAT_INTERVAL
   : 25000;
 export const wsTtlRefreshInterval: number = process.env.WS_TTL_REFRESH_INTERVAL
   ? Number.parseInt(process.env.WS_TTL_REFRESH_INTERVAL)
-  : 36_000_000;
+  : 36000000;
 export const defaultTimeoutDelay: number = process.env.DEFAULT_TIMEOUT_DELAY
   ? Number.parseInt(process.env.DEFAULT_TIMEOUT_DELAY)
   : 30000;
