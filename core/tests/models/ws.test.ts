@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { WS } from "../../models/ws";
 import { addEventMock } from "../mocks/dispatcher";
 import { Dispatcher } from "../../models/dispatcher";
-import { maxReconnectionAttempts } from "../../config";
+import { maxReconnectionAttempts, wsHeartbeatInterval } from "../../config";
 
 describe("WS", () => {
   let ws: WS;
@@ -65,6 +65,45 @@ describe("WS", () => {
       request: eventDetail.request,
     });
   });
+  test("should send ping frames on heartbeat interval while open", () => {
+    vi.useFakeTimers();
+    // biome-ignore lint/suspicious/noExplicitAny: mock access
+    const connection = ws.connection as any;
+    connection.readyState = WebSocket.OPEN;
+    connection.onopen?.();
+
+    vi.advanceTimersByTime(wsHeartbeatInterval * 2);
+
+    expect(connection.send).toHaveBeenCalledWith(JSON.stringify({ action: "ping" }));
+    expect(connection.send).toHaveBeenCalledTimes(2);
+  });
+
+  test("should ignore pong frames (not dispatch them)", () => {
+    addEventMock.mockClear();
+    const messageEvent = new MessageEvent("message", {
+      data: JSON.stringify({ type: "pong" }),
+    });
+
+    ws.connection?.onmessage?.(messageEvent);
+
+    expect(addEventMock).not.toHaveBeenCalled();
+  });
+
+  test("should stop heartbeat on close", () => {
+    vi.useFakeTimers();
+    // biome-ignore lint/suspicious/noExplicitAny: mock access
+    const connection = ws.connection as any;
+    connection.readyState = WebSocket.OPEN;
+    connection.onopen?.();
+    vi.advanceTimersByTime(wsHeartbeatInterval);
+    const callsBeforeClose = connection.send.mock.calls.length;
+
+    ws.connection?.onclose?.(new CloseEvent("close"));
+    vi.advanceTimersByTime(wsHeartbeatInterval * 3);
+
+    expect(connection.send.mock.calls.length).toBe(callsBeforeClose);
+  });
+
   test("should return false if max reconnection attempts is reached", () => {
     vi.useFakeTimers();
     vi.advanceTimersToNextTimer();

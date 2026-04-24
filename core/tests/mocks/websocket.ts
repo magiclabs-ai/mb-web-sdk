@@ -13,6 +13,8 @@ export class WebSocketMock {
 
   readyState?: number;
 
+  send = vi.fn();
+
   open() {
     this.readyState = WebSocket.OPEN;
     if (this.onopen) this.onopen();

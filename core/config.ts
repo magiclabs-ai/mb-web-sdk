@@ -5,6 +5,9 @@ export const wsReconnectInterval: number = process.env.WS_RECONNECT_INTERVAL
 export const maxReconnectionAttempts: number = process.env.WS_MAX_RECONNECTION_ATTEMPTS
   ? Number.parseInt(process.env.WS_MAX_RECONNECTION_ATTEMPTS)
   : 10;
+export const wsHeartbeatInterval: number = process.env.WS_HEARTBEAT_INTERVAL
+  ? Number.parseInt(process.env.WS_HEARTBEAT_INTERVAL)
+  : 25000;
 export const defaultTimeoutDelay: number = process.env.DEFAULT_TIMEOUT_DELAY
   ? Number.parseInt(process.env.DEFAULT_TIMEOUT_DELAY)
   : 30000;
