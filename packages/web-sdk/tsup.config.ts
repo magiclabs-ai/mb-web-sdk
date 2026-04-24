@@ -16,6 +16,7 @@ export default defineConfig({
     DEFAULT_TIMEOUT_DELAY: process.env.DEFAULT_TIMEOUT_DELAY!,
     PHOTO_DEPRECATION_WARNING_THRESHOLD: process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD!,
     WS_HEARTBEAT_INTERVAL: process.env.WS_HEARTBEAT_INTERVAL!,
+    WS_TTL_REFRESH_INTERVAL: process.env.WS_TTL_REFRESH_INTERVAL!,
   },
   target: "esnext",
   outDir: "dist",
