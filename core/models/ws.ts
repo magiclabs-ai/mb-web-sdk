@@ -48,7 +48,7 @@ export class WS {
 
       this.connection.onmessage = (event: MessageEvent) => {
         const data = JSON.parse(event.data);
-        if (data?.type === "pong") {
+        if (data?.result === "pong") {
           return;
         }
         const res = formatObject(data, {

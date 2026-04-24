@@ -81,7 +81,7 @@ describe("WS", () => {
   test("should ignore pong frames (not dispatch them)", () => {
     addEventMock.mockClear();
     const messageEvent = new MessageEvent("message", {
-      data: JSON.stringify({ type: "pong" }),
+      data: JSON.stringify({ result: "pong" }),
     });
 
     ws.connection?.onmessage?.(messageEvent);
