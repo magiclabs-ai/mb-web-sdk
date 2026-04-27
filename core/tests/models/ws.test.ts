@@ -2,7 +2,13 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { WS } from "../../models/ws";
 import { addEventMock } from "../mocks/dispatcher";
 import { Dispatcher } from "../../models/dispatcher";
-import { maxReconnectionAttempts, wsHeartbeatInterval, wsTtlRefreshInterval } from "../../config";
+import {
+  maxReconnectionAttempts,
+  wsForceCloseGracePeriod,
+  wsHeartbeatInterval,
+  wsPongTimeout,
+  wsTtlRefreshInterval,
+} from "../../config";
 
 describe("WS", () => {
   let ws: WS;
@@ -65,17 +71,82 @@ describe("WS", () => {
       request: eventDetail.request,
     });
   });
-  test("should send ping frames on heartbeat interval while open", () => {
+  test("should send a single ping per heartbeat interval and only schedule the next one after pong arrives", () => {
     vi.useFakeTimers();
     // biome-ignore lint/suspicious/noExplicitAny: mock access
     const connection = ws.connection as any;
     connection.readyState = WebSocket.OPEN;
     connection.onopen?.();
 
-    vi.advanceTimersByTime(wsHeartbeatInterval * 2);
-
+    // First interval: one ping is sent.
+    vi.advanceTimersByTime(wsHeartbeatInterval);
     expect(connection.send).toHaveBeenCalledWith(JSON.stringify({ action: "ping" }));
+    expect(connection.send).toHaveBeenCalledTimes(1);
+
+    // Without a pong, no further pings are scheduled before the pong timeout would fire.
+    vi.advanceTimersByTime(wsPongTimeout - 1);
+    expect(connection.send).toHaveBeenCalledTimes(1);
+
+    // Pong arrives -> next ping is scheduled, fires after another heartbeat interval.
+    connection.onmessage?.(new MessageEvent("message", { data: JSON.stringify({ result: "pong" }) }));
+    vi.advanceTimersByTime(wsHeartbeatInterval);
     expect(connection.send).toHaveBeenCalledTimes(2);
+  });
+
+  test("should close the connection if pong is not received within the timeout", () => {
+    vi.useFakeTimers();
+    // biome-ignore lint/suspicious/noExplicitAny: mock access
+    const connection = ws.connection as any;
+    connection.readyState = WebSocket.OPEN;
+    connection.onopen?.();
+
+    vi.advanceTimersByTime(wsHeartbeatInterval);
+    expect(connection.send).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(wsPongTimeout);
+    expect(connection.close).toHaveBeenCalledTimes(1);
+  });
+
+  test("should fire onclose even if the underlying socket never emits close after a pong timeout", () => {
+    vi.useFakeTimers();
+    // biome-ignore lint/suspicious/noExplicitAny: mock access
+    const connection = ws.connection as any;
+    connection.stallClose = true;
+    connection.readyState = WebSocket.OPEN;
+    connection.onopen?.();
+    const oncloseSpy = vi.fn();
+    const originalOnclose = connection.onclose;
+    connection.onclose = (event: CloseEvent) => {
+      oncloseSpy();
+      originalOnclose?.(event);
+    };
+
+    vi.advanceTimersByTime(wsHeartbeatInterval + wsPongTimeout + wsForceCloseGracePeriod);
+
+    expect(connection.close).toHaveBeenCalledTimes(1);
+    expect(oncloseSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test("should not double-fire onclose if the socket eventually emits close after the force-close path runs", () => {
+    vi.useFakeTimers();
+    // biome-ignore lint/suspicious/noExplicitAny: mock access
+    const connection = ws.connection as any;
+    connection.stallClose = true;
+    connection.readyState = WebSocket.OPEN;
+    connection.onopen?.();
+    const oncloseSpy = vi.fn();
+    const originalOnclose = connection.onclose;
+    connection.onclose = (event: CloseEvent) => {
+      oncloseSpy();
+      originalOnclose?.(event);
+    };
+
+    vi.advanceTimersByTime(wsHeartbeatInterval + wsPongTimeout + wsForceCloseGracePeriod);
+    expect(oncloseSpy).toHaveBeenCalledTimes(1);
+
+    // The browser belatedly fires onclose. It should be a no-op because we detached it.
+    connection.onclose?.(new CloseEvent("close"));
+    expect(oncloseSpy).toHaveBeenCalledTimes(1);
   });
 
   test("should ignore pong frames (not dispatch them)", () => {
