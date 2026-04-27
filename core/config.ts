@@ -8,6 +8,12 @@ export const maxReconnectionAttempts: number = process.env.WS_MAX_RECONNECTION_A
 export const wsHeartbeatInterval: number = process.env.WS_HEARTBEAT_INTERVAL
   ? Number.parseInt(process.env.WS_HEARTBEAT_INTERVAL)
   : 25000;
+export const wsPongTimeout: number = process.env.WS_PONG_TIMEOUT
+  ? Number.parseInt(process.env.WS_PONG_TIMEOUT)
+  : 10000;
+export const wsForceCloseGracePeriod: number = process.env.WS_FORCE_CLOSE_GRACE_PERIOD
+  ? Number.parseInt(process.env.WS_FORCE_CLOSE_GRACE_PERIOD)
+  : 1000;
 export const wsTtlRefreshInterval: number = process.env.WS_TTL_REFRESH_INTERVAL
   ? Number.parseInt(process.env.WS_TTL_REFRESH_INTERVAL)
   : 36000000;

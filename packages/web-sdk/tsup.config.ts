@@ -17,6 +17,8 @@ export default defineConfig({
     PHOTO_DEPRECATION_WARNING_THRESHOLD: process.env.PHOTO_DEPRECATION_WARNING_THRESHOLD!,
     WS_HEARTBEAT_INTERVAL: process.env.WS_HEARTBEAT_INTERVAL!,
     WS_TTL_REFRESH_INTERVAL: process.env.WS_TTL_REFRESH_INTERVAL!,
+    WS_PONG_TIMEOUT: process.env.WS_PONG_TIMEOUT!,
+    WS_FORCE_CLOSE_GRACE_PERIOD: process.env.WS_FORCE_CLOSE_GRACE_PERIOD!,
   },
   target: "esnext",
   outDir: "dist",

@@ -1,4 +1,11 @@
-import { maxReconnectionAttempts, wsHeartbeatInterval, wsReconnectInterval, wsTtlRefreshInterval } from "../config";
+import {
+  maxReconnectionAttempts,
+  wsForceCloseGracePeriod,
+  wsHeartbeatInterval,
+  wsPongTimeout,
+  wsReconnectInterval,
+  wsTtlRefreshInterval,
+} from "../config";
 import { formatObject } from "../utils/toolbox";
 import type { Dispatcher } from "./dispatcher";
 
@@ -20,7 +27,9 @@ export class WS {
   private onConnectionStateChange: () => void;
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
-  private heartbeatTimer?: ReturnType<typeof setInterval>;
+  private heartbeatTimer?: ReturnType<typeof setTimeout>;
+  private pongTimer?: ReturnType<typeof setTimeout>;
+  private forceCloseTimer?: ReturnType<typeof setTimeout>;
   private ttlTimer?: ReturnType<typeof setTimeout>;
 
   constructor(url: string, onConnectionStateChange: () => void, dispatcher: Dispatcher) {
@@ -52,6 +61,7 @@ export class WS {
       this.connection.onmessage = (event: MessageEvent) => {
         const data = JSON.parse(event.data);
         if (data?.result === "pong") {
+          this.handlePong();
           return;
         }
         const res = formatObject(data, {
@@ -62,9 +72,7 @@ export class WS {
       };
 
       this.connection.onclose = () => {
-        this.stopHeartbeat();
-        this.stopTtlTimer();
-        this.onConnectionStateChange();
+        this.handleClose();
         if (this.reconnectionAttempts < maxReconnectionAttempts) {
           setTimeout(() => {
             this.connect();
@@ -83,18 +91,74 @@ export class WS {
 
   private startHeartbeat() {
     this.stopHeartbeat();
-    this.heartbeatTimer = setInterval(() => {
-      if (this.connection?.readyState === WebSocket.OPEN) {
-        this.connection.send(JSON.stringify({ action: "ping" }));
+    this.scheduleNextPing();
+  }
+
+  private scheduleNextPing() {
+    this.heartbeatTimer = setTimeout(() => {
+      if (this.connection?.readyState !== WebSocket.OPEN) {
+        return;
       }
+      this.connection.send(JSON.stringify({ action: "ping" }));
+      this.pongTimer = setTimeout(() => {
+        this.handlePongTimeout();
+      }, wsPongTimeout);
     }, wsHeartbeatInterval);
+  }
+
+  private handlePong() {
+    if (this.pongTimer) {
+      clearTimeout(this.pongTimer);
+      this.pongTimer = undefined;
+    }
+    if (this.connection?.readyState === WebSocket.OPEN) {
+      this.scheduleNextPing();
+    }
+  }
+
+  private handlePongTimeout() {
+    this.pongTimer = undefined;
+    const connection = this.connection;
+    if (!connection) return;
+    // Once max attempts is reached we should not try to revive the connection.
+    if (this.reconnectionAttempts >= maxReconnectionAttempts) {
+      return;
+    }
+    try {
+      connection.close();
+    } catch {
+      // ignore — we will force the close handler below
+    }
+    // Browsers don't always fire onclose promptly on a stalled socket; ensure it runs.
+    this.forceCloseTimer = setTimeout(() => {
+      this.forceCloseTimer = undefined;
+      if (connection.onclose) {
+        const onclose = connection.onclose;
+        connection.onclose = null;
+        onclose.call(connection, new CloseEvent("close"));
+      }
+    }, wsForceCloseGracePeriod);
   }
 
   private stopHeartbeat() {
     if (this.heartbeatTimer) {
-      clearInterval(this.heartbeatTimer);
+      clearTimeout(this.heartbeatTimer);
       this.heartbeatTimer = undefined;
     }
+    if (this.pongTimer) {
+      clearTimeout(this.pongTimer);
+      this.pongTimer = undefined;
+    }
+    if (this.forceCloseTimer) {
+      clearTimeout(this.forceCloseTimer);
+      this.forceCloseTimer = undefined;
+    }
+  }
+
+  private handleClose() {
+    this.stopHeartbeat();
+    this.stopTtlTimer();
+    this.onConnectionStateChange();
   }
 
   private startTtlTimer() {
