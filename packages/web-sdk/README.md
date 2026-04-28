@@ -51,11 +51,14 @@ Once you receive the `ws` event with result
 
 ```json
 {
-  "areConnectionsOpen": true
+  "areConnectionsOpen": true,
+  "hasReachedMaxReconnectionAttempts": false
 }
 ```
 
 You are ready to go!
+
+`hasReachedMaxReconnectionAttempts` becomes `true` once a socket has exhausted its automatic reconnection attempts, and is reset to `false` as soon as a connection succeeds again. Use it to surface a terminal connection error to the user or to trigger a manual reconnect.
 
 If the WS connection fails to reconnect, you can manually reconnect it with
 
@@ -63,7 +66,32 @@ If the WS connection fails to reconnect, you can manually reconnect it with
 await api.reconnectWS();
 ```
 
-This promise will return the same response as the `ws` event above
+This promise will return the same response as the `ws` event above.
+
+#### Example: smart retry with exponential backoff
+
+The SDK's built-in retries use short, fixed-step delays and stop after a fixed number of attempts. For long outages you usually want to keep trying, but space attempts further apart so you don't hammer the server. The snippet below waits for `hasReachedMaxReconnectionAttempts`, then loops `reconnectWS()` with exponential backoff capped at one minute, plus jitter so multiple clients recovering from the same outage don't retry in lockstep.
+
+Each call to `reconnectWS()` resolves once both sockets have either opened or exhausted their internal retry budget; if it returns `areConnectionsOpen: false`, you are responsible for spacing the next attempt — which is what the loop below does.
+
+```ts
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+window.addEventListener("MagicBook", (async (event: CustomEvent<MBEvent<unknown>>) => {
+  if (event.detail.eventName !== "ws") return;
+  const { hasReachedMaxReconnectionAttempts } = event.detail.result;
+  if (!hasReachedMaxReconnectionAttempts) return;
+
+  for (let attempt = 0; ; attempt++) {
+    const backoff = Math.min(60_000, 1000 * 2 ** attempt);
+    await wait(backoff * Math.random()); // full jitter
+    const { areConnectionsOpen } = await api.reconnectWS();
+    if (areConnectionsOpen) return;
+  }
+}) as EventListener);
+```
+
+The `await` chain serialises retries, so re-entry from later `ws` events is naturally bounded — if a loop is already running, the next event's loop will succeed on its first `reconnectWS()` call (because the first loop got us connected) and exit. In a component, capture the listener reference and remove it on unmount, and gate the loop body on a `cancelled` flag so an in-flight loop on a stale `api` instance can be stopped.
 
 ### Photos
 

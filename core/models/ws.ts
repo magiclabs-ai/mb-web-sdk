@@ -27,6 +27,7 @@ export class WS {
   private onConnectionStateChange: () => void;
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
+  private maxReconnectionAttemptsReached = false;
   private heartbeatTimer?: ReturnType<typeof setTimeout>;
   private pongTimer?: ReturnType<typeof setTimeout>;
   private forceCloseTimer?: ReturnType<typeof setTimeout>;
@@ -48,10 +49,16 @@ export class WS {
         return resolve(true);
       }
 
+      if (this.maxReconnectionAttemptsReached) {
+        this.reconnectionAttempts = 0;
+        this.maxReconnectionAttemptsReached = false;
+      }
+
       this.connection = new WebSocket(this.url);
 
       this.connection.onopen = () => {
         this.reconnectionAttempts = 0;
+        this.maxReconnectionAttemptsReached = false;
         this.startHeartbeat();
         this.startTtlTimer();
         this.onConnectionStateChange();
@@ -79,6 +86,8 @@ export class WS {
             this.reconnectionAttempts++;
           }, wsReconnectInterval * this.reconnectionAttempts);
         } else {
+          this.maxReconnectionAttemptsReached = true;
+          this.onConnectionStateChange();
           resolve(false);
         }
       };
@@ -87,6 +96,10 @@ export class WS {
 
   isConnectionOpen() {
     return this.connection?.readyState === WebSocket.OPEN;
+  }
+
+  hasReachedMaxReconnectionAttempts() {
+    return this.maxReconnectionAttemptsReached;
   }
 
   private startHeartbeat() {

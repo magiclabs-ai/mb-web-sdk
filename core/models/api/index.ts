@@ -14,6 +14,7 @@ import { MonitoringEndpoints } from "./endpoints/monitoring";
 
 export type WSConnectionState = {
   areConnectionsOpen: boolean;
+  hasReachedMaxReconnectionAttempts: boolean;
 };
 
 const densitySchema = z.object({
@@ -96,14 +97,29 @@ export class MagicBookAPI {
     return (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
   }
 
+  hasReachedMaxReconnectionAttempts() {
+    return (
+      this.analyzerWS?.hasReachedMaxReconnectionAttempts() ||
+      this.designerWS?.hasReachedMaxReconnectionAttempts() ||
+      false
+    );
+  }
+
+  private getConnectionState(): WSConnectionState {
+    return {
+      areConnectionsOpen: this.areWSOpen(),
+      hasReachedMaxReconnectionAttempts: this.hasReachedMaxReconnectionAttempts(),
+    };
+  }
+
   async reconnectWS(): Promise<WSConnectionState> {
     await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
-    return { areConnectionsOpen: this.areWSOpen() };
+    return this.getConnectionState();
   }
 
   onConnectionStateChange() {
     const onConnectionStateChangeEvent = new CustomEvent<WSMessage<WSConnectionState>>("MagicBook", {
-      detail: { eventName: "ws", result: { areConnectionsOpen: this.areWSOpen() } },
+      detail: { eventName: "ws", result: this.getConnectionState() },
     });
     window.dispatchEvent(onConnectionStateChangeEvent);
   }

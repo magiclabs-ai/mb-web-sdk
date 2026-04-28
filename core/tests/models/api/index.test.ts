@@ -54,6 +54,7 @@ describe("API", () => {
     const analyzerSpy = vi.spyOn(api.analyzerWS, "connect");
     const res = await api.reconnectWS();
     expect(res.areConnectionsOpen).toBe(true);
+    expect(res.hasReachedMaxReconnectionAttempts).toBe(false);
     expect(designerSpy).toHaveBeenCalled();
     expect(analyzerSpy).toHaveBeenCalled();
     expect(api.designerWS?.isConnectionOpen()).toBe(true);
