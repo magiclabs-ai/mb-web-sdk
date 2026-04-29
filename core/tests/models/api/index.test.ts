@@ -40,25 +40,25 @@ describe("API", () => {
     api.onConnectionStateChange();
   });
 
-  test("reconnectWS function", async () => {
+  test("ws.open function", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
     });
     // @ts-ignore
-    api.designerWS?.connection?.open();
+    api.ws.designerWS?.connection?.open();
     // @ts-ignore
-    api.analyzerWS?.connection?.open();
+    api.ws.analyzerWS?.connection?.open();
     // @ts-ignore
-    const designerSpy = vi.spyOn(api.designerWS, "connect");
+    const designerSpy = vi.spyOn(api.ws.designerWS, "connect");
     // @ts-ignore
-    const analyzerSpy = vi.spyOn(api.analyzerWS, "connect");
-    const res = await api.reconnectWS();
+    const analyzerSpy = vi.spyOn(api.ws.analyzerWS, "connect");
+    const res = await api.ws.open();
     expect(res.areConnectionsOpen).toBe(true);
     expect(res.hasReachedMaxReconnectionAttempts).toBe(false);
     expect(designerSpy).toHaveBeenCalled();
     expect(analyzerSpy).toHaveBeenCalled();
-    expect(api.designerWS?.isConnectionOpen()).toBe(true);
-    expect(api.analyzerWS?.isConnectionOpen()).toBe(true);
+    expect(api.ws.designerWS?.isConnectionOpen()).toBe(true);
+    expect(api.ws.analyzerWS?.isConnectionOpen()).toBe(true);
   });
 
   test("bodyParse function", async () => {

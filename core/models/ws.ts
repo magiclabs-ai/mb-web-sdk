@@ -28,6 +28,7 @@ export class WS {
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
   private maxReconnectionAttemptsReached = false;
+  private manuallyClosed = false;
   private heartbeatTimer?: ReturnType<typeof setTimeout>;
   private pongTimer?: ReturnType<typeof setTimeout>;
   private forceCloseTimer?: ReturnType<typeof setTimeout>;
@@ -53,6 +54,7 @@ export class WS {
         this.reconnectionAttempts = 0;
         this.maxReconnectionAttemptsReached = false;
       }
+      this.manuallyClosed = false;
 
       this.connection = new WebSocket(this.url);
 
@@ -80,6 +82,10 @@ export class WS {
 
       this.connection.onclose = () => {
         this.handleClose();
+        if (this.manuallyClosed) {
+          resolve(false);
+          return;
+        }
         if (this.reconnectionAttempts < maxReconnectionAttempts) {
           setTimeout(() => {
             this.connect();
@@ -92,6 +98,32 @@ export class WS {
         }
       };
     });
+  }
+
+  disconnect() {
+    this.manuallyClosed = true;
+    this.reconnectionAttempts = 0;
+    this.maxReconnectionAttemptsReached = false;
+    const connection = this.connection;
+    if (!connection) {
+      this.handleClose();
+      return;
+    }
+    if (connection.readyState === WebSocket.CLOSED) {
+      this.handleClose();
+      return;
+    }
+    try {
+      connection.close();
+    } catch {
+      // ignore — fall through to the synthetic close below
+    }
+    // Mirror the stalled-socket guard from handlePongTimeout: ensure onclose runs.
+    if (connection.readyState !== WebSocket.CLOSED && connection.onclose) {
+      const onclose = connection.onclose;
+      connection.onclose = null;
+      onclose.call(connection, new CloseEvent("close"));
+    }
   }
 
   isConnectionOpen() {

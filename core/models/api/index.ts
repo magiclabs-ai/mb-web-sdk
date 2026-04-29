@@ -50,10 +50,36 @@ type MagicBookAPIProps = {
     }
 );
 
-export class MagicBookAPI {
-  private clientId = faker.string.uuid();
+export class WSController {
   analyzerWS?: WS;
   designerWS?: WS;
+
+  get status(): WSConnectionState {
+    return {
+      areConnectionsOpen:
+        (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false,
+      hasReachedMaxReconnectionAttempts:
+        this.analyzerWS?.hasReachedMaxReconnectionAttempts() ||
+        this.designerWS?.hasReachedMaxReconnectionAttempts() ||
+        false,
+    };
+  }
+
+  async open(): Promise<WSConnectionState> {
+    await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
+    return this.status;
+  }
+
+  disconnect(): WSConnectionState {
+    this.analyzerWS?.disconnect();
+    this.designerWS?.disconnect();
+    return this.status;
+  }
+}
+
+export class MagicBookAPI {
+  private clientId = faker.string.uuid();
+  readonly ws = new WSController();
   readonly fetcher: Fetcher;
   dispatcher: Dispatcher;
   readonly photos = new PhotoEndpoints(this);
@@ -78,48 +104,34 @@ export class MagicBookAPI {
 
     if (!mock) {
       options.headers.Authorization = `Api-key ${props.apiKey}`;
-      this.analyzerWS = new WS(
+      this.ws.analyzerWS = new WS(
         `${webSocketHost}/ws/analyzer?clientId=${this.clientId}`,
         () => this.onConnectionStateChange(),
         this.dispatcher,
       );
-      this.designerWS = new WS(
+      this.ws.designerWS = new WS(
         `${webSocketHost}/ws/designer?clientId=${this.clientId}`,
         () => this.onConnectionStateChange(),
         this.dispatcher,
       );
     }
 
-    this.fetcher = new Fetcher(apiHost, options, mock, () => this.areWSOpen());
+    this.fetcher = new Fetcher(apiHost, options, mock, () => this.ws.status.areConnectionsOpen);
   }
 
-  areWSOpen() {
-    return (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
-  }
-
-  hasReachedMaxReconnectionAttempts() {
-    return (
-      this.analyzerWS?.hasReachedMaxReconnectionAttempts() ||
-      this.designerWS?.hasReachedMaxReconnectionAttempts() ||
-      false
-    );
-  }
-
-  private getConnectionState(): WSConnectionState {
-    return {
-      areConnectionsOpen: this.areWSOpen(),
-      hasReachedMaxReconnectionAttempts: this.hasReachedMaxReconnectionAttempts(),
-    };
-  }
-
-  async reconnectWS(): Promise<WSConnectionState> {
-    await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
-    return this.getConnectionState();
-  }
+  private hasEmittedInitialState = false;
 
   onConnectionStateChange() {
+    const status = this.ws.status;
+    // Suppress transient states during initial setup — wait until both sockets are open
+    // or retries are exhausted, so consumers don't see a spurious areConnectionsOpen: false
+    // between the two sockets opening.
+    if (!this.hasEmittedInitialState) {
+      if (!status.areConnectionsOpen && !status.hasReachedMaxReconnectionAttempts) return;
+      this.hasEmittedInitialState = true;
+    }
     const onConnectionStateChangeEvent = new CustomEvent<WSMessage<WSConnectionState>>("MagicBook", {
-      detail: { eventName: "ws", result: this.getConnectionState() },
+      detail: { eventName: "ws", result: status },
     });
     window.dispatchEvent(onConnectionStateChangeEvent);
   }
