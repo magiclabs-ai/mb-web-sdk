@@ -56,8 +56,7 @@ export class WSController {
 
   get status(): WSConnectionState {
     return {
-      areConnectionsOpen:
-        (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false,
+      areConnectionsOpen: (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false,
       hasReachedMaxReconnectionAttempts:
         this.analyzerWS?.hasReachedMaxReconnectionAttempts() ||
         this.designerWS?.hasReachedMaxReconnectionAttempts() ||
@@ -66,10 +65,7 @@ export class WSController {
   }
 
   async open(): Promise<WSConnectionState> {
-    await Promise.all([
-      this.analyzerWS?.connect({ manual: true }),
-      this.designerWS?.connect({ manual: true }),
-    ]);
+    await Promise.all([this.analyzerWS?.connect({ manual: true }), this.designerWS?.connect({ manual: true })]);
     return this.status;
   }
 
