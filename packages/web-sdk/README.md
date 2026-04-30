@@ -51,19 +51,89 @@ Once you receive the `ws` event with result
 
 ```json
 {
-  "areConnectionsOpen": true
+  "areConnectionsOpen": true,
+  "hasReachedMaxReconnectionAttempts": false
 }
 ```
 
 You are ready to go!
 
+`hasReachedMaxReconnectionAttempts` becomes `true` once a socket has exhausted its automatic reconnection attempts, and is reset to `false` as soon as a connection succeeds again. Use it to surface a terminal connection error to the user or to trigger a manual reconnect.
+
+The WS surface is exposed under `api.ws`:
+
+- `api.ws.status` — current `{ areConnectionsOpen, hasReachedMaxReconnectionAttempts }`.
+- `api.ws.open()` — open (or reopen) both sockets. One-shot: if the connection fails it does **not** trigger the SDK's automatic retry budget — the promise resolves with `areConnectionsOpen: false` and `hasReachedMaxReconnectionAttempts: true`, leaving spacing of further attempts up to you.
+- `api.ws.disconnect()` — close both sockets and disable auto-retry. Returns the new status synchronously; the underlying close completes shortly after.
+
 If the WS connection fails to reconnect, you can manually reconnect it with
 
 ```ts
-await api.reconnectWS();
+await api.ws.open();
 ```
 
-This promise will return the same response as the `ws` event above
+This promise will return the same response as the `ws` event above.
+
+#### Closing the connection on idle
+
+If the user goes idle (e.g. no activity for several minutes, tab hidden, etc.) and you want to free the socket without the SDK auto-reconnecting, call
+
+```ts
+api.ws.disconnect();
+```
+
+This closes both sockets, stops the heartbeat and TTL timers, and disables auto-retry. Call `await api.ws.open()` to come back online — the internal retry budget is reset, so reconnects start fresh.
+
+```ts
+let idleTimer: ReturnType<typeof setTimeout> | undefined;
+const IDLE_MS = 5 * 60_000;
+
+const goIdle = () => api.ws.disconnect();
+const resetIdleTimer = () => {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(goIdle, IDLE_MS);
+};
+
+const wakeUp = async () => {
+  resetIdleTimer();
+  if (!api.ws.status.areConnectionsOpen) await api.ws.open();
+};
+
+["mousemove", "keydown", "pointerdown"].forEach((evt) =>
+  window.addEventListener(evt, wakeUp),
+);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") goIdle();
+  else wakeUp();
+});
+
+resetIdleTimer();
+```
+
+#### Example: smart retry with exponential backoff
+
+The SDK's built-in retries use short, fixed-step delays and stop after a fixed number of attempts. For long outages you usually want to keep trying, but space attempts further apart so you don't hammer the server. The snippet below waits for `hasReachedMaxReconnectionAttempts`, then loops `api.ws.open()` with exponential backoff capped at one minute, plus jitter so multiple clients recovering from the same outage don't retry in lockstep.
+
+Each call to `api.ws.open()` is a single attempt — it does not fall back to the SDK's automatic retry budget. If it returns `areConnectionsOpen: false`, you are responsible for spacing the next attempt — which is what the loop below does.
+
+```ts
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+window.addEventListener("MagicBook", (async (event: CustomEvent<MBEvent<unknown>>) => {
+  if (event.detail.eventName !== "ws") return;
+  const { hasReachedMaxReconnectionAttempts } = event.detail.result;
+  if (!hasReachedMaxReconnectionAttempts) return;
+
+  for (let attempt = 0; ; attempt++) {
+    const backoff = Math.min(60_000, 1000 * 2 ** attempt);
+    await wait(backoff * Math.random()); // full jitter
+    const { areConnectionsOpen } = await api.ws.open();
+    if (areConnectionsOpen) return;
+  }
+}) as EventListener);
+```
+
+The `await` chain serialises retries, so re-entry from later `ws` events is naturally bounded — if a loop is already running, the next event's loop will succeed on its first `api.ws.open()` call (because the first loop got us connected) and exit. In a component, capture the listener reference and remove it on unmount, and gate the loop body on a `cancelled` flag so an in-flight loop on a stale `api` instance can be stopped.
 
 ### Photos
 

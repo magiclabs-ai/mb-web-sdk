@@ -40,24 +40,92 @@ describe("API", () => {
     api.onConnectionStateChange();
   });
 
-  test("reconnectWS function", async () => {
+  test("ws.open function", async () => {
     const api = new MagicBookAPI({
       apiKey: "fake key",
     });
     // @ts-ignore
-    api.designerWS?.connection?.open();
+    api.ws.designerWS?.connection?.open();
     // @ts-ignore
-    api.analyzerWS?.connection?.open();
+    api.ws.analyzerWS?.connection?.open();
     // @ts-ignore
-    const designerSpy = vi.spyOn(api.designerWS, "connect");
+    const designerSpy = vi.spyOn(api.ws.designerWS, "connect");
     // @ts-ignore
-    const analyzerSpy = vi.spyOn(api.analyzerWS, "connect");
-    const res = await api.reconnectWS();
+    const analyzerSpy = vi.spyOn(api.ws.analyzerWS, "connect");
+    const res = await api.ws.open();
     expect(res.areConnectionsOpen).toBe(true);
+    expect(res.hasReachedMaxReconnectionAttempts).toBe(false);
     expect(designerSpy).toHaveBeenCalled();
     expect(analyzerSpy).toHaveBeenCalled();
-    expect(api.designerWS?.isConnectionOpen()).toBe(true);
-    expect(api.analyzerWS?.isConnectionOpen()).toBe(true);
+    expect(api.ws.designerWS?.isConnectionOpen()).toBe(true);
+    expect(api.ws.analyzerWS?.isConnectionOpen()).toBe(true);
+  });
+
+  test("debounces transient areConnectionsOpen: false", async () => {
+    vi.useFakeTimers();
+    try {
+      const api = new MagicBookAPI({ apiKey: "fake key" });
+      // @ts-ignore
+      api.ws.analyzerWS?.connection?.open();
+      // @ts-ignore
+      api.ws.designerWS?.connection?.open();
+
+      const events: Array<boolean> = [];
+      const handler = (e: Event) => {
+        const detail = (e as CustomEvent<{ result: { areConnectionsOpen: boolean } }>).detail;
+        events.push(detail.result.areConnectionsOpen);
+      };
+      window.addEventListener("MagicBook", handler);
+
+      // Drop one socket, then bring it back within the debounce window.
+      // @ts-ignore
+      api.ws.analyzerWS.connection.readyState = WebSocket.CLOSED;
+      api.onConnectionStateChange();
+      vi.advanceTimersByTime(100);
+      // @ts-ignore
+      api.ws.analyzerWS.connection.readyState = WebSocket.OPEN;
+      api.onConnectionStateChange();
+      vi.advanceTimersByTime(500);
+
+      window.removeEventListener("MagicBook", handler);
+      // No false should have been emitted during the transient drop.
+      expect(events).not.toContain(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  test("emits hasReachedMaxReconnectionAttempts only once across both sockets", async () => {
+    const api = new MagicBookAPI({ apiKey: "fake key" });
+
+    const events: Array<{ areConnectionsOpen: boolean; hasReachedMaxReconnectionAttempts: boolean }> = [];
+    const handler = (e: Event) => {
+      events.push(
+        (
+          e as CustomEvent<{
+            result: { areConnectionsOpen: boolean; hasReachedMaxReconnectionAttempts: boolean };
+          }>
+        ).detail.result,
+      );
+    };
+    window.addEventListener("MagicBook", handler);
+
+    // Simulate both sockets exhausting their retry budget. Each WS would normally fire
+    // onConnectionStateChange twice on terminal close (once from handleClose, once from
+    // the max-attempts branch); with two sockets that's four calls — consumers should
+    // still see exactly one terminal event.
+    // @ts-ignore — force the flag the way ws.ts would on max attempts
+    api.ws.analyzerWS.maxReconnectionAttemptsReached = true;
+    api.onConnectionStateChange();
+    api.onConnectionStateChange();
+    // @ts-ignore
+    api.ws.designerWS.maxReconnectionAttemptsReached = true;
+    api.onConnectionStateChange();
+    api.onConnectionStateChange();
+
+    window.removeEventListener("MagicBook", handler);
+    const terminal = events.filter((e) => e.hasReachedMaxReconnectionAttempts);
+    expect(terminal).toHaveLength(1);
   });
 
   test("bodyParse function", async () => {

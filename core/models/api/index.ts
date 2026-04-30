@@ -1,5 +1,5 @@
 import { Fetcher, type FetchOptions } from "../fetcher";
-import { defaultApiHost } from "@/core/config";
+import { defaultApiHost, wsConnectionDownDebounce } from "@/core/config";
 import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
@@ -14,6 +14,7 @@ import { MonitoringEndpoints } from "./endpoints/monitoring";
 
 export type WSConnectionState = {
   areConnectionsOpen: boolean;
+  hasReachedMaxReconnectionAttempts: boolean;
 };
 
 const densitySchema = z.object({
@@ -49,10 +50,35 @@ type MagicBookAPIProps = {
     }
 );
 
-export class MagicBookAPI {
-  private clientId = faker.string.uuid();
+export class WSController {
   analyzerWS?: WS;
   designerWS?: WS;
+
+  get status(): WSConnectionState {
+    return {
+      areConnectionsOpen: (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false,
+      hasReachedMaxReconnectionAttempts:
+        this.analyzerWS?.hasReachedMaxReconnectionAttempts() ||
+        this.designerWS?.hasReachedMaxReconnectionAttempts() ||
+        false,
+    };
+  }
+
+  async open(): Promise<WSConnectionState> {
+    await Promise.all([this.analyzerWS?.connect({ manual: true }), this.designerWS?.connect({ manual: true })]);
+    return this.status;
+  }
+
+  disconnect(): WSConnectionState {
+    this.analyzerWS?.disconnect();
+    this.designerWS?.disconnect();
+    return this.status;
+  }
+}
+
+export class MagicBookAPI {
+  private clientId = faker.string.uuid();
+  readonly ws = new WSController();
   readonly fetcher: Fetcher;
   dispatcher: Dispatcher;
   readonly photos = new PhotoEndpoints(this);
@@ -77,33 +103,67 @@ export class MagicBookAPI {
 
     if (!mock) {
       options.headers.Authorization = `Api-key ${props.apiKey}`;
-      this.analyzerWS = new WS(
+      this.ws.analyzerWS = new WS(
         `${webSocketHost}/ws/analyzer?clientId=${this.clientId}`,
         () => this.onConnectionStateChange(),
         this.dispatcher,
       );
-      this.designerWS = new WS(
+      this.ws.designerWS = new WS(
         `${webSocketHost}/ws/designer?clientId=${this.clientId}`,
         () => this.onConnectionStateChange(),
         this.dispatcher,
       );
     }
 
-    this.fetcher = new Fetcher(apiHost, options, mock, () => this.areWSOpen());
+    this.fetcher = new Fetcher(apiHost, options, mock, () => this.ws.status.areConnectionsOpen);
   }
 
-  areWSOpen() {
-    return (this.analyzerWS?.isConnectionOpen() && this.designerWS?.isConnectionOpen()) ?? false;
-  }
-
-  async reconnectWS(): Promise<WSConnectionState> {
-    await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
-    return { areConnectionsOpen: this.areWSOpen() };
-  }
+  private hasEmittedInitialState = false;
+  private downEmitTimer?: ReturnType<typeof setTimeout>;
+  private lastEmittedStatus?: WSConnectionState;
 
   onConnectionStateChange() {
+    const status = this.ws.status;
+    // Suppress transient states during initial setup — wait until both sockets are open
+    // or retries are exhausted, so consumers don't see a spurious areConnectionsOpen: false
+    // between the two sockets opening.
+    if (!this.hasEmittedInitialState) {
+      if (!status.areConnectionsOpen && !status.hasReachedMaxReconnectionAttempts) return;
+      this.hasEmittedInitialState = true;
+    }
+
+    // Debounce "connections went down" so a brief gap between one socket closing and
+    // the other reconnecting doesn't surface as areConnectionsOpen: false. Up/terminal
+    // states emit immediately and cancel any pending down-emission.
+    if (!status.areConnectionsOpen && !status.hasReachedMaxReconnectionAttempts) {
+      if (this.downEmitTimer) return;
+      this.downEmitTimer = setTimeout(() => {
+        this.downEmitTimer = undefined;
+        const latest = this.ws.status;
+        if (latest.areConnectionsOpen || latest.hasReachedMaxReconnectionAttempts) return;
+        this.emitConnectionState(latest);
+      }, wsConnectionDownDebounce);
+      return;
+    }
+
+    if (this.downEmitTimer) {
+      clearTimeout(this.downEmitTimer);
+      this.downEmitTimer = undefined;
+    }
+    this.emitConnectionState(status);
+  }
+
+  private emitConnectionState(status: WSConnectionState) {
+    if (
+      this.lastEmittedStatus &&
+      this.lastEmittedStatus.areConnectionsOpen === status.areConnectionsOpen &&
+      this.lastEmittedStatus.hasReachedMaxReconnectionAttempts === status.hasReachedMaxReconnectionAttempts
+    ) {
+      return;
+    }
+    this.lastEmittedStatus = status;
     const onConnectionStateChangeEvent = new CustomEvent<WSMessage<WSConnectionState>>("MagicBook", {
-      detail: { eventName: "ws", result: { areConnectionsOpen: this.areWSOpen() } },
+      detail: { eventName: "ws", result: status },
     });
     window.dispatchEvent(onConnectionStateChangeEvent);
   }

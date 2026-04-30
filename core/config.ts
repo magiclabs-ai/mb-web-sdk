@@ -15,6 +15,9 @@ export const wsForceCloseGracePeriod: number = process.env.WS_FORCE_CLOSE_GRACE_
 export const wsTtlRefreshInterval: number = process.env.WS_TTL_REFRESH_INTERVAL
   ? Number.parseInt(process.env.WS_TTL_REFRESH_INTERVAL)
   : 36000000;
+export const wsConnectionDownDebounce: number = process.env.WS_CONNECTION_DOWN_DEBOUNCE
+  ? Number.parseInt(process.env.WS_CONNECTION_DOWN_DEBOUNCE)
+  : 250;
 export const defaultTimeoutDelay: number = process.env.DEFAULT_TIMEOUT_DELAY
   ? Number.parseInt(process.env.DEFAULT_TIMEOUT_DELAY)
   : 30000;

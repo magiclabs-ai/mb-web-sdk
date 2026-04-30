@@ -27,6 +27,8 @@ export class WS {
   private onConnectionStateChange: () => void;
   private dispatcher: Dispatcher;
   private reconnectionAttempts = 0;
+  private maxReconnectionAttemptsReached = false;
+  private manuallyClosed = false;
   private heartbeatTimer?: ReturnType<typeof setTimeout>;
   private pongTimer?: ReturnType<typeof setTimeout>;
   private forceCloseTimer?: ReturnType<typeof setTimeout>;
@@ -39,7 +41,7 @@ export class WS {
     this.dispatcher = dispatcher;
   }
 
-  async connect(): Promise<boolean> {
+  async connect({ manual = false }: { manual?: boolean } = {}): Promise<boolean> {
     return new Promise((resolve) => {
       if (this.connection?.readyState === WebSocket.CONNECTING) {
         return resolve(false);
@@ -48,10 +50,17 @@ export class WS {
         return resolve(true);
       }
 
+      if (this.maxReconnectionAttemptsReached) {
+        this.reconnectionAttempts = 0;
+        this.maxReconnectionAttemptsReached = false;
+      }
+      this.manuallyClosed = false;
+
       this.connection = new WebSocket(this.url);
 
       this.connection.onopen = () => {
         this.reconnectionAttempts = 0;
+        this.maxReconnectionAttemptsReached = false;
         this.startHeartbeat();
         this.startTtlTimer();
         this.onConnectionStateChange();
@@ -73,20 +82,62 @@ export class WS {
 
       this.connection.onclose = () => {
         this.handleClose();
+        if (this.manuallyClosed) {
+          resolve(false);
+          return;
+        }
+        // Manual attempts don't fall back to the auto-retry budget — one shot, then report.
+        if (manual) {
+          this.maxReconnectionAttemptsReached = true;
+          this.onConnectionStateChange();
+          resolve(false);
+          return;
+        }
         if (this.reconnectionAttempts < maxReconnectionAttempts) {
           setTimeout(() => {
             this.connect();
             this.reconnectionAttempts++;
           }, wsReconnectInterval * this.reconnectionAttempts);
         } else {
+          this.maxReconnectionAttemptsReached = true;
+          this.onConnectionStateChange();
           resolve(false);
         }
       };
     });
   }
 
+  disconnect() {
+    this.manuallyClosed = true;
+    this.reconnectionAttempts = 0;
+    this.maxReconnectionAttemptsReached = false;
+    const connection = this.connection;
+    if (!connection || connection.readyState === WebSocket.CLOSED) {
+      this.stopHeartbeat();
+      this.stopTtlTimer();
+      return;
+    }
+    try {
+      connection.close();
+    } catch {
+      // The grace-period timer below will synthesize onclose if needed.
+    }
+    this.forceCloseTimer = setTimeout(() => {
+      this.forceCloseTimer = undefined;
+      if (connection.readyState !== WebSocket.CLOSED && connection.onclose) {
+        const onclose = connection.onclose;
+        connection.onclose = null;
+        onclose.call(connection, new CloseEvent("close"));
+      }
+    }, wsForceCloseGracePeriod);
+  }
+
   isConnectionOpen() {
     return this.connection?.readyState === WebSocket.OPEN;
+  }
+
+  hasReachedMaxReconnectionAttempts() {
+    return this.maxReconnectionAttemptsReached;
   }
 
   private startHeartbeat() {

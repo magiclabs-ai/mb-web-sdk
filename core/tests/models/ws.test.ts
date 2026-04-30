@@ -201,6 +201,22 @@ describe("WS", () => {
     expect((ws as any).reconnectionAttempts).toBe(0);
   });
 
+  test("manual connect does not schedule auto-retries on failure", async () => {
+    vi.useFakeTimers();
+    // biome-ignore lint/suspicious/noExplicitAny: private access
+    const connectSpy = vi.spyOn(ws as any, "connect");
+    connectSpy.mockClear();
+
+    const result = ws.connect({ manual: true });
+    // Fail the manual attempt before it opens.
+    ws.connection?.onclose?.(new CloseEvent("close"));
+    vi.advanceTimersByTime(60_000);
+
+    await expect(result).resolves.toBe(false);
+    expect(connectSpy).toHaveBeenCalledTimes(1);
+    expect(ws.hasReachedMaxReconnectionAttempts()).toBe(true);
+  });
+
   test("should return false if max reconnection attempts is reached", () => {
     vi.useFakeTimers();
     vi.advanceTimersToNextTimer();
