@@ -112,25 +112,27 @@ export class WS {
     this.reconnectionAttempts = 0;
     this.maxReconnectionAttemptsReached = false;
     const connection = this.connection;
-    if (!connection) {
-      this.handleClose();
-      return;
-    }
-    if (connection.readyState === WebSocket.CLOSED) {
-      this.handleClose();
+    if (!connection || connection.readyState === WebSocket.CLOSED) {
+      this.stopHeartbeat();
+      this.stopTtlTimer();
       return;
     }
     try {
       connection.close();
     } catch {
-      // ignore — fall through to the synthetic close below
+      // close() can throw if the socket is in a bad state; the grace-period
+      // timer below will synthesize onclose so handleClose still runs.
     }
-    // Mirror the stalled-socket guard from handlePongTimeout: ensure onclose runs.
-    if (connection.readyState !== WebSocket.CLOSED && connection.onclose) {
-      const onclose = connection.onclose;
-      connection.onclose = null;
-      onclose.call(connection, new CloseEvent("close"));
-    }
+    // Mirror handlePongTimeout: give the browser a grace period to fire onclose
+    // naturally, then force it if the socket is still not closed.
+    this.forceCloseTimer = setTimeout(() => {
+      this.forceCloseTimer = undefined;
+      if (connection.readyState !== WebSocket.CLOSED && connection.onclose) {
+        const onclose = connection.onclose;
+        connection.onclose = null;
+        onclose.call(connection, new CloseEvent("close"));
+      }
+    }, wsForceCloseGracePeriod);
   }
 
   isConnectionOpen() {
