@@ -231,8 +231,7 @@ function App() {
           <button
             type="button"
             onClick={async () => {
-              const res = await mb?.ws.open();
-              console.log("Reconnect WS", res);
+              await mb?.ws.open();
             }}
           >
             Reconnect WS
@@ -240,8 +239,7 @@ function App() {
           <button
             type="button"
             onClick={() => {
-              const res = mb?.ws.disconnect();
-              console.log("Disconnect WS", res);
+              mb?.ws.disconnect();
             }}
           >
             Disconnect WS
