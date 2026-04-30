@@ -120,11 +120,8 @@ export class WS {
     try {
       connection.close();
     } catch {
-      // close() can throw if the socket is in a bad state; the grace-period
-      // timer below will synthesize onclose so handleClose still runs.
+      // The grace-period timer below will synthesize onclose if needed.
     }
-    // Mirror handlePongTimeout: give the browser a grace period to fire onclose
-    // naturally, then force it if the socket is still not closed.
     this.forceCloseTimer = setTimeout(() => {
       this.forceCloseTimer = undefined;
       if (connection.readyState !== WebSocket.CLOSED && connection.onclose) {

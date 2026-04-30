@@ -64,7 +64,7 @@ The WS surface is exposed under `api.ws`:
 
 - `api.ws.status` — current `{ areConnectionsOpen, hasReachedMaxReconnectionAttempts }`.
 - `api.ws.open()` — open (or reopen) both sockets. One-shot: if the connection fails it does **not** trigger the SDK's automatic retry budget — the promise resolves with `areConnectionsOpen: false` and `hasReachedMaxReconnectionAttempts: true`, leaving spacing of further attempts up to you.
-- `api.ws.disconnect()` — close both sockets and disable auto-retry. Returns the new status.
+- `api.ws.disconnect()` — close both sockets and disable auto-retry. Returns the new status synchronously; the underlying close completes shortly after.
 
 If the WS connection fails to reconnect, you can manually reconnect it with
 
