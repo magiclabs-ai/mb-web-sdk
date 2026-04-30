@@ -19,6 +19,7 @@ export default defineConfig({
     WS_TTL_REFRESH_INTERVAL: process.env.WS_TTL_REFRESH_INTERVAL!,
     WS_PONG_TIMEOUT: process.env.WS_PONG_TIMEOUT!,
     WS_FORCE_CLOSE_GRACE_PERIOD: process.env.WS_FORCE_CLOSE_GRACE_PERIOD!,
+    WS_CONNECTION_DOWN_DEBOUNCE: process.env.WS_CONNECTION_DOWN_DEBOUNCE!,
   },
   target: "esnext",
   outDir: "dist",

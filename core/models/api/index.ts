@@ -1,5 +1,5 @@
 import { Fetcher, type FetchOptions } from "../fetcher";
-import { defaultApiHost } from "@/core/config";
+import { defaultApiHost, wsConnectionDownDebounce } from "@/core/config";
 import { ProjectEndpoints } from "@/core/models/api/endpoints/projects";
 import { PhotoEndpoints } from "@/core/models/api/endpoints/photos";
 import { WS } from "../ws";
@@ -66,7 +66,10 @@ export class WSController {
   }
 
   async open(): Promise<WSConnectionState> {
-    await Promise.all([this.analyzerWS?.connect(), this.designerWS?.connect()]);
+    await Promise.all([
+      this.analyzerWS?.connect({ manual: true }),
+      this.designerWS?.connect({ manual: true }),
+    ]);
     return this.status;
   }
 
@@ -120,6 +123,8 @@ export class MagicBookAPI {
   }
 
   private hasEmittedInitialState = false;
+  private downEmitTimer?: ReturnType<typeof setTimeout>;
+  private lastEmittedStatus?: WSConnectionState;
 
   onConnectionStateChange() {
     const status = this.ws.status;
@@ -130,6 +135,37 @@ export class MagicBookAPI {
       if (!status.areConnectionsOpen && !status.hasReachedMaxReconnectionAttempts) return;
       this.hasEmittedInitialState = true;
     }
+
+    // Debounce "connections went down" so a brief gap between one socket closing and
+    // the other reconnecting doesn't surface as areConnectionsOpen: false. Up/terminal
+    // states emit immediately and cancel any pending down-emission.
+    if (!status.areConnectionsOpen && !status.hasReachedMaxReconnectionAttempts) {
+      if (this.downEmitTimer) return;
+      this.downEmitTimer = setTimeout(() => {
+        this.downEmitTimer = undefined;
+        const latest = this.ws.status;
+        if (latest.areConnectionsOpen || latest.hasReachedMaxReconnectionAttempts) return;
+        this.emitConnectionState(latest);
+      }, wsConnectionDownDebounce);
+      return;
+    }
+
+    if (this.downEmitTimer) {
+      clearTimeout(this.downEmitTimer);
+      this.downEmitTimer = undefined;
+    }
+    this.emitConnectionState(status);
+  }
+
+  private emitConnectionState(status: WSConnectionState) {
+    if (
+      this.lastEmittedStatus &&
+      this.lastEmittedStatus.areConnectionsOpen === status.areConnectionsOpen &&
+      this.lastEmittedStatus.hasReachedMaxReconnectionAttempts === status.hasReachedMaxReconnectionAttempts
+    ) {
+      return;
+    }
+    this.lastEmittedStatus = status;
     const onConnectionStateChangeEvent = new CustomEvent<WSMessage<WSConnectionState>>("MagicBook", {
       detail: { eventName: "ws", result: status },
     });

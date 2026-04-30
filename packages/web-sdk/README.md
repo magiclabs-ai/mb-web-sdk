@@ -63,7 +63,7 @@ You are ready to go!
 The WS surface is exposed under `api.ws`:
 
 - `api.ws.status` — current `{ areConnectionsOpen, hasReachedMaxReconnectionAttempts }`.
-- `api.ws.open()` — open (or reopen) both sockets. Resolves with the new status.
+- `api.ws.open()` — open (or reopen) both sockets. One-shot: if the connection fails it does **not** trigger the SDK's automatic retry budget — the promise resolves with `areConnectionsOpen: false` and `hasReachedMaxReconnectionAttempts: true`, leaving spacing of further attempts up to you.
 - `api.ws.disconnect()` — close both sockets and disable auto-retry. Returns the new status.
 
 If the WS connection fails to reconnect, you can manually reconnect it with
@@ -114,7 +114,7 @@ resetIdleTimer();
 
 The SDK's built-in retries use short, fixed-step delays and stop after a fixed number of attempts. For long outages you usually want to keep trying, but space attempts further apart so you don't hammer the server. The snippet below waits for `hasReachedMaxReconnectionAttempts`, then loops `api.ws.open()` with exponential backoff capped at one minute, plus jitter so multiple clients recovering from the same outage don't retry in lockstep.
 
-Each call to `api.ws.open()` resolves once both sockets have either opened or exhausted their internal retry budget; if it returns `areConnectionsOpen: false`, you are responsible for spacing the next attempt — which is what the loop below does.
+Each call to `api.ws.open()` is a single attempt — it does not fall back to the SDK's automatic retry budget. If it returns `areConnectionsOpen: false`, you are responsible for spacing the next attempt — which is what the loop below does.
 
 ```ts
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));

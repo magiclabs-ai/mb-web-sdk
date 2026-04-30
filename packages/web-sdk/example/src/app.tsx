@@ -1,10 +1,10 @@
 import {
-  MagicBookAPI,
-  type WSMessage,
   type AnalyzedPhoto,
+  MagicBookAPI,
   type Project,
   type Surface,
   type SurfaceShuffleBody,
+  type WSMessage,
   photoAnalyzeBodySchema,
 } from "@magiclabs.ai/mb-web-sdk";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ function App() {
   const [surfaces, setSurfaces] = useState<Array<Surface>>([]);
   const hasSurface = surfaces.length > 0;
   const [areConnectionsOpen, setAreConnectionsOpen] = useState(false);
+  const [hasReachedMaxReconnectionAttempts, setHasReachedMaxReconnectionAttempts] = useState(false);
   const [mb, setMbApi] = useState<MagicBookAPI>();
   const [project, setProject] = useState<Project>({
     designMode: "automatic",
@@ -80,6 +81,7 @@ function App() {
 
     setMbApi(
       new MagicBookAPI({
+        apiHost: "api.dev.magiclabs-aurora.io",
         apiKey: import.meta.env.VITE_MB_API_KEY,
         debugMode: true,
       }),
@@ -91,11 +93,13 @@ function App() {
 
   function handleEvent(event: CustomEvent<WSMessage<unknown>>) {
     console.log("MagicBook", event.detail.eventName, event.detail.request, event.detail.result, event.detail.eventType);
-    if (
-      event.detail.eventName === "ws" &&
-      (event.detail.result as { areConnectionsOpen: boolean }).areConnectionsOpen
-    ) {
-      setAreConnectionsOpen(true);
+    if (event.detail.eventName === "ws") {
+      const result = event.detail.result as {
+        areConnectionsOpen: boolean;
+        hasReachedMaxReconnectionAttempts: boolean;
+      };
+      setAreConnectionsOpen(result.areConnectionsOpen);
+      setHasReachedMaxReconnectionAttempts(result.hasReachedMaxReconnectionAttempts);
     }
     if (event.detail.eventName === "photo.analyzed") {
       const photo = event.detail.result as AnalyzedPhoto;
@@ -200,6 +204,10 @@ function App() {
           <span>WS Connections Open: </span>
           <span>{areConnectionsOpen ? "✅" : "🔴"}</span>
         </div>
+        <div className="text-sm">
+          <span>Reached Max Reconnection Attempts: </span>
+          <span>{hasReachedMaxReconnectionAttempts ? "⚠️" : "—"}</span>
+        </div>
         <div className="flex gap-2">
           <label htmlFor="start-from-left">startFromLeftSide</label>
           <input
@@ -223,11 +231,28 @@ function App() {
           <button
             type="button"
             onClick={async () => {
-              const res = await mb?.reconnectWS();
+              const res = await mb?.ws.open();
               console.log("Reconnect WS", res);
             }}
           >
             Reconnect WS
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              const res = mb?.ws.disconnect();
+              console.log("Disconnect WS", res);
+            }}
+          >
+            Disconnect WS
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              console.log("WS Status", mb?.ws.status);
+            }}
+          >
+            Log WS Status
           </button>
         </div>
         <div className="flex flex-col gap-4 items-start p-4">

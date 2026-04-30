@@ -41,7 +41,7 @@ export class WS {
     this.dispatcher = dispatcher;
   }
 
-  async connect(): Promise<boolean> {
+  async connect({ manual = false }: { manual?: boolean } = {}): Promise<boolean> {
     return new Promise((resolve) => {
       if (this.connection?.readyState === WebSocket.CONNECTING) {
         return resolve(false);
@@ -83,6 +83,13 @@ export class WS {
       this.connection.onclose = () => {
         this.handleClose();
         if (this.manuallyClosed) {
+          resolve(false);
+          return;
+        }
+        // Manual attempts don't fall back to the auto-retry budget — one shot, then report.
+        if (manual) {
+          this.maxReconnectionAttemptsReached = true;
+          this.onConnectionStateChange();
           resolve(false);
           return;
         }
