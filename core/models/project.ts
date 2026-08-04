@@ -1,5 +1,5 @@
 import { analyzedPhotoSchema } from "@/core/models/photo";
-import { type Surface, isSpread, surfaceSchema } from "@/core/models/surface";
+import { type Surface, autofillSurfaceSchema, isSpread, surfaceSchema } from "@/core/models/surface";
 import { z } from "zod/v4";
 
 const bookFormatSchema = z.object({
@@ -48,8 +48,13 @@ export const projectSchema = z.object({
   surfaces: z.array(surfaceSchema),
 });
 
-export const projectAutofillBodySchema = projectSchema.omit({
-  surfaces: true,
+/**
+ * The autofill request body. `surfaces` is optional here: omit it and the API designs the covers itself,
+ * or supply the front (`-2`) and back (`-4`) cover surfaces of an authored design and the API fills only
+ * their empty photo wells, leaving background, embellishment and text layers untouched.
+ */
+export const projectAutofillBodySchema = projectSchema.omit({ surfaces: true }).extend({
+  surfaces: z.array(autofillSurfaceSchema).optional(),
 });
 
 export type Project = z.infer<typeof projectSchema>;
