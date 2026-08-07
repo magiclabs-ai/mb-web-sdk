@@ -13,7 +13,6 @@ dist-ssr
 *.local
 coverage
 .env
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -27,3 +26,12 @@ coverage
 .turbo
 *.config.json
 packages/cli/data/*
+# Claude Code personal settings (teams copy .claude/settings.local.json.example)
+.claude/settings.local.json
+# Cursor
+.cursor/
+# OpenCode
+.opencode/
+.claude
+CLAUDE.md
+ACTION_PLAN.md

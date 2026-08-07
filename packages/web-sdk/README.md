@@ -214,8 +214,53 @@ await api.projects.autofill({
     } // optional
   },
   images: [...],
+  surfaces: [...], // optional — see "Supplying cover surfaces" below
 });
 ```
+
+##### Supplying cover surfaces
+
+`surfaces` is optional. Omit it and the API designs the covers itself, which is the usual case.
+
+Supply it to autofill an existing cover design — for example a pre-authored front and back cover. Pass
+exactly two entries, the front cover (`surfaceNumber: -2`) and the back cover (`surfaceNumber: -4`). The
+API fills only the empty photo wells and leaves background, embellishment and text layers untouched, so
+authored cover copy is preserved.
+
+A photo well is empty when its `content.userData` dimensions are zeroed and it has no `assetId`. Wells
+that already carry a photo are left as they are, which lets you pre-seed one well and have the rest
+filled. A cover with no photo layers at all is valid and comes back unchanged.
+
+```ts
+await api.projects.autofill({
+  // ...the fields above
+  surfaces: [
+    {
+      surfaceType: "front", // optional
+      layoutId: "DA_4177725", // optional
+      surfaceNumber: -2,
+      surfaceData: {
+        pageDetails: { width: 3105, height: 3510, dpi: 300 },
+        layeredItems: [
+          // An empty photo well for the API to fill.
+          {
+            type: "photo",
+            content: { contentType: "UserPhoto", userData: { w: 0, h: 0, x: 0, y: 0, rot: 0 } },
+            container: { w: 1873.02, h: 1207.1, x: 488.49, y: 1158.78, rot: 0 },
+            layerMetadata: [...],
+          },
+          // Background, embellishment and text layers pass through untouched.
+        ],
+      },
+      surfaceMetadata: [...],
+      version: "4.0",
+    },
+    { surfaceType: "back", surfaceNumber: -4, /* ... */ },
+  ],
+});
+```
+
+`surfaceType` and `layoutId` are request-only: the API does not echo them back on the returned surfaces.
 
 #### Restyle
 
