@@ -5,6 +5,7 @@ import {
   type projectAutofillBodySchema,
   projectAutofillTimeoutDelay,
 } from "@/core/models/project";
+import { encodeEmbedding, type AnalyzedPhoto } from "@/core/models/photo";
 import type { MagicBookAPI } from "../..";
 import type { z } from "zod/v4";
 import { formatObject } from "@/core/utils/toolbox";
@@ -43,7 +44,13 @@ export class ProjectEndpoints {
           headers: {
             "magic-request-id": request.id,
           },
-          body: this.magicBookAPI.bodyParse(body),
+          body: this.magicBookAPI.bodyParse({
+            ...body,
+            images: body.images.map((image: AnalyzedPhoto) => ({
+              ...image,
+              embedding: image.embedding ? encodeEmbedding(image.embedding) : undefined,
+            })),
+          }),
         },
         factory: async () => {
           Array.from({ length: faker.number.int({ max: 10, min: 2 }) }, () =>
