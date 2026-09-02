@@ -1,7 +1,7 @@
 import { formatObject, mergeNestedObject } from "../utils/toolbox";
-import { version } from "../../package.json";
+import { version, versionHeader } from "../version";
 
-export type FetchOptions = RequestInit & { headers: { Authorization?: string } };
+export type FetchOptions = RequestInit & { headers: { Authorization?: string; [header: string]: string | undefined } };
 
 export type RequestResponse = {
   requestId: string;
@@ -18,7 +18,7 @@ export type CallProps<T> = {
 export const baseOptions: RequestInit = {
   headers: {
     "Content-Type": "application/json",
-    "Magic-Client-Version": version,
+    [versionHeader]: version,
   },
   method: "GET",
 };

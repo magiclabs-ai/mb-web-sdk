@@ -58,6 +58,22 @@ Once you receive the `ws` event with result
 
 You are ready to go!
 
+#### SDK version
+
+The SDK version is available at runtime and is sent with every request, so it can be checked both from the browser and on the API side.
+
+```ts
+import { version, MagicBookAPI } from "@magiclabs.ai/mb-web-sdk";
+
+version; // "0.28.0"
+MagicBookAPI.version; // "0.28.0"
+api.version; // "0.28.0"
+```
+
+Every HTTP call carries a `Magic-Client-Version: <version>` header.
+
+When loaded as a script, use `MagicLabs.version`.
+
 `hasReachedMaxReconnectionAttempts` becomes `true` once a socket has exhausted its automatic reconnection attempts, and is reset to `false` as soon as a connection succeeds again. Use it to surface a terminal connection error to the user or to trigger a manual reconnect.
 
 The WS surface is exposed under `api.ws`:

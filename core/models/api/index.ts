@@ -11,6 +11,7 @@ import { z } from "zod/v4";
 import { densitiesFactory } from "@/core/factories/design-options";
 import { StyleEndpoints } from "@/core/models/api/endpoints/styles";
 import { MonitoringEndpoints } from "./endpoints/monitoring";
+import { version } from "@/core/version";
 
 export type WSConnectionState = {
   areConnectionsOpen: boolean;
@@ -77,6 +78,9 @@ export class WSController {
 }
 
 export class MagicBookAPI {
+  static readonly version = version;
+
+  readonly version = version;
   private clientId = faker.string.uuid();
   readonly ws = new WSController();
   readonly fetcher: Fetcher;

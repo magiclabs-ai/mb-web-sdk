@@ -1,11 +1,24 @@
 import { Fetcher, baseOptions } from "@/core/models/fetcher";
 import { describe, expect, test } from "vitest";
 import { fetchMocker } from "@/core/tests/mocks/fetch";
+import { version, versionHeader } from "@/core/version";
+import { version as packageVersion } from "../../../package.json";
 
 describe("Fetcher", () => {
   const fetcher = new Fetcher("https://api.fake-server.com", {}, false, () => true);
   test("init without options", async () => {
     expect(fetcher.options).toStrictEqual(baseOptions);
+  });
+  test("version matches the root package.json", () => {
+    expect(version).toBe(packageVersion);
+    expect(version).toMatch(/^\d+\.\d+\.\d+/);
+  });
+  test("sends the SDK version header on every call", async () => {
+    fetchMocker.mockResponse(() => Promise.resolve({ status: 200, body: JSON.stringify({}) }));
+    await fetcher.call({ path: "/books", options: { headers: { "X-Custom": "1" } } });
+    const headers = fetchMocker.mock.lastCall?.[1]?.headers as Record<string, string>;
+    expect(headers[versionHeader]).toBe(version);
+    expect(headers["X-Custom"]).toBe("1");
   });
   test.fails("fail call", async () => {
     fetchMocker.mockReject(() => Promise.reject("Something went wrong. Please try again."));

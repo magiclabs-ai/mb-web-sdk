@@ -5,8 +5,16 @@ import type { FetchOptions } from "@/core/models/fetcher";
 import { projectFactory } from "@/core/factories/project";
 import { densitiesSchema } from "@/core/models/api";
 import { addEventMock, finishMock } from "../../mocks/dispatcher";
+import { version, versionHeader } from "@/core/version";
 
 describe("API", () => {
+  test("exposes the SDK version", () => {
+    const api = new MagicBookAPI({ mock: true });
+    expect(MagicBookAPI.version).toBe(version);
+    expect(api.version).toBe(version);
+    expect((api.fetcher.options as FetchOptions).headers[versionHeader]).toBe(version);
+  });
+
   test("apiKey is used properly", async () => {
     const apiKey = "fake key2";
     const api = new MagicBookAPI({
