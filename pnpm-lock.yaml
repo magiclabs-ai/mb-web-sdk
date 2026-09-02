@@ -70,6 +70,9 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0
     devDependencies:
+      esbuild:
+        specifier: ^0.23.1
+        version: 0.23.1
       jsdom:
         specifier: ^24.1.1
         version: 24.1.1
