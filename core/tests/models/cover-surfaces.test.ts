@@ -113,3 +113,29 @@ describe("surfaces on the autofill request body", () => {
     expect(surfaceSchema.safeParse(project.surfaces[0]).success).toBe(true);
   });
 });
+
+describe("populateEmptyCoverTitle on the autofill request body", () => {
+  test("the flag is optional and is captured when present", () => {
+    const { surfaces: _ignored, ...body } = projectFactory({ noSurfaces: true });
+
+    const without = projectAutofillBodySchema.safeParse(body);
+    expect(without.success).toBe(true);
+    expect(without.data).not.toHaveProperty("populateEmptyCoverTitle");
+
+    const withFlag = projectAutofillBodySchema.safeParse({ ...body, populateEmptyCoverTitle: true });
+    expect(withFlag.success).toBe(true);
+    expect(withFlag.data?.populateEmptyCoverTitle).toBe(true);
+  });
+
+  test("a non-boolean flag is rejected", () => {
+    const { surfaces: _ignored, ...body } = projectFactory({ noSurfaces: true });
+
+    expect(projectAutofillBodySchema.safeParse({ ...body, populateEmptyCoverTitle: "yes" }).success).toBe(false);
+  });
+
+  test("the flag is converted to the snake_case the API expects", () => {
+    const parsed = JSON.parse(api.bodyParse({ populateEmptyCoverTitle: true }));
+
+    expect(parsed.populate_empty_cover_title).toBe(true);
+  });
+});

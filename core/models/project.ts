@@ -52,9 +52,14 @@ export const projectSchema = z.object({
  * The autofill request body. `surfaces` is optional here: omit it and the API designs the covers itself,
  * or supply the front (`-2`) and back (`-4`) cover surfaces of an authored design and the API fills only
  * their empty photo wells, leaving background, embellishment and text layers untouched.
+ *
+ * `populateEmptyCoverTitle` opts into filling a supplied cover's `title` and `subtitle` text layers from
+ * `title` and `subtitle`, but only where that layer is authored empty. A layer that ships with its own
+ * copy stays untouched. Omit the field to keep the default, which never writes cover text.
  */
 export const projectAutofillBodySchema = projectSchema.omit({ surfaces: true }).extend({
   surfaces: z.array(autofillSurfaceSchema).optional(),
+  populateEmptyCoverTitle: z.boolean().optional(),
 });
 
 export type Project = z.infer<typeof projectSchema>;
